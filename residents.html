@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Resident Management - Barangay 14</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                    <div class="mx-3 sidebar-brand-text"><span>Brgy 14</span></div>
+                </a>
+                <hr class="my-0 sidebar-divider">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none me-3 rounded-circle" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small"></span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Profile</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                        <h3 class="text-dark mb-0">Resident Management</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showResidentForm()"><i class="fas fa-plus fa-sm text-white-50"></i>&nbsp;Register New Resident</button>
+                    </div>
+                    
+                    <!-- Resident List -->
+                    <div class="card shadow mb-4" id="residentListCard">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary m-0 fw-bold">Registered Residents</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-6">
+                                    <input type="search" class="form-control" id="searchResident" placeholder="Search by name, address..." onkeyup="searchResidentTable()">
+                                </div>
+                                <div class="col-md-3">
+                                    <select class="form-select" id="filterGender" onchange="filterResidents()">
+                                        <option value="">All Genders</option>
+                                        <option value="Male">Male</option>
+                                        <option value="Female">Female</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <button class="btn btn-outline-primary w-100" onclick="loadResidents()"><i class="fas fa-sync"></i> Refresh</button>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table class="table table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th>Photo</th>
+                                            <th>Full Name</th>
+                                            <th>Gender</th>
+                                            <th>Age</th>
+                                            <th>Address</th>
+                                            <th>Contact</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="residentTableBody">
+                                        <tr>
+                                            <td colspan="7" class="text-center">Loading residents...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div id="residentCount" class="text-muted mt-2">Total: 0 residents</div>
+                        </div>
+                    </div>
+
+                    <!-- Resident Registration Form -->
+                    <div class="card shadow mb-4" id="residentFormCard" style="display: none;">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary m-0 fw-bold">Resident Registration Form</h6>
+                        </div>
+                        <div class="card-body">
+                            <form id="residentForm" onsubmit="saveResident(event)">
+                                <input type="hidden" id="residentId">
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">First Name *</label>
+                                        <input type="text" class="form-control" id="firstName" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Middle Name</label>
+                                        <input type="text" class="form-control" id="middleName">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Last Name *</label>
+                                        <input type="text" class="form-control" id="lastName" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Suffix</label>
+                                        <input type="text" class="form-control" id="suffix" placeholder="Jr, Sr, III">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Gender *</label>
+                                        <select class="form-select" id="gender" required>
+                                            <option value="">Select...</option>
+                                            <option value="Male">Male</option>
+                                            <option value="Female">Female</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Date of Birth *</label>
+                                        <input type="date" class="form-control" id="dateOfBirth" onchange="calculateAge()" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Age</label>
+                                        <input type="number" class="form-control" id="age" readonly>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Civil Status *</label>
+                                        <select class="form-select" id="civilStatus" required>
+                                            <option value="">Select...</option>
+                                            <option value="Single">Single</option>
+                                            <option value="Married">Married</option>
+                                            <option value="Widowed">Widowed</option>
+                                            <option value="Separated">Separated</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Complete Address *</label>
+                                        <input type="text" class="form-control" id="address" placeholder="House No., Street, Zone" required>
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Contact Number</label>
+                                        <input type="tel" class="form-control" id="contactNumber" placeholder="09XXXXXXXXX">
+                                    </div>
+                                    <div class="col-md-3 mb-3">
+                                        <label class="form-label">Email (Optional)</label>
+                                        <input type="email" class="form-control" id="email">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-4 mb-3">
+                                        <label class="form-label">Photo</label>
+                                        <input type="file" class="form-control" id="photoUpload" accept="image/*" onchange="previewPhoto()">
+                                        <small class="text-muted">Optional: Upload resident photo</small>
+                                    </div>
+                                    <div class="col-md-2 mb-3">
+                                        <label class="form-label">Preview</label>
+                                        <div>
+                                            <img id="photoPreview" src="assets/img/avatars/avatar1.jpeg" style="width: 80px; height: 80px; object-fit: cover; border-radius: 8px;">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-save"></i> Save Resident</button>
+                                        <button type="button" class="btn btn-secondary" onclick="cancelForm()"><i class="fas fa-times"></i> Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white footer sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Barangay 14 Zone 2 District 2 2026</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Firebase + Migrated Scripts -->
+    <script type="module" src="assets/js/firebase-config.js"></script>
+    <script type="module" src="assets/js/firebase-db.js"></script>
+    <script type="module" src="assets/js/auth-firebase.js"></script>
+    <script type="module" src="assets/js/residents-firebase.js"></script>
+    
+    <script>
+        initAuth();
+        document.addEventListener('DOMContentLoaded', loadResidentsFirebase);
+    </script>
+</body>
+
+</html>

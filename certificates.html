@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Certificate Management - Barangay 14</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .queue-card {
+            border-left: 4px solid #4e73df;
+        }
+        .queue-card.processing {
+            border-left-color: #f6c23e;
+        }
+        .queue-card.completed {
+            border-left-color: #1cc88a;
+        }
+        .cert-print-area {
+            display: none;
+        }
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            .cert-print-area, .cert-print-area * {
+                visibility: visible;
+            }
+            .cert-print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body id="page-top">
+    <div id="wrapper">
+        <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark">
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
+                    <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                    <div class="mx-3 sidebar-brand-text"><span>Brgy 14</span></div>
+                </a>
+                <hr class="my-0 sidebar-divider">
+                <ul class="navbar-nav text-light" id="accordionSidebar">
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                </ul>
+                <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+            </div>
+        </nav>
+        <div class="d-flex flex-column" id="content-wrapper">
+            <div id="content">
+                <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
+                    <div class="container-fluid"><button class="btn btn-link d-md-none me-3 rounded-circle" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                        <ul class="navbar-nav flex-nowrap ms-auto">
+                            <div class="d-none d-sm-block topbar-divider"></div>
+                            <li class="nav-item dropdown no-arrow">
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small"></span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
+                                    <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Profile</a>
+                                        <div class="dropdown-divider"></div><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Logout</a>
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </nav>
+                <div class="container-fluid">
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                        <h3 class="text-dark mb-0">Certificate Management</h3>
+                        <button class="btn btn-primary btn-sm" onclick="showRequestForm()"><i class="fas fa-plus fa-sm text-white-50"></i>&nbsp;New Certificate Request</button>
+                    </div>
+
+                    <!-- Statistics Cards -->
+                    <div class="row mb-4">
+                        <div class="col-md-3">
+                            <div class="card border-left-primary shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs fw-bold text-primary text-uppercase mb-1">Pending</div>
+                                            <div class="h5 mb-0 fw-bold text-gray-800" id="statPending">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-clock fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-left-warning shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs fw-bold text-warning text-uppercase mb-1">Processing</div>
+                                            <div class="h5 mb-0 fw-bold text-gray-800" id="statProcessing">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-spinner fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-left-success shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs fw-bold text-success text-uppercase mb-1">Completed</div>
+                                            <div class="h5 mb-0 fw-bold text-gray-800" id="statCompleted">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-check-circle fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="card border-left-info shadow h-100 py-2">
+                                <div class="card-body">
+                                    <div class="row no-gutters align-items-center">
+                                        <div class="col mr-2">
+                                            <div class="text-xs fw-bold text-info text-uppercase mb-1">Today</div>
+                                            <div class="h5 mb-0 fw-bold text-gray-800" id="statToday">0</div>
+                                        </div>
+                                        <div class="col-auto">
+                                            <i class="fas fa-calendar-day fa-2x text-gray-300"></i>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Certificate Queue -->
+                    <div class="card shadow mb-4" id="queueCard">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary m-0 fw-bold">Certificate Queue</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="row mb-3">
+                                <div class="col-md-4">
+                                    <select class="form-select" id="filterStatus" onchange="filterCertificates()">
+                                        <option value="">All Status</option>
+                                        <option value="pending">Pending</option>
+                                        <option value="processing">Processing</option>
+                                        <option value="completed">Completed</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <select class="form-select" id="filterType" onchange="filterCertificates()">
+                                        <option value="">All Types</option>
+                                        <option value="clearance">Barangay Clearance</option>
+                                        <option value="residency">Residency Certificate</option>
+                                        <option value="indigency">Indigency Certificate</option>
+                                        <option value="job_seeker">Job Seeker Certificate</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <button class="btn btn-outline-primary w-100" onclick="loadCertificates()"><i class="fas fa-sync"></i> Refresh</button>
+                                </div>
+                            </div>
+                            <div id="certificateQueue">
+                                <p class="text-center text-muted">Loading certificates...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Request Form -->
+                    <div class="card shadow mb-4" id="requestFormCard" style="display: none;">
+                        <div class="card-header py-3">
+                            <h6 class="text-primary m-0 fw-bold">New Certificate Request</h6>
+                        </div>
+                        <div class="card-body">
+                            <form id="certRequestForm" onsubmit="submitRequest(event)">
+                                <div class="row">
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Select Resident *</label>
+                                        <select class="form-select" id="residentSelect" required onchange="loadResidentInfo()">
+                                            <option value="">Choose resident...</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-md-6 mb-3">
+                                        <label class="form-label">Certificate Type *</label>
+                                        <select class="form-select" id="certificateType" required>
+                                            <option value="">Choose type...</option>
+                                            <option value="clearance">Barangay Clearance</option>
+                                            <option value="residency">Certificate of Residency</option>
+                                            <option value="indigency">Certificate of Indigency</option>
+                                            <option value="job_seeker">First-time Job Seeker</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <label class="form-label">Purpose *</label>
+                                        <textarea class="form-control" id="purpose" rows="3" required placeholder="State the purpose of this certificate..."></textarea>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 mb-3">
+                                        <div class="alert alert-info">
+                                            <strong>Selected Resident:</strong>
+                                            <div id="residentInfo">No resident selected</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <button type="submit" class="btn btn-primary"><i class="fas fa-paper-plane"></i> Submit Request</button>
+                                        <button type="button" class="btn btn-secondary" onclick="cancelRequestForm()"><i class="fas fa-times"></i> Cancel</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <footer class="bg-white footer sticky-footer">
+                <div class="container my-auto">
+                    <div class="text-center my-auto copyright"><span>Copyright © Barangay 14 Zone 2 District 2 2026</span></div>
+                </div>
+            </footer>
+        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+    </div>
+
+    <!-- Print Area -->
+    <div class="cert-print-area" id="printArea"></div>
+
+    <script src="assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="assets/js/bs-init.js"></script>
+    <script src="assets/js/theme.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="assets/js/auth.js"></script>
+    <script src="assets/js/database.js"></script>
+    <script src="assets/js/certificates.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const user = getCurrentUser();
+            if (user) {
+                document.getElementById('userName').textContent = `${user.firstName} ${user.lastName}`;
+                updateProfileImages();
+            }
+            loadCertificates();
+            updateStats();
+        });
+    </script>
+</body>
+
+</html>
