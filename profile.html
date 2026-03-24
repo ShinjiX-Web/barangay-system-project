@@ -9,6 +9,69 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <style>
+        .user-profile-img, .img-profile, #mainProfilePhoto { object-fit: cover; }
+    </style>
+
+    <style>
+        /* Dark mode overrides for SB Admin custom elements */
+        [data-bs-theme="dark"] .topbar,
+        [data-bs-theme="dark"] .sticky-footer,
+        [data-bs-theme="dark"] .footer {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .topbar {
+            border-bottom: 1px solid #2d3139;
+        }
+        [data-bs-theme="dark"] .card {
+            background-color: #212529;
+            border-color: #2d3139;
+        }
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #2d3139;
+            border-color: #3d4149;
+        }
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #3d4149;
+            color: #fff;
+        }
+        [data-bs-theme="dark"] .text-gray-600 {
+            color: #adb5bd !important;
+        }
+        [data-bs-theme="dark"] .text-gray-800 {
+            color: #dee2e6 !important;
+        }
+        [data-bs-theme="dark"] .text-dark {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .border-left-primary { border-left-color: #4e73df !important; }
+        [data-bs-theme="dark"] .border-left-success { border-left-color: #1cc88a !important; }
+        [data-bs-theme="dark"] .border-left-info    { border-left-color: #36b9cc !important; }
+        [data-bs-theme="dark"] .border-left-warning { border-left-color: #f6c23e !important; }
+        [data-bs-theme="dark"] .border-left-danger  { border-left-color: #e74a3b !important; }
+        [data-bs-theme="dark"] .table {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        [data-bs-theme="dark"] #themeToggleBtn {
+            color: #f6c23e;
+        }
+        [data-bs-theme="light"] #themeToggleBtn {
+            color: #4e73df;
+        }
+        /* Smooth transition */
+        html {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -16,13 +79,20 @@
         <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
                     <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
-                    <div class="mx-3 sidebar-brand-text"><span>Brand</span></div>
+                    <div class="mx-3 sidebar-brand-text"><span>Brgy 14</span></div>
                 </a>
                 <hr class="my-0 sidebar-divider">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="/index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/table.html"><i class="fas fa-table"></i><span>Table</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <div id="adminSidebarItems" style="display:none;">
+                    <hr class="my-0 sidebar-divider">
+                    <li class="nav-item"><a class="nav-link" href="activity-log.html"><i class="fas fa-list-alt"></i><span>Activity Log</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="system-settings.html"><i class="fas fa-cogs"></i><span>System Settings</span></a></li>
+                    </div>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -110,9 +180,14 @@
                                 </div>
                                 <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div>
                             </li>
+<li class="nav-item me-1">
+                                <button class="btn btn-link nav-link px-2" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+                                    <i class="fas fa-moon fa-fw"></i>
+                                </button>
+                            </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small">Valerie Luna</span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small"></span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="#"><i class="fas fa-user me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" href="#"><i class="fas fa-cogs me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" href="#"><i class="fas fa-list me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Activity log</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
@@ -126,8 +201,12 @@
                     <div class="row mb-3">
                         <div class="col-lg-4">
                             <div class="card mb-3">
-                                <div class="card-body text-center shadow"><img id="mainProfilePhoto" class="rounded-circle mt-4 mb-3 user-profile-img" src="assets/img/dogs/image2.jpeg" width="160" height="160">
-                                    <div class="mb-3"><button class="btn btn-primary btn-sm" type="button" onclick="changeProfilePhoto()">Change Photo</button></div>
+                                <div class="card-body text-center shadow"><img id="mainProfilePhoto" class="rounded-circle mt-4 mb-3" src="" width="160" height="160" style="object-fit:cover; visibility:hidden;">
+                                    <div class="mb-3">
+                                        <button class="btn btn-primary btn-sm me-1" type="button" onclick="changeProfilePhoto()"><i class="fas fa-image me-1"></i>Choose Avatar</button>
+                                        <button class="btn btn-outline-primary btn-sm" type="button" onclick="document.getElementById('photoFileInput').click()"><i class="fas fa-upload me-1"></i>Upload Photo</button>
+                                        <input type="file" id="photoFileInput" accept="image/*" style="display:none" onchange="uploadProfilePhoto(this)">
+                                    </div>
                                 </div>
                             </div>
                             <div class="card shadow mb-4">
@@ -196,13 +275,13 @@
                                             <p class="text-primary m-0 fw-bold">User Settings</p>
                                         </div>
                                         <div class="card-body">
-                                            <form>
+                                            <form id="profileSettingsForm">
                                                 <div class="row">
                                                     <div class="col">
                                                         <div class="mb-3"><label class="form-label" for="username"><strong>Username</strong></label><input class="form-control" type="text" id="username" placeholder="user.name" name="username"></div>
                                                     </div>
                                                     <div class="col">
-                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="user@example.com" name="email"></div>
+                                                        <div class="mb-3"><label class="form-label" for="email"><strong>Email Address</strong></label><input class="form-control" type="email" id="email" placeholder="user@example.com" name="email" readonly></div>
                                                     </div>
                                                 </div>
                                                 <div class="row">
@@ -213,7 +292,7 @@
                                                         <div class="mb-3"><label class="form-label" for="last_name"><strong>Last Name</strong></label><input class="form-control" type="text" id="last_name" placeholder="Doe" name="last_name"></div>
                                                     </div>
                                                 </div>
-                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
+                                                <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit"><i class="fas fa-save me-1"></i>Save Settings</button></div>
                                             </form>
                                         </div>
                                     </div>
@@ -262,81 +341,196 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2026</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © Barangay 14 Zone 2 District 2 2026</span></div>
                 </div>
             </footer>
-        </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
-    </div>
-    <!-- Firebase SDKs -->
-    <script type="module" src="assets/js/firebase-config.js"></script>
-    <script type="module" src="assets/js/firebase-db.js"></script>
-    
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/theme-toggle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="assets/js/auth.js"></script>
-    <!-- Note: database.js deprecated, remove after migration -->
-    <script>
-        // Load and display current user's name
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = getCurrentUser();
-            if (user) {
-                const userNameElement = document.getElementById('userName');
-                if (userNameElement) {
-                    userNameElement.textContent = `${user.firstName} ${user.lastName}`;
-                }
-                
-                // Update profile images
-                updateProfileImages();
-            }
-        });
-        
-        // Change profile photo functionality
-        function changeProfilePhoto() {
-            const avatars = [
-                'assets/img/avatars/avatar1.jpeg',
-                'assets/img/avatars/avatar2.jpeg',
-                'assets/img/avatars/avatar3.jpeg',
-                'assets/img/avatars/avatar4.jpeg',
-                'assets/img/avatars/avatar5.jpeg',
-                'assets/img/dogs/image1.jpeg',
-                'assets/img/dogs/image2.jpeg',
-                'assets/img/dogs/image3.jpeg'
-            ];
-            
-            Swal.fire({
-                title: 'Choose Your Profile Photo',
-                html: `
-                    <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; padding: 20px;">
-                        ${avatars.map((avatar, index) => `
-                            <div style="text-align: center; cursor: pointer;" onclick="selectAvatar('${avatar}')">
-                                <img src="${avatar}" style="width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #ddd;" 
-                                     onmouseover="this.style.borderColor='#4e73df'" 
-                                     onmouseout="this.style.borderColor='#ddd'">
-                            </div>
-                        `).join('')}
-                    </div>
-                `,
-                showConfirmButton: false,
-                showCancelButton: true,
-                cancelButtonText: 'Close',
-                width: 600
+    <script type="module">
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { getDoc, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        let currentUserId = null;
+
+        window.logout              = async () => { await signOut(auth); window.location.href = 'login.html'; };
+        window.changeProfilePhoto  = changeProfilePhoto;
+        window.selectAvatar        = selectAvatar;
+        window.uploadProfilePhoto  = uploadProfilePhoto;
+
+        // ── Compress image → base64 (no Firebase Storage needed) ─────────────
+        function compressImageToBase64(file, maxSize = 300, quality = 0.8) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onerror = reject;
+                reader.onload = e => {
+                    const img = new Image();
+                    img.onerror = reject;
+                    img.onload = () => {
+                        const canvas = document.createElement('canvas');
+                        let { width, height } = img;
+                        if (width > height) {
+                            if (width > maxSize) { height = Math.round(height * maxSize / width); width = maxSize; }
+                        } else {
+                            if (height > maxSize) { width = Math.round(width * maxSize / height); height = maxSize; }
+                        }
+                        canvas.width = width; canvas.height = height;
+                        canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+                        resolve(canvas.toDataURL('image/jpeg', quality));
+                    };
+                    img.src = e.target.result;
+                };
+                reader.readAsDataURL(file);
             });
         }
-        
-        function selectAvatar(avatarPath) {
-            if (updateProfilePhoto(avatarPath)) {
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Profile Photo Updated!',
-                    text: 'Your profile photo has been changed successfully.',
-                    confirmButtonColor: '#4e73df',
-                    timer: 1500,
-                    showConfirmButton: false
+
+        async function uploadProfilePhoto(input) {
+            const file = input.files[0];
+            if (!file || !currentUserId) return;
+            if (file.size > 5 * 1024 * 1024) {
+                Swal.fire({ icon: 'error', title: 'File too large', text: 'Please choose an image under 5MB.' });
+                return;
+            }
+            Swal.fire({ title: 'Processing photo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+            try {
+                const base64 = await compressImageToBase64(file);
+                await updateDoc(doc(db, COLLECTIONS.users, currentUserId), {
+                    profilePhoto: base64, updatedAt: serverTimestamp()
                 });
+                setProfilePhoto(base64);
+                Swal.fire({ icon: 'success', title: 'Photo Updated!', timer: 1500, showConfirmButton: false });
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Failed', text: err.message });
+            }
+            input.value = '';
+        }
+
+        // ── Helper: set photo on all img targets and make visible ─────────────
+        function setProfilePhoto(src) {
+            const fallback = 'assets/img/avatars/avatar1.jpeg';
+            const url = src || fallback;
+            document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => img.src = url);
+            const main = document.getElementById('mainProfilePhoto');
+            if (main) { main.src = url; main.style.visibility = 'visible'; }
+        }
+
+        // ── Boot ──────────────────────────────────────────────────────────────
+        document.addEventListener('DOMContentLoaded', () => {
+            onAuthStateChanged(auth, async (firebaseUser) => {
+                if (!firebaseUser) { window.location.href = 'login.html'; return; }
+                currentUserId = firebaseUser.uid;
+
+                try {
+                    const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+
+                        // Topbar name
+                        const el = document.getElementById('userName');
+                        if (el) el.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || firebaseUser.email;
+
+                        // Profile photo — visible only once real src is set (no flash)
+                        setProfilePhoto(data.profilePhoto);
+
+                        // Pre-fill User Settings form
+                        document.getElementById('username').value   = data.username  || '';
+                        document.getElementById('email').value      = data.email     || firebaseUser.email;
+                        document.getElementById('first_name').value = data.firstName || '';
+                        document.getElementById('last_name').value  = data.lastName  || '';
+                    }
+                } catch (e) {
+                    console.warn('Could not load user profile:', e.message);
+                    setProfilePhoto(null);
+                }
+
+                // ── Save User Settings ────────────────────────────────────────
+                const settingsForm = document.getElementById('profileSettingsForm');
+                if (settingsForm) {
+                    settingsForm.addEventListener('submit', async (e) => {
+                        e.preventDefault();
+                        const username  = document.getElementById('username').value.trim();
+                        const firstName = document.getElementById('first_name').value.trim();
+                        const lastName  = document.getElementById('last_name').value.trim();
+
+                        if (!firstName || !lastName) {
+                            Swal.fire({ icon: 'warning', title: 'Required', text: 'First and last name are required.' });
+                            return;
+                        }
+
+                        try {
+                            await updateDoc(doc(db, COLLECTIONS.users, currentUserId), {
+                                username:  username || firebaseUser.email,
+                                firstName, lastName,
+                                updatedAt: serverTimestamp()
+                            });
+                            // Update topbar name immediately
+                            const el = document.getElementById('userName');
+                            if (el) el.textContent = `${firstName} ${lastName}`.trim();
+                            Swal.fire({ icon: 'success', title: 'Settings Saved!', timer: 1500, showConfirmButton: false });
+                        } catch (err) {
+                            Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+                        }
+                    });
+                }
+            });
+        });
+
+        // ── Avatar picker ─────────────────────────────────────────────────────
+        function changeProfilePhoto() {
+            const avatars = [
+                'assets/img/avatars/avatar1.jpeg', 'assets/img/avatars/avatar2.jpeg',
+                'assets/img/avatars/avatar3.jpeg', 'assets/img/avatars/avatar4.jpeg',
+                'assets/img/avatars/avatar5.jpeg', 'assets/img/dogs/image1.jpeg',
+                'assets/img/dogs/image2.jpeg',     'assets/img/dogs/image3.jpeg'
+            ];
+            Swal.fire({
+                title: 'Choose Your Profile Photo',
+                html: `<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:15px;padding:20px;">
+                    ${avatars.map(a => `
+                        <div style="text-align:center;cursor:pointer;" onclick="selectAvatar('${a}')">
+                            <img src="${a}" style="width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #ddd;"
+                                 onmouseover="this.style.borderColor='#4e73df'"
+                                 onmouseout="this.style.borderColor='#ddd'">
+                        </div>`).join('')}
+                </div>`,
+                showConfirmButton: false, showCancelButton: true, cancelButtonText: 'Close', width: 600
+            });
+        }
+
+        async function selectAvatar(avatarPath) {
+            Swal.close();
+            if (!currentUserId) return;
+            try {
+                await updateDoc(doc(db, COLLECTIONS.users, currentUserId), {
+                    profilePhoto: avatarPath, updatedAt: serverTimestamp()
+                });
+                setProfilePhoto(avatarPath);
+                Swal.fire({ icon: 'success', title: 'Photo Updated!', timer: 1500, showConfirmButton: false });
+            } catch (err) {
+                Swal.fire({ icon: 'error', title: 'Error', text: err.message });
             }
         }
+    </script>
+
+    <script type="module">
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        // Show admin-only sidebar items if user is admin
+        onAuthStateChanged(auth, async (firebaseUser) => {
+            if (!firebaseUser) return;
+            try {
+                const snap = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+                if (snap.exists() && snap.data().role === 'admin') {
+                    const el = document.getElementById('adminSidebarItems');
+                    if (el) el.style.display = 'block';
+                }
+            } catch(e) { console.warn(e.message); }
+        });
     </script>
 </body>
 

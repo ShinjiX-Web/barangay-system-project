@@ -34,9 +34,8 @@
                                             <div class="custom-checkbox small">
                                                 <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Remember Me</label></div>
                                             </div>
-                                        </div><button class="btn btn-primary d-block w-100 btn-user" type="submit">Login</button>
-                                        <hr><a class="btn btn-primary d-block w-100 mb-2 btn-google btn-user" role="button"><i class="fab fa-google"></i>&nbsp; Login with Google</a><a class="btn btn-primary d-block w-100 btn-facebook btn-user" role="button"><i class="fab fa-facebook-f"></i>&nbsp; Login with Facebook</a>
-                                        <hr>
+                                        </div><button class="mb-3 btn btn-primary d-block w-100 btn-user" type="submit">Login</button>
+
                                     </form>
                                     <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
                                     <div class="text-center"><a class="small" href="register.html">Create an Account!</a></div>
@@ -56,27 +55,84 @@
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="assets/js/auth-firebase.js"></script>
-    <script>
-        // Firebase login handler
+    <script type="module">
+        import { loginUser } from './assets/js/auth-firebase.js';
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
         document.addEventListener('DOMContentLoaded', () => {
+            // If already logged in and approved, redirect to dashboard
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    const userDoc = await getDoc(doc(db, COLLECTIONS.users, user.uid));
+                    if (userDoc.exists() && userDoc.data().status === 'approved') {
+                        window.location.href = 'index.html';
+                    }
+                }
+            });
+
             const form = document.querySelector('form.user');
             if (form) {
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    const email = document.getElementById('exampleInputEmail').value;
+                    const email    = document.getElementById('exampleInputEmail').value.trim();
                     const password = document.getElementById('exampleInputPassword').value;
-                    const rememberMe = document.getElementById('formCheck-1').checked;
-                    
+
+                    if (!email || !password) {
+                        Swal.fire('Error', 'Email/password required', 'warning');
+                        return;
+                    }
+
                     try {
-                        await loginUser(email, password);
+                        const firebaseUser = await loginUser(email, password);
+
+                        // Check approval status in Firestore
+                        const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+
+                        if (!userDoc.exists()) {
+                            await signOut(auth);
+                            Swal.fire('Error', 'Account not found. Please contact the administrator.', 'error');
+                            return;
+                        }
+
+                        const userData = userDoc.data();
+
+                        if (userData.status === 'pending') {
+                            await signOut(auth);
+                            Swal.fire({
+                                icon: 'info',
+                                title: 'Account Pending Approval',
+                                html: `Hi <strong>${userData.firstName}</strong>, your account is awaiting approval from the Barangay Captain.<br><br>Please check back later or contact the barangay office.`,
+                                confirmButtonColor: '#4e73df',
+                                confirmButtonText: 'OK'
+                            });
+                            return;
+                        }
+
+                        if (userData.status === 'rejected') {
+                            await signOut(auth);
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Account Rejected',
+                                text: 'Your account registration was not approved. Please contact the barangay office for more information.',
+                                confirmButtonColor: '#e74a3b'
+                            });
+                            return;
+                        }
+
+                        // Approved — go to dashboard
                         window.location.href = 'index.html';
+
                     } catch (error) {
-                        Swal.fire('Login Failed', error.message, 'error');
+                        let msg = 'Login failed. Please check your credentials.';
+                        if (error.code === 'auth/user-not-found'  ) msg = 'No account found with this email.';
+                        if (error.code === 'auth/wrong-password'  ) msg = 'Incorrect password.';
+                        if (error.code === 'auth/invalid-credential') msg = 'Invalid email or password.';
+                        Swal.fire('Login Failed', msg, 'error');
                     }
                 });
             }
-            initAuth();
         });
     </script>
 </body>

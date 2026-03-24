@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html data-bs-theme="light" lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>System Settings - Barangay 14</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        /* Dark mode overrides for SB Admin custom elements */
+        [data-bs-theme="dark"] .topbar,
+        [data-bs-theme="dark"] .sticky-footer,
+        [data-bs-theme="dark"] .footer {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .topbar {
+            border-bottom: 1px solid #2d3139;
+        }
+        [data-bs-theme="dark"] .card {
+            background-color: #212529;
+            border-color: #2d3139;
+        }
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #2d3139;
+            border-color: #3d4149;
+        }
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #3d4149;
+            color: #fff;
+        }
+        [data-bs-theme="dark"] .text-gray-600 {
+            color: #adb5bd !important;
+        }
+        [data-bs-theme="dark"] .text-gray-800 {
+            color: #dee2e6 !important;
+        }
+        [data-bs-theme="dark"] .text-dark {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .border-left-primary { border-left-color: #4e73df !important; }
+        [data-bs-theme="dark"] .border-left-success { border-left-color: #1cc88a !important; }
+        [data-bs-theme="dark"] .border-left-info    { border-left-color: #36b9cc !important; }
+        [data-bs-theme="dark"] .border-left-warning { border-left-color: #f6c23e !important; }
+        [data-bs-theme="dark"] .border-left-danger  { border-left-color: #e74a3b !important; }
+        [data-bs-theme="dark"] .table {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        [data-bs-theme="dark"] #themeToggleBtn {
+            color: #f6c23e;
+        }
+        [data-bs-theme="light"] #themeToggleBtn {
+            color: #4e73df;
+        }
+        /* Smooth transition */
+        html {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+    </style>
+</head>
+<body id="page-top">
+<div id="wrapper">
+    <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark">
+        <div class="container-fluid d-flex flex-column p-0">
+            <a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
+                <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
+                <div class="mx-3 sidebar-brand-text"><span>Brgy 14</span></div>
+            </a>
+            <hr class="my-0 sidebar-divider">
+            <ul class="navbar-nav text-light" id="accordionSidebar">
+                <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
+                <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                <div id="adminSidebarItems" style="display:none;">
+                <hr class="my-0 sidebar-divider">
+                <li class="nav-item"><a class="nav-link" href="activity-log.html"><i class="fas fa-list-alt"></i><span>Activity Log</span></a></li>
+                <li class="nav-item"><a class="nav-link active" href="system-settings.html"><i class="fas fa-cogs"></i><span>System Settings</span></a></li>
+                </div>
+            </ul>
+            <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
+        </div>
+    </nav>
+    <div class="d-flex flex-column" id="content-wrapper">
+        <div id="content">
+            <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
+                <div class="container-fluid">
+                    <button class="btn btn-link d-md-none me-3 rounded-circle" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
+                    <ul class="navbar-nav flex-nowrap ms-auto">
+<li class="nav-item me-1">
+                        <button class="btn btn-link nav-link px-2" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+                            <i class="fas fa-moon fa-fw"></i>
+                        </button>
+                            </li>
+                        <div class="d-none d-sm-block topbar-divider"></div>
+                        <li class="nav-item dropdown no-arrow">
+                            <div class="nav-item dropdown no-arrow">
+                                <a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#">
+                                    <span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small"></span>
+                                    <img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg" style="object-fit:cover;width:32px;height:32px;">
+                                </a>
+                                <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in">
+                                    <a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Profile</a>
+                                    <a class="dropdown-item" href="system-settings.html"><i class="fas fa-cogs me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Settings</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Logout</a>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <div class="container-fluid">
+                <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                    <h3 class="text-dark mb-0">System Settings</h3>
+                </div>
+
+                <div class="row">
+                    <!-- Barangay Info -->
+                    <div class="col-lg-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="text-primary m-0 fw-bold"><i class="fas fa-building me-2"></i>Barangay Information</h6>
+                            </div>
+                            <div class="card-body">
+                                <form id="barangayInfoForm">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Barangay Name</label>
+                                        <input type="text" class="form-control" id="brgyName" value="Barangay 14">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Zone / District</label>
+                                        <input type="text" class="form-control" id="brgyZone" value="Zone 2, District 2">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">City / Municipality</label>
+                                        <input type="text" class="form-control" id="brgyCity" value="Manila">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Province</label>
+                                        <input type="text" class="form-control" id="brgyProvince" value="Metro Manila">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Contact Number</label>
+                                        <input type="text" class="form-control" id="brgyContact" placeholder="02-XXXX-XXXX">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Email Address</label>
+                                        <input type="email" class="form-control" id="brgyEmail" placeholder="brgy14@manila.gov.ph">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save me-1"></i>Save Barangay Info</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Captain Info + System -->
+                    <div class="col-lg-6">
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="text-primary m-0 fw-bold"><i class="fas fa-user-tie me-2"></i>Barangay Captain</h6>
+                            </div>
+                            <div class="card-body">
+                                <form id="captainInfoForm">
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Captain Name</label>
+                                        <input type="text" class="form-control" id="captainName" placeholder="Full name">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Term Start</label>
+                                        <input type="date" class="form-control" id="captainTermStart">
+                                    </div>
+                                    <div class="mb-3">
+                                        <label class="form-label fw-bold">Term End</label>
+                                        <input type="date" class="form-control" id="captainTermEnd">
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm"><i class="fas fa-save me-1"></i>Save Captain Info</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="text-primary m-0 fw-bold"><i class="fas fa-database me-2"></i>System Status</h6>
+                            </div>
+                            <div class="card-body">
+                                <div id="systemStatus">
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="small fw-bold">Firebase Auth</span>
+                                        <span class="badge bg-success" id="statusAuth">Checking...</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-2">
+                                        <span class="small fw-bold">Firestore DB</span>
+                                        <span class="badge bg-success" id="statusDB">Checking...</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <span class="small fw-bold">Total Records</span>
+                                        <span class="badge bg-primary" id="statusRecords">—</span>
+                                    </div>
+                                    <button class="btn btn-outline-primary btn-sm w-100" onclick="checkStatus()"><i class="fas fa-sync me-1"></i>Refresh Status</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Danger Zone -->
+                <div class="card shadow mb-4 border-left-danger">
+                    <div class="card-header py-3">
+                        <h6 class="text-danger m-0 fw-bold"><i class="fas fa-exclamation-triangle me-2"></i>Danger Zone</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <p class="small text-muted">Clear all activity logs from the system. This cannot be undone.</p>
+                                <a href="activity-log.html" class="btn btn-outline-warning btn-sm"><i class="fas fa-list-alt me-1"></i>Go to Activity Logs</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <footer class="bg-white footer sticky-footer">
+            <div class="container my-auto">
+                <div class="text-center my-auto copyright"><span>Copyright &copy; Barangay 14 Zone 2 District 2 2026</span></div>
+            </div>
+        </footer>
+    </div>
+    <a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
+</div>
+
+<script src="assets/bootstrap/js/bootstrap.min.js"></script>
+<script src="assets/js/bs-init.js"></script>
+<script src="assets/js/theme.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script type="module">
+    import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+    import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+    import { collection, getDocs, getDoc, doc, setDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+    window.logout      = async () => { await signOut(auth); window.location.href = 'login.html'; };
+    window.checkStatus = checkStatus;
+
+    document.addEventListener('DOMContentLoaded', () => {
+        onAuthStateChanged(auth, async (firebaseUser) => {
+            if (!firebaseUser) { window.location.href = 'login.html'; return; }
+
+            try {
+                const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+                if (userDoc.exists()) {
+                    const data = userDoc.data();
+                    const el = document.getElementById('userName');
+                    if (el) el.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || firebaseUser.email;
+                    if (data.profilePhoto) {
+                        document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => img.src = data.profilePhoto);
+                    }
+
+                    // Only admins should access this page
+                    if (data.role !== 'admin') {
+                        Swal.fire({ icon: 'error', title: 'Access Denied', text: 'Admin access required.' })
+                            .then(() => window.location.href = 'index.html');
+                        return;
+                    }
+                }
+            } catch(e) { console.warn(e.message); }
+
+            // Load saved settings
+            await loadSettings();
+            await checkStatus();
+        });
+    });
+
+    async function loadSettings() {
+        try {
+            const snap = await getDoc(doc(db, 'settings', 'barangay'));
+            if (snap.exists()) {
+                const d = snap.data();
+                document.getElementById('brgyName').value        = d.name        || 'Barangay 14';
+                document.getElementById('brgyZone').value        = d.zone        || 'Zone 2, District 2';
+                document.getElementById('brgyCity').value        = d.city        || 'Manila';
+                document.getElementById('brgyProvince').value    = d.province    || 'Metro Manila';
+                document.getElementById('brgyContact').value     = d.contact     || '';
+                document.getElementById('brgyEmail').value       = d.email       || '';
+                document.getElementById('captainName').value     = d.captainName || '';
+                document.getElementById('captainTermStart').value= d.termStart   || '';
+                document.getElementById('captainTermEnd').value  = d.termEnd     || '';
+            }
+        } catch(e) { console.warn('Could not load settings:', e.message); }
+    }
+
+    // Save Barangay Info
+    document.getElementById('barangayInfoForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            await setDoc(doc(db, 'settings', 'barangay'), {
+                name:     document.getElementById('brgyName').value.trim(),
+                zone:     document.getElementById('brgyZone').value.trim(),
+                city:     document.getElementById('brgyCity').value.trim(),
+                province: document.getElementById('brgyProvince').value.trim(),
+                contact:  document.getElementById('brgyContact').value.trim(),
+                email:    document.getElementById('brgyEmail').value.trim(),
+                updatedAt: serverTimestamp()
+            }, { merge: true });
+            Swal.fire({ icon: 'success', title: 'Saved!', timer: 1500, showConfirmButton: false });
+        } catch(err) {
+            Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+        }
+    });
+
+    // Save Captain Info
+    document.getElementById('captainInfoForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        try {
+            await setDoc(doc(db, 'settings', 'barangay'), {
+                captainName: document.getElementById('captainName').value.trim(),
+                termStart:   document.getElementById('captainTermStart').value,
+                termEnd:     document.getElementById('captainTermEnd').value,
+                updatedAt:   serverTimestamp()
+            }, { merge: true });
+            Swal.fire({ icon: 'success', title: 'Saved!', timer: 1500, showConfirmButton: false });
+        } catch(err) {
+            Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+        }
+    });
+
+    async function checkStatus() {
+        const authEl    = document.getElementById('statusAuth');
+        const dbEl      = document.getElementById('statusDB');
+        const recordsEl = document.getElementById('statusRecords');
+
+        // Auth status
+        authEl.className = auth.currentUser ? 'badge bg-success' : 'badge bg-danger';
+        authEl.textContent = auth.currentUser ? 'Connected' : 'Disconnected';
+
+        // Firestore status + record counts
+        try {
+            const [users, residents, certs] = await Promise.all([
+                getDocs(collection(db, COLLECTIONS.users)),
+                getDocs(collection(db, COLLECTIONS.residents)),
+                getDocs(collection(db, COLLECTIONS.certificates))
+            ]);
+            dbEl.className   = 'badge bg-success';
+            dbEl.textContent = 'Connected';
+            const total = users.size + residents.size + certs.size;
+            recordsEl.textContent = `${total} (${users.size} staff, ${residents.size} residents, ${certs.size} certs)`;
+        } catch(err) {
+            dbEl.className   = 'badge bg-danger';
+            dbEl.textContent = 'Error';
+            recordsEl.textContent = '—';
+        }
+    }
+</script>
+    <script type="module">
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        // Show admin-only sidebar items if user is admin
+        onAuthStateChanged(auth, async (firebaseUser) => {
+            if (!firebaseUser) return;
+            try {
+                const snap = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+                if (snap.exists() && snap.data().role === 'admin') {
+                    const el = document.getElementById('adminSidebarItems');
+                    if (el) el.style.display = 'block';
+                }
+            } catch(e) { console.warn(e.message); }
+        });
+    </script>
+</body>
+</html>

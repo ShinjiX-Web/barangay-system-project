@@ -199,17 +199,25 @@ export async function getDashboardStats() {
       getDocs(collection(db, COLLECTIONS.residents)),
       getDocs(collection(db, COLLECTIONS.certificates))
     ]);
-    
-    const today = new Date().toISOString().split('T')[0];
+
+    // Fix: use start of today as a JS Date — Firestore accepts Date objects
+    // when compared against Timestamp fields via >= operator
+    const todayStart = new Date();
+    todayStart.setHours(0, 0, 0, 0);
+
     const todayCerts = await getDocs(
-      query(collection(db, COLLECTIONS.certificates), 
-           where('requestDate', '>=', new Date(today)))
+      query(
+        collection(db, COLLECTIONS.certificates),
+        where('requestDate', '>=', todayStart),
+        orderBy('requestDate', 'desc')
+      )
     );
-    
+
+    // Count both 'pending' and 'processing' as active requests
     const pendingCerts = await getDocs(
-      query(collection(db, COLLECTIONS.certificates), where('status', '==', 'pending'))
+      query(collection(db, COLLECTIONS.certificates), where('status', 'in', ['pending', 'processing']))
     );
-    
+
     return {
       totalStaff: usersSnap.size,
       totalResidents: residentsSnap.size,
@@ -221,4 +229,3 @@ export async function getDashboardStats() {
     return { totalStaff: 0, totalResidents: 0, todayCertificates: 0, pendingRequests: 0 };
   }
 }
-

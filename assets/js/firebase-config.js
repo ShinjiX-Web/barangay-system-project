@@ -8,12 +8,12 @@ import { getFirestore, collection, doc, addDoc, getDoc, getDocs, updateDoc, dele
 import { getStorage, ref, uploadBytes, getDownloadURL } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-storage.js';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAAMgLqMnsRgovpgV6dRcW459feF_AOd6w",
-  authDomain: "barangay-system-701b9.firebaseapp.com",
-  projectId: "barangay-system-701b9",
-  storageBucket: "barangay-system-701b9.firebasestorage.app",
-  messagingSenderId: "595188953117",
-  appId: "1:595188953117:web:4371ec5d47b6d18da6d6f4"
+  apiKey: "__FIREBASE_API_KEY__",
+  authDomain: "__FIREBASE_AUTH_DOMAIN__",
+  projectId: "__FIREBASE_PROJECT_ID__",
+  storageBucket: "__FIREBASE_STORAGE_BUCKET__",
+  messagingSenderId: "__FIREBASE_MESSAGING_SENDER_ID__",
+  appId: "__FIREBASE_APP_ID__"
 };
 
 // Initialize Firebase

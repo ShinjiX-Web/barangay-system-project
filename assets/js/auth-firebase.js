@@ -1,11 +1,7 @@
 // Firebase Authentication - Migrated from auth.js
 import { auth, db, COLLECTIONS } from './firebase-config.js';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, updateProfile } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
-import { doc, getDoc, setDoc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
-import { getUsers } from './firebase-db.js';
-
-// Super Admin UID (set manually in Firebase Console)
-const SUPER_ADMIN_UID = 'superadmin@example.com'; // Update after first user
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+import { doc, getDoc, setDoc, updateDoc, addDoc, collection, getDocs, query, limit, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
 // Current user (cached)
 let currentUserData = null;
@@ -14,7 +10,6 @@ let currentUserData = null;
 export function onAuthStateChangedCallback(callback) {
   return onAuthStateChanged(auth, async (user) => {
     if (user) {
-      // Get profile from Firestore
       const userDoc = await getDoc(doc(db, COLLECTIONS.users, user.uid));
       if (userDoc.exists()) {
         currentUserData = { uid: user.uid, ...userDoc.data() };
@@ -27,29 +22,49 @@ export function onAuthStateChangedCallback(callback) {
   });
 }
 
-// Register new staff (creates Firebase Auth + Firestore profile)
-export async function registerUser(firstName, lastName, email, password, position = 'Staff') {
+// ─── Register new staff ────────────────────────────────────────────────────────
+// Uses a secondary Firebase app instance so the currently logged-in admin
+// session is NOT interrupted when creating a new user account.
+export async function registerUser(firstName, lastName, email, password, role = 'staff') {
   try {
-    // Create Auth user
-    const userCredential = await createUserWithEmailAndPassword(auth, email, password);
-    const user = userCredential.user;
+    // Check existing user count BEFORE creating (first user becomes admin)
+    const usersSnap = await getDocs(query(collection(db, COLLECTIONS.users), limit(1)));
+    const isFirstUser = usersSnap.empty;
 
-    // Create Firestore profile
-    await setDoc(doc(db, COLLECTIONS.users, user.uid), {
+    // Create secondary app instance so admin stays signed in
+    const { initializeApp }                          = await import('https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js');
+    const { getAuth, createUserWithEmailAndPassword: _createUser }
+                                                     = await import('https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js');
+
+    const secondaryApp  = initializeApp(auth.app.options, `reg-${Date.now()}`);
+    const secondaryAuth = getAuth(secondaryApp);
+
+    const cred = await _createUser(secondaryAuth, email, password);
+    const uid  = cred.user.uid;
+    await secondaryAuth.signOut();
+
+    // First user = auto-approved admin (the barangay captain bootstrapping the system)
+    // All subsequent users = pending approval
+    const assignedRole = isFirstUser ? 'admin' : role;
+    const status       = isFirstUser ? 'approved' : 'pending';
+
+    await setDoc(doc(db, COLLECTIONS.users, uid), {
       firstName,
       lastName,
       email,
-      role: 'staff',
-      position,
+      username:     email,
+      role:         assignedRole,
+      position:     isFirstUser ? 'Barangay Captain' : '',
       profilePhoto: 'assets/img/avatars/avatar1.jpeg',
-      isActive: true,
-      dateHired: new Date().toISOString(),
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString()
+      isActive:     isFirstUser,   // first user active immediately, others wait
+      status,                      // 'pending' | 'approved' | 'rejected'
+      dateHired:    serverTimestamp(),
+      createdAt:    serverTimestamp(),
+      updatedAt:    serverTimestamp()
     });
 
-    console.log('User registered:', user.uid);
-    return user.uid;
+    console.log(`User registered (${assignedRole}, ${status}):`, uid);
+    return uid;
   } catch (error) {
     console.error('Register error:', error);
     throw error;
@@ -57,10 +72,9 @@ export async function registerUser(firstName, lastName, email, password, positio
 }
 
 // Login user
-export async function loginUser(email, password, rememberMe = false) {
+export async function loginUser(email, password) {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
-    // onAuthStateChanged will handle profile load
     return userCredential.user;
   } catch (error) {
     console.error('Login error:', error);
@@ -78,7 +92,7 @@ export async function logoutUser() {
   }
 }
 
-// Get current user (from cache or Firestore)
+// Get current user (from cache)
 export function getCurrentUser() {
   return currentUserData;
 }
@@ -86,13 +100,11 @@ export function getCurrentUser() {
 // Update profile photo
 export async function updateProfilePhoto(photoUrl) {
   if (!currentUserData) return false;
-  
   try {
     await updateDoc(doc(db, COLLECTIONS.users, currentUserData.uid), {
       profilePhoto: photoUrl,
-      updatedAt: new Date().toISOString()
+      updatedAt:    serverTimestamp()
     });
-    
     currentUserData.profilePhoto = photoUrl;
     updateProfileImages();
     return true;
@@ -106,7 +118,6 @@ export async function updateProfilePhoto(photoUrl) {
 export function updateProfileImages() {
   const user = getCurrentUser();
   if (!user) return;
-  
   document.querySelectorAll('.user-profile-img').forEach(img => {
     img.src = user.profilePhoto || 'assets/img/avatars/avatar1.jpeg';
   });
@@ -116,35 +127,53 @@ export function updateProfileImages() {
 export function hasRole(requiredRole) {
   const user = getCurrentUser();
   if (!user) return false;
-  
   const hierarchy = { superadmin: 4, admin: 3, secretary: 2, staff: 1 };
-  return hierarchy[user.role] >= hierarchy[requiredRole];
+  return (hierarchy[user.role] || 0) >= (hierarchy[requiredRole] || 0);
 }
 
-export function isAdmin() {
-  return getCurrentUser()?.role === 'admin';
-}
+export function isAdmin()      { return getCurrentUser()?.role === 'admin'; }
+export function isSuperAdmin() { return getCurrentUser()?.role === 'superadmin'; }
 
-export function isSuperAdmin() {
-  return getCurrentUser()?.role === 'superadmin';
-}
-
-// Activity log (Firestore)
-export async function logActivity(action, module, details) {
+// Activity log
+export async function logActivity(action, module, description) {
   const user = getCurrentUser();
   if (!user) return;
-  
   try {
     await addDoc(collection(db, COLLECTIONS.activityLogs), {
-      userId: user.uid,
+      userId:      user.uid,
+      userName:    `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email,
+      userEmail:   user.email,
       action,
       module,
-      details,
-      timestamp: serverTimestamp()
+      description,
+      timestamp:   serverTimestamp()
     });
   } catch (error) {
     console.error('Log error:', error);
   }
+}
+
+// Init - call in HTML pages that need auth guard
+export function initAuth() {
+  onAuthStateChanged(auth, async (user) => {
+    const path = window.location.pathname;
+    const isPublic = path.includes('login.html') || path.includes('register.html');
+    if (!user) {
+      if (!isPublic) window.location.href = 'login.html';
+      return;
+    }
+    // Check approval status — pending/rejected users can't access protected pages
+    try {
+      const snap = await getDoc(doc(db, COLLECTIONS.users, user.uid));
+      if (snap.exists()) {
+        const status = snap.data().status;
+        if (status === 'pending' || status === 'rejected') {
+          await signOut(auth);
+          window.location.href = 'login.html';
+        }
+      }
+    } catch(e) { console.warn('initAuth check failed:', e.message); }
+  });
 }
 
 // Validation
@@ -152,21 +181,10 @@ export function isValidEmail(email) {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
-// Init - call in HTML
-export function initAuth() {
-  // Auto-check auth on load
-  onAuthStateChangedCallback((user) => {
-    if (!user && window.location.pathname !== '/login.html' && window.location.pathname !== '/register.html') {
-      window.location.href = 'login.html';
-    }
-  });
-}
-
 // Global exports for backward compat
-window.getCurrentUser = getCurrentUser;
+window.getCurrentUser    = getCurrentUser;
 window.updateProfileImages = updateProfileImages;
-window.logout = logoutUser; // Wrapper
-window.isValidEmail = isValidEmail;
-window.isAdmin = isAdmin;
-window.hasRole = hasRole;
-
+window.logout            = logoutUser;
+window.isValidEmail      = isValidEmail;
+window.isAdmin           = isAdmin;
+window.hasRole           = hasRole;

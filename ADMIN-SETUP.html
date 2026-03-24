@@ -1,46 +1,49 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-bs-theme="light" lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin Setup - Barangay 14</title>
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-gradient-primary">
+    <!-- Theme Toggle Button (Fixed Position) -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <button class="btn btn-link text-white" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+            <i class="fas fa-moon fa-fw fa-2x"></i>
+        </button>
+    </div>
+    
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6 mt-5">
                 <div class="card shadow">
                     <div class="card-header">
-                        <h4 class="text-primary mb-0">Admin Setup & Database Check</h4>
+                        <h4 class="text-primary mb-0">Admin Setup &amp; Database Check</h4>
                     </div>
                     <div class="card-body">
-                        <h5>Database Status</h5>
+                        <h5>Firebase Auth Status</h5>
+                        <div id="authStatus" class="alert alert-info">Checking...</div>
+
+                        <h5 class="mt-4">Firestore Collections</h5>
                         <div id="dbStatus" class="alert alert-info">Checking...</div>
-                        
-                        <h5 class="mt-4">Admin Account</h5>
-                        <div id="adminStatus" class="alert alert-info">Checking...</div>
-                        
+
                         <div class="mt-4">
                             <button class="btn btn-primary w-100 mb-2" onclick="checkDatabase()">
                                 <i class="fas fa-sync"></i> Check Database
-                            </button>
-                            <button class="btn btn-success w-100 mb-2" onclick="createAdmin()">
-                                <i class="fas fa-user-plus"></i> Create Admin Account
-                            </button>
-                            <button class="btn btn-warning w-100 mb-2" onclick="clearDatabase()">
-                                <i class="fas fa-trash"></i> Clear Database (Reset)
                             </button>
                             <a href="login.html" class="btn btn-info w-100">
                                 <i class="fas fa-sign-in-alt"></i> Go to Login
                             </a>
                         </div>
-                        
-                        <div class="mt-4">
-                            <h6>Default Credentials:</h6>
-                            <p class="mb-1"><strong>Email:</strong> admin@brgy14.gov.ph</p>
-                            <p class="mb-0"><strong>Password:</strong> admin123</p>
+
+                        <div class="mt-4 alert alert-warning">
+                            <h6>Note</h6>
+                            <p class="mb-1">This system uses Firebase Auth + Firestore.</p>
+                            <p class="mb-1">To create the first admin, register via <a href="register.html">register.html</a> then manually set <code>role: "admin"</code> in Firestore Console.</p>
                         </div>
                     </div>
                 </div>
@@ -48,94 +51,50 @@
         </div>
     </div>
 
-    <script src="assets/js/database.js"></script>
-    <script>
-        function checkDatabase() {
-            const users = getUsers();
-            const residents = getResidents();
-            const certificates = getCertificates();
-            
-            const dbStatus = document.getElementById('dbStatus');
-            const adminStatus = document.getElementById('adminStatus');
-            
-            // Check database
-            const isInit = localStorage.getItem('dbInitialized');
-            dbStatus.className = 'alert ' + (isInit ? 'alert-success' : 'alert-warning');
-            dbStatus.innerHTML = `
-                <strong>Database Status:</strong> ${isInit ? 'Initialized ✅' : 'Not initialized ⚠️'}<br>
-                <strong>Users:</strong> ${Object.keys(users).length}<br>
-                <strong>Residents:</strong> ${Object.keys(residents).length}<br>
-                <strong>Certificates:</strong> ${Object.keys(certificates).length}
-            `;
-            
-            // Check admin
-            const adminEmail = 'admin@brgy14.gov.ph';
-            const admin = users[adminEmail];
-            
-            adminStatus.className = 'alert ' + (admin ? 'alert-success' : 'alert-danger');
-            if (admin) {
-                adminStatus.innerHTML = `
-                    <strong>Admin Status:</strong> Exists ✅<br>
-                    <strong>Name:</strong> ${admin.firstName} ${admin.lastName}<br>
-                    <strong>Email:</strong> ${admin.email}<br>
-                    <strong>Role:</strong> ${admin.role}<br>
-                    <strong>Position:</strong> ${admin.position}
-                `;
+    <script type="module">
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { collection, getDocs } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        window.checkDatabase = checkDatabase;
+
+        onAuthStateChanged(auth, (user) => {
+            const el = document.getElementById('authStatus');
+            if (user) {
+                el.className = 'alert alert-success';
+                el.innerHTML = `<strong>Logged in as:</strong> ${user.email}`;
             } else {
-                adminStatus.innerHTML = `
-                    <strong>Admin Status:</strong> Not found ❌<br>
-                    Click "Create Admin Account" button to create default admin.
+                el.className = 'alert alert-warning';
+                el.innerHTML = '<strong>Not logged in.</strong> <a href="login.html">Login here</a>';
+            }
+        });
+
+        async function checkDatabase() {
+            const el = document.getElementById('dbStatus');
+            el.className = 'alert alert-info';
+            el.textContent = 'Checking...';
+            try {
+                const [usersSnap, residentsSnap, certsSnap] = await Promise.all([
+                    getDocs(collection(db, COLLECTIONS.users)),
+                    getDocs(collection(db, COLLECTIONS.residents)),
+                    getDocs(collection(db, COLLECTIONS.certificates))
+                ]);
+                el.className = 'alert alert-success';
+                el.innerHTML = `
+                    <strong>Firestore connected ✅</strong><br>
+                    Users: ${usersSnap.size}<br>
+                    Residents: ${residentsSnap.size}<br>
+                    Certificates: ${certsSnap.size}
                 `;
+            } catch (err) {
+                el.className = 'alert alert-danger';
+                el.innerHTML = `<strong>Error:</strong> ${err.message}`;
             }
         }
-        
-        function createAdmin() {
-            createDefaultAdmin();
-            localStorage.setItem('dbInitialized', 'true');
-            
-            Swal.fire({
-                icon: 'success',
-                title: 'Admin Created!',
-                html: `
-                    Default admin account created successfully!<br><br>
-                    <strong>Email:</strong> admin@brgy14.gov.ph<br>
-                    <strong>Password:</strong> admin123
-                `,
-                confirmButtonColor: '#4e73df'
-            }).then(() => {
-                checkDatabase();
-            });
-        }
-        
-        function clearDatabase() {
-            Swal.fire({
-                icon: 'warning',
-                title: 'Clear Database?',
-                text: 'This will delete ALL data including users, residents, and certificates!',
-                showCancelButton: true,
-                confirmButtonColor: '#e74a3b',
-                cancelButtonColor: '#858796',
-                confirmButtonText: 'Yes, clear it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    localStorage.clear();
-                    Swal.fire({
-                        icon: 'success',
-                        title: 'Database Cleared!',
-                        text: 'All data has been removed.',
-                        confirmButtonColor: '#4e73df'
-                    }).then(() => {
-                        checkDatabase();
-                    });
-                }
-            });
-        }
-        
-        // Check on page load
-        window.addEventListener('DOMContentLoaded', function() {
-            initializeDatabase();
-            checkDatabase();
-        });
+
+        // Auto-check on load
+        document.addEventListener('DOMContentLoaded', checkDatabase);
     </script>
+    <script src="assets/js/theme-toggle.js"></script>
 </body>
 </html>

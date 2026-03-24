@@ -1,0 +1,289 @@
+/* Dark Mode Theme Styles */
+
+/* Bootstrap Dark Mode Overrides for SB Admin */
+
+/* Sidebar full height fix */
+.sidebar {
+    min-height: 100vh;
+}
+
+/* Main content area backgrounds */
+[data-bs-theme="dark"] body {
+    background-color: #0d1117 !important;
+}
+
+[data-bs-theme="dark"] #content-wrapper,
+[data-bs-theme="dark"] #wrapper,
+[data-bs-theme="dark"] #content,
+[data-bs-theme="dark"] .container-fluid {
+    background-color: #0d1117 !important;
+}
+
+/* Sidebar dark mode - keep it darker */
+[data-bs-theme="dark"] .sidebar,
+[data-bs-theme="dark"] .sidebar.bg-gradient-primary {
+    background: linear-gradient(180deg, #1a1d23 10%, #0d1117 100%) !important;
+}
+
+[data-bs-theme="dark"] .sidebar .nav-item .nav-link {
+    color: #dee2e6 !important;
+}
+
+[data-bs-theme="dark"] .sidebar .nav-item .nav-link:hover,
+[data-bs-theme="dark"] .sidebar .nav-item .nav-link.active {
+    color: #fff !important;
+}
+
+[data-bs-theme="dark"] .sidebar-brand {
+    color: #fff !important;
+}
+
+[data-bs-theme="dark"] .sidebar-divider {
+    border-color: #2d3139 !important;
+}
+
+[data-bs-theme="dark"] .topbar,
+[data-bs-theme="dark"] .sticky-footer,
+[data-bs-theme="dark"] .footer {
+    background-color: #1a1d23 !important;
+}
+
+[data-bs-theme="dark"] .topbar {
+    border-bottom: 1px solid #2d3139;
+}
+
+[data-bs-theme="dark"] .card {
+    background-color: #212529;
+    border-color: #2d3139;
+}
+
+[data-bs-theme="dark"] .dropdown-menu {
+    background-color: #2d3139;
+    border-color: #3d4149;
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover {
+    background-color: #3d4149;
+    color: #fff;
+}
+
+[data-bs-theme="dark"] .text-gray-600 {
+    color: #adb5bd !important;
+}
+
+[data-bs-theme="dark"] .text-gray-800 {
+    color: #dee2e6 !important;
+}
+
+[data-bs-theme="dark"] .text-dark {
+    color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] .bg-white {
+    background-color: #1a1d23 !important;
+}
+
+[data-bs-theme="dark"] .border-left-primary { 
+    border-left-color: #4e73df !important; 
+}
+
+[data-bs-theme="dark"] .border-left-success { 
+    border-left-color: #1cc88a !important; 
+}
+
+[data-bs-theme="dark"] .border-left-info { 
+    border-left-color: #36b9cc !important; 
+}
+
+[data-bs-theme="dark"] .border-left-warning { 
+    border-left-color: #f6c23e !important; 
+}
+
+[data-bs-theme="dark"] .border-left-danger { 
+    border-left-color: #e74a3b !important; 
+}
+
+[data-bs-theme="dark"] .table {
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .table-hover tbody tr:hover {
+    background-color: rgba(255,255,255,0.05);
+}
+
+/* Headings and text in dark mode */
+[data-bs-theme="dark"] h1,
+[data-bs-theme="dark"] h2,
+[data-bs-theme="dark"] h3,
+[data-bs-theme="dark"] h4,
+[data-bs-theme="dark"] h5,
+[data-bs-theme="dark"] h6 {
+    color: #f8f9fa !important;
+}
+
+[data-bs-theme="dark"] p,
+[data-bs-theme="dark"] span,
+[data-bs-theme="dark"] label {
+    color: #dee2e6;
+}
+
+/* Specific utility class overrides */
+[data-bs-theme="dark"] .text-primary {
+    color: #1a1d23 !important;
+}
+
+[data-bs-theme="dark"] .text-success {
+    color: #1cc88a !important;
+}
+
+[data-bs-theme="dark"] .text-info {
+    color: #36b9cc !important;
+}
+
+[data-bs-theme="dark"] .text-warning {
+    color: #f6c23e !important;
+}
+
+[data-bs-theme="dark"] .text-danger {
+    color: #e74a3b !important;
+}
+
+/* Modal dark mode */
+[data-bs-theme="dark"] .modal-content {
+    background-color: #1a1d23;
+    border-color: #2d3139;
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .modal-header {
+    border-bottom-color: #2d3139;
+}
+
+[data-bs-theme="dark"] .modal-footer {
+    border-top-color: #2d3139;
+}
+
+/* Alert dark mode */
+[data-bs-theme="dark"] .alert-info {
+    background-color: #1f3d4d;
+    border-color: #2d5a6e;
+    color: #b8daff;
+}
+
+[data-bs-theme="dark"] .alert-success {
+    background-color: #1d4831;
+    border-color: #2d6a48;
+    color: #c3e6cb;
+}
+
+[data-bs-theme="dark"] .alert-warning {
+    background-color: #4d3d1f;
+    border-color: #6e5a2d;
+    color: #ffd966;
+}
+
+[data-bs-theme="dark"] .alert-danger {
+    background-color: #4d1f1f;
+    border-color: #6e2d2d;
+    color: #f8b9b7;
+}
+
+/* Input group dark mode */
+[data-bs-theme="dark"] .input-group-text {
+    background-color: #2d3139;
+    border-color: #3d4149;
+    color: #dee2e6;
+}
+
+/* Theme Toggle Button Colors */
+[data-bs-theme="dark"] #themeToggleBtn {
+    color: #f6c23e;
+}
+
+[data-bs-theme="light"] #themeToggleBtn {
+    color: #4e73df;
+}
+
+/* Auth Pages Dark Mode */
+[data-bs-theme="dark"] .bg-gradient-primary {
+    background: linear-gradient(135deg, #1a1d23 0%, #2d3139 100%) !important;
+}
+
+[data-bs-theme="dark"] .form-control {
+    background-color: #2d3139;
+    border-color: #3d4149;
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .form-control:focus {
+    background-color: #2d3139;
+    border-color: #4e73df;
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+    color: #6c757d;
+}
+
+[data-bs-theme="dark"] .text-muted {
+    color: #adb5bd !important;
+}
+
+/* Links - using default Bootstrap behavior for better readability */
+/* [data-bs-theme="dark"] a {
+    color: #4e9cdf;
+}
+
+[data-bs-theme="dark"] a:hover {
+    color: #6eb5f0;
+} */
+
+/* Custom style.css elements dark mode */
+[data-bs-theme="dark"] .features {
+    background: #1a1d23;
+}
+
+[data-bs-theme="dark"] .section-title {
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .feature-card {
+    background: #2d3139;
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .feature-card p {
+    color: #adb5bd;
+}
+
+[data-bs-theme="dark"] .contact {
+    background: #1a1d23;
+}
+
+[data-bs-theme="dark"] .social-link {
+    background: #2d3139;
+    color: #dee2e6;
+}
+
+[data-bs-theme="dark"] .social-link:hover {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+}
+
+/* Smooth theme transition */
+html {
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+body,
+.card,
+.form-control,
+.dropdown-menu,
+.topbar,
+.footer {
+    transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}

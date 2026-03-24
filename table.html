@@ -9,6 +9,66 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        /* Dark mode overrides for SB Admin custom elements */
+        [data-bs-theme="dark"] .topbar,
+        [data-bs-theme="dark"] .sticky-footer,
+        [data-bs-theme="dark"] .footer {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .topbar {
+            border-bottom: 1px solid #2d3139;
+        }
+        [data-bs-theme="dark"] .card {
+            background-color: #212529;
+            border-color: #2d3139;
+        }
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #2d3139;
+            border-color: #3d4149;
+        }
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #3d4149;
+            color: #fff;
+        }
+        [data-bs-theme="dark"] .text-gray-600 {
+            color: #adb5bd !important;
+        }
+        [data-bs-theme="dark"] .text-gray-800 {
+            color: #dee2e6 !important;
+        }
+        [data-bs-theme="dark"] .text-dark {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .border-left-primary { border-left-color: #4e73df !important; }
+        [data-bs-theme="dark"] .border-left-success { border-left-color: #1cc88a !important; }
+        [data-bs-theme="dark"] .border-left-info    { border-left-color: #36b9cc !important; }
+        [data-bs-theme="dark"] .border-left-warning { border-left-color: #f6c23e !important; }
+        [data-bs-theme="dark"] .border-left-danger  { border-left-color: #e74a3b !important; }
+        [data-bs-theme="dark"] .table {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        [data-bs-theme="dark"] #themeToggleBtn {
+            color: #f6c23e;
+        }
+        [data-bs-theme="light"] #themeToggleBtn {
+            color: #4e73df;
+        }
+        /* Smooth transition */
+        html {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -16,13 +76,18 @@
         <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark">
             <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="#">
                     <div class="sidebar-brand-icon rotate-n-15"><i class="fas fa-laugh-wink"></i></div>
-                    <div class="mx-3 sidebar-brand-text"><span>Brand</span></div>
+                    <div class="mx-3 sidebar-brand-text"><span>Brgy 14</span></div>
                 </a>
                 <hr class="my-0 sidebar-divider">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
-                    <li class="nav-item"><a class="nav-link" href="/index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="/profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
-                    <li class="nav-item"><a class="nav-link active" href="/table.html"><i class="fas fa-table"></i><span>Table</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="index.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                    <li class="nav-item"><a class="nav-link active" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <hr class="my-0 sidebar-divider">
+                    <li class="nav-item"><a class="nav-link" href="activity-log.html"><i class="fas fa-list-alt"></i><span>Activity Log</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="system-settings.html"><i class="fas fa-cogs"></i><span>System Settings</span></a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -110,6 +175,11 @@
                                 </div>
                                 <div class="shadow dropdown-list dropdown-menu dropdown-menu-end" aria-labelledby="alertsDropdown"></div>
                             </li>
+<li class="nav-item me-1">
+                                <button class="btn btn-link nav-link px-2" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+                                    <i class="fas fa-moon fa-fw"></i>
+                                </button>
+                            </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small">Valerie Luna</span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
@@ -122,7 +192,36 @@
                     </div>
                 </nav>
                 <div class="container-fluid">
-                    <h3 class="text-dark mb-4">Staff Management</h3>
+                    <div class="d-sm-flex justify-content-between align-items-center mb-4">
+                        <h3 class="text-dark mb-0">Staff Management</h3>
+                    </div>
+
+                    <!-- Pending Approvals (admin only) -->
+                    <div class="card shadow mb-4 border-left-warning" id="pendingCard" style="display:none;">
+                        <div class="card-header py-3 d-flex justify-content-between align-items-center">
+                            <h6 class="text-warning m-0 fw-bold"><i class="fas fa-user-clock me-2"></i>Pending Account Approvals</h6>
+                            <span class="badge bg-warning text-dark" id="pendingCount">0</span>
+                        </div>
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-hover mb-0">
+                                    <thead class="table-light">
+                                        <tr>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Requested Role</th>
+                                            <th>Registered</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="pendingTableBody">
+                                        <tr><td colspan="5" class="text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="card shadow">
                         <div class="card-header py-3">
                             <p class="text-primary m-0 fw-bold">Barangay Staff Information</p>
@@ -154,88 +253,13 @@
                                         </tr>
                                     </thead>
                                      <tbody id="userTableBody">
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Airi Satou</td>
-                                            <td>Accountant</td>
-                                            <td>Tokyo</td>
-                                            <td>33</td>
-                                            <td>2008/11/28</td>
-                                            <td>$162,700</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar2.jpeg">Angelica Ramos</td>
-                                            <td>Chief Executive Officer(CEO)</td>
-                                            <td>London</td>
-                                            <td>47</td>
-                                            <td>2009/10/09<br></td>
-                                            <td>$1,200,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar3.jpeg">Ashton Cox</td>
-                                            <td>Junior Technical Author</td>
-                                            <td>San Francisco</td>
-                                            <td>66</td>
-                                            <td>2009/01/12<br></td>
-                                            <td>$86,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar4.jpeg">Bradley Greer</td>
-                                            <td>Software Engineer</td>
-                                            <td>London</td>
-                                            <td>41</td>
-                                            <td>2012/10/13<br></td>
-                                            <td>$132,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar5.jpeg">Brenden Wagner</td>
-                                            <td>Software Engineer</td>
-                                            <td>San Francisco</td>
-                                            <td>28</td>
-                                            <td>2011/06/07<br></td>
-                                            <td>$206,850</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar1.jpeg">Brielle Williamson</td>
-                                            <td>Integration Specialist</td>
-                                            <td>New York</td>
-                                            <td>61</td>
-                                            <td>2012/12/02<br></td>
-                                            <td>$372,000</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar2.jpeg">Bruno Nash<br></td>
-                                            <td>Software Engineer</td>
-                                            <td>London</td>
-                                            <td>38</td>
-                                            <td>2011/05/03<br></td>
-                                            <td>$163,500</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar3.jpeg">Caesar Vance</td>
-                                            <td>Pre-Sales Support</td>
-                                            <td>New York</td>
-                                            <td>21</td>
-                                            <td>2011/12/12<br></td>
-                                            <td>$106,450</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar4.jpeg">Cara Stevens</td>
-                                            <td>Sales Assistant</td>
-                                            <td>New York</td>
-                                            <td>46</td>
-                                            <td>2011/12/06<br></td>
-                                            <td>$145,600</td>
-                                        </tr>
-                                        <tr>
-                                            <td><img class="rounded-circle me-2" width="30" height="30" src="assets/img/avatars/avatar5.jpeg">Cedric Kelly</td>
-                                            <td>Senior JavaScript Developer</td>
-                                            <td>Edinburgh</td>
-                                            <td>22</td>
-                                            <td>2012/03/29<br></td>
-                                            <td>$433,060</td>
+                                        <tr id="loadingRow">
+                                            <td colspan="6" class="text-center text-muted py-3">
+                                                <span class="spinner-border spinner-border-sm me-2"></span>Loading staff...
+                                            </td>
                                         </tr>
                                     </tbody>
-                                    <tfoot>
+                                    <!-- <tfoot>
                                         <tr>
                                             <td><strong>Name</strong></td>
                                             <td><strong>Role</strong></td>
@@ -244,7 +268,7 @@
                                             <td><strong>Date Hired</strong></td>
                                             <td><strong>Email</strong></td>
                                         </tr>
-                                    </tfoot>
+                                    </tfoot> -->
                                 </table>
                             </div>
                             <div class="row">
@@ -274,93 +298,205 @@
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
     </div>
-    <!-- Firebase SDKs -->
-    <script type="module" src="assets/js/firebase-config.js"></script>
-    <script type="module" src="assets/js/firebase-db.js"></script>
-    
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/theme-toggle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="assets/js/auth.js"></script>
-    <!-- Note: database.js deprecated, remove after migration -->
-    <script>
-        // Load and display current user's name
-        document.addEventListener('DOMContentLoaded', function() {
-            const user = getCurrentUser();
-            if (user) {
-                const userNameElement = document.getElementById('userName');
-                if (userNameElement) {
-                    userNameElement.textContent = `${user.firstName} ${user.lastName}`;
-                }
-                
-                // Update profile images
-                updateProfileImages();
-            }
-            
-            // Load users table
-            loadUsersTable();
-        });
-        
-        function loadUsersTable() {
-            const users = getUsers();
-            const userTableBody = document.getElementById('userTableBody');
-            
-            if (!userTableBody) return;
-            
-            // Convert users object to array
-            const usersArray = Object.values(users);
-            
-            if (usersArray.length === 0) {
-                userTableBody.innerHTML = '<tr><td colspan="6" class="text-center">No staff registered yet</td></tr>';
-                document.getElementById('dataTable_info').textContent = 'Showing 0 to 0 of 0';
-                return;
-            }
-            
-            // Clear existing rows
-            userTableBody.innerHTML = '';
-            
-            // Generate table rows
-            usersArray.forEach((user, index) => {
-                const row = document.createElement('tr');
-                
-                // Format hired date
-                const hiredDate = new Date(user.dateHired || user.createdAt);
-                const formattedDate = hiredDate.toLocaleDateString('en-US', {
-                    year: 'numeric',
-                    month: '2-digit',
-                    day: '2-digit'
-                });
-                
-                // Role badge colors
-                const roleBadgeClass = {
-                    'admin': 'badge bg-danger',
-                    'secretary': 'badge bg-primary',
-                    'staff': 'badge bg-secondary'
-                };
-                
-                const roleClass = roleBadgeClass[user.role] || 'badge bg-secondary';
-                const statusBadge = user.isActive ? 
-                    '<span class="badge bg-success">Active</span>' : 
-                    '<span class="badge bg-warning">Inactive</span>';
-                
-                const profilePhoto = user.profilePhoto || 'assets/img/avatars/avatar1.jpeg';
-                const position = user.position || 'Not specified';
-                
-                row.innerHTML = `
-                    <td><img class="rounded-circle me-2" width="30" height="30" src="${profilePhoto}">${user.firstName} ${user.lastName}</td>
-                    <td><span class="${roleClass}">${user.role.toUpperCase()}</span></td>
-                    <td>${position}</td>
-                    <td>${statusBadge}</td>
-                    <td>${formattedDate}</td>
-                    <td>${user.email}</td>
-                `;
-                
-                userTableBody.appendChild(row);
+    <script type="module">
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { collection, getDocs, getDoc, doc, updateDoc, orderBy, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        window.logout         = async () => { await signOut(auth); window.location.href = 'login.html'; };
+        window.approveUser    = approveUser;
+        window.rejectUser     = rejectUser;
+        window.changeRole     = changeRole;
+
+        let currentUserRole = 'staff';
+
+        document.addEventListener('DOMContentLoaded', () => {
+            onAuthStateChanged(auth, async (firebaseUser) => {
+                if (!firebaseUser) { window.location.href = 'login.html'; return; }
+
+                // Load current user profile
+                try {
+                    const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        currentUserRole = data.role || 'staff';
+                        const el = document.getElementById('userName');
+                        if (el) el.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || firebaseUser.email;
+                        if (data.profilePhoto) {
+                            document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => img.src = data.profilePhoto);
+                        }
+
+                        // Show pending approvals card only for admin
+                        if (currentUserRole === 'admin') {
+                            document.getElementById('pendingCard').style.display = 'block';
+                            await loadPendingUsers();
+                        }
+                    }
+                } catch(e) { console.warn(e.message); }
+
+                await loadUsersTable();
             });
-            
-            // Update info text
-            document.getElementById('dataTable_info').textContent = `Showing 1 to ${usersArray.length} of ${usersArray.length}`;
+        });
+
+        // ── Pending approvals (admin only) ───────────────────────────────────
+        async function loadPendingUsers() {
+            const tbody = document.getElementById('pendingTableBody');
+            try {
+                const snap = await getDocs(query(
+                    collection(db, COLLECTIONS.users),
+                    where('status', '==', 'pending')
+                ));
+
+                document.getElementById('pendingCount').textContent = snap.size;
+
+                if (snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-3">No pending approvals.</td></tr>';
+                    return;
+                }
+
+                tbody.innerHTML = snap.docs.map(d => {
+                    const u = d.data();
+                    const name = `${u.firstName || ''} ${u.lastName || ''}`.trim();
+                    const date = u.createdAt?.toDate ? u.createdAt.toDate().toLocaleDateString() : '—';
+                    return `<tr>
+                        <td>${name}</td>
+                        <td>${u.email || '—'}</td>
+                        <td><span class="badge bg-secondary text-capitalize">${u.role || 'staff'}</span></td>
+                        <td>${date}</td>
+                        <td>
+                            <button class="btn btn-sm btn-success me-1" onclick="approveUser('${d.id}')"><i class="fas fa-check me-1"></i>Approve</button>
+                            <button class="btn btn-sm btn-danger" onclick="rejectUser('${d.id}')"><i class="fas fa-times me-1"></i>Reject</button>
+                        </td>
+                    </tr>`;
+                }).join('');
+            } catch(err) {
+                tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">${err.message}</td></tr>`;
+            }
+        }
+
+        async function approveUser(uid) {
+            const result = await Swal.fire({
+                title: 'Approve this account?',
+                text: 'The user will be able to log in after approval.',
+                icon: 'question', showCancelButton: true,
+                confirmButtonColor: '#1cc88a', confirmButtonText: 'Yes, Approve'
+            });
+            if (!result.isConfirmed) return;
+            try {
+                await updateDoc(doc(db, COLLECTIONS.users, uid), {
+                    status: 'approved', isActive: true, updatedAt: serverTimestamp()
+                });
+                Swal.fire({ icon: 'success', title: 'Approved!', timer: 1500, showConfirmButton: false });
+                await loadPendingUsers();
+                await loadUsersTable();
+            } catch(err) {
+                Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+            }
+        }
+
+        async function rejectUser(uid) {
+            const result = await Swal.fire({
+                title: 'Reject this account?',
+                text: 'The user will be notified their account was not approved.',
+                icon: 'warning', showCancelButton: true,
+                confirmButtonColor: '#e74a3b', confirmButtonText: 'Yes, Reject'
+            });
+            if (!result.isConfirmed) return;
+            try {
+                await updateDoc(doc(db, COLLECTIONS.users, uid), {
+                    status: 'rejected', isActive: false, updatedAt: serverTimestamp()
+                });
+                Swal.fire({ icon: 'success', title: 'Rejected', timer: 1500, showConfirmButton: false });
+                await loadPendingUsers();
+                await loadUsersTable();
+            } catch(err) {
+                Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+            }
+        }
+
+        async function changeRole(uid, newRole) {
+            try {
+                await updateDoc(doc(db, COLLECTIONS.users, uid), {
+                    role: newRole, updatedAt: serverTimestamp()
+                });
+                Swal.fire({ icon: 'success', title: 'Role Updated!', timer: 1200, showConfirmButton: false });
+            } catch(err) {
+                Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+            }
+        }
+
+        // ── Staff table ───────────────────────────────────────────────────────
+        async function loadUsersTable() {
+            const tbody  = document.getElementById('userTableBody');
+            const infoEl = document.getElementById('dataTable_info');
+            if (!tbody) return;
+
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted py-3"><span class="spinner-border spinner-border-sm me-2"></span>Loading staff...</td></tr>';
+
+            try {
+                const snap = await getDocs(query(
+                    collection(db, COLLECTIONS.users),
+                    where('status', '==', 'approved'),
+                    orderBy('createdAt', 'desc')
+                ));
+
+                if (snap.empty) {
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-muted">No approved staff yet.</td></tr>';
+                    if (infoEl) infoEl.textContent = 'Showing 0 to 0 of 0';
+                    return;
+                }
+
+                const roleBadge = { admin:'badge bg-danger', secretary:'badge bg-primary', staff:'badge bg-secondary', resident:'badge bg-info' };
+                const isAdmin   = currentUserRole === 'admin';
+
+                tbody.innerHTML = '';
+                let count = 0;
+                snap.forEach(docSnap => {
+                    const u = docSnap.data();
+                    count++;
+                    let formattedDate = '—';
+                    const rawDate = u.dateHired || u.createdAt;
+                    if (rawDate) {
+                        const d = rawDate.toDate ? rawDate.toDate() : new Date(rawDate);
+                        if (!isNaN(d)) formattedDate = d.toLocaleDateString('en-US', { year:'numeric', month:'2-digit', day:'2-digit' });
+                    }
+                    const roleClass   = roleBadge[u.role] || 'badge bg-secondary';
+                    const statusBadge = u.isActive !== false ? '<span class="badge bg-success">Active</span>' : '<span class="badge bg-warning text-dark">Inactive</span>';
+                    const photo       = u.profilePhoto || 'assets/img/avatars/avatar1.jpeg';
+                    const name        = `${u.firstName || ''} ${u.lastName || ''}`.trim() || u.email;
+
+                    // Role selector — only admin can change roles
+                    const roleCell = isAdmin
+                        ? `<select class="form-select form-select-sm" style="width:120px" onchange="changeRole('${docSnap.id}', this.value)">
+                                <option value="staff"     ${u.role==='staff'     ?'selected':''}>Staff</option>
+                                <option value="secretary" ${u.role==='secretary' ?'selected':''}>Secretary</option>
+                                <option value="admin"     ${u.role==='admin'     ?'selected':''}>Admin</option>
+                                <option value="resident"  ${u.role==='resident'  ?'selected':''}>Resident</option>
+                           </select>`
+                        : `<span class="${roleClass}">${(u.role||'staff').toUpperCase()}</span>`;
+
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `
+                        <td><img class="rounded-circle me-2" width="30" height="30" src="${photo}" style="object-fit:cover;" onerror="this.src='assets/img/avatars/avatar1.jpeg'">${name}</td>
+                        <td>${roleCell}</td>
+                        <td>${u.position || '—'}</td>
+                        <td>${statusBadge}</td>
+                        <td>${formattedDate}</td>
+                        <td>${u.email || '—'}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                if (infoEl) infoEl.textContent = `Showing 1 to ${count} of ${count}`;
+            } catch(err) {
+                console.error('Error loading staff:', err);
+                tbody.innerHTML = `<tr><td colspan="6" class="text-center text-danger">Error: ${err.message}</td></tr>`;
+            }
         }
     </script>
 </body>

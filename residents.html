@@ -9,6 +9,66 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+
+    <style>
+        /* Dark mode overrides for SB Admin custom elements */
+        [data-bs-theme="dark"] .topbar,
+        [data-bs-theme="dark"] .sticky-footer,
+        [data-bs-theme="dark"] .footer {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .topbar {
+            border-bottom: 1px solid #2d3139;
+        }
+        [data-bs-theme="dark"] .card {
+            background-color: #212529;
+            border-color: #2d3139;
+        }
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #2d3139;
+            border-color: #3d4149;
+        }
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #3d4149;
+            color: #fff;
+        }
+        [data-bs-theme="dark"] .text-gray-600 {
+            color: #adb5bd !important;
+        }
+        [data-bs-theme="dark"] .text-gray-800 {
+            color: #dee2e6 !important;
+        }
+        [data-bs-theme="dark"] .text-dark {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .border-left-primary { border-left-color: #4e73df !important; }
+        [data-bs-theme="dark"] .border-left-success { border-left-color: #1cc88a !important; }
+        [data-bs-theme="dark"] .border-left-info    { border-left-color: #36b9cc !important; }
+        [data-bs-theme="dark"] .border-left-warning { border-left-color: #f6c23e !important; }
+        [data-bs-theme="dark"] .border-left-danger  { border-left-color: #e74a3b !important; }
+        [data-bs-theme="dark"] .table {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        [data-bs-theme="dark"] #themeToggleBtn {
+            color: #f6c23e;
+        }
+        [data-bs-theme="light"] #themeToggleBtn {
+            color: #4e73df;
+        }
+        /* Smooth transition */
+        html {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -25,6 +85,11 @@
                     <li class="nav-item"><a class="nav-link active" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
+                    <div id="adminSidebarItems" style="display:none;">
+                    <hr class="my-0 sidebar-divider">
+                    <li class="nav-item"><a class="nav-link" href="activity-log.html"><i class="fas fa-list-alt"></i><span>Activity Log</span></a></li>
+                    <li class="nav-item"><a class="nav-link" href="system-settings.html"><i class="fas fa-cogs"></i><span>System Settings</span></a></li>
+                    </div>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -34,6 +99,11 @@
                 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
                     <div class="container-fluid"><button class="btn btn-link d-md-none me-3 rounded-circle" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <ul class="navbar-nav flex-nowrap ms-auto">
+<li class="nav-item me-1">
+                                <button class="btn btn-link nav-link px-2" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+                                    <i class="fas fa-moon fa-fw"></i>
+                                </button>
+                            </li>
                             <div class="d-none d-sm-block topbar-divider"></div>
                             <li class="nav-item dropdown no-arrow">
                                 <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small"></span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
@@ -87,7 +157,9 @@
                                     </thead>
                                     <tbody id="residentTableBody">
                                         <tr>
-                                            <td colspan="7" class="text-center">Loading residents...</td>
+                                            <td colspan="7" class="text-center text-muted py-3">
+                                                <span class="spinner-border spinner-border-sm me-2"></span>Loading residents...
+                                            </td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -198,16 +270,56 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/theme-toggle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <!-- Firebase + Migrated Scripts -->
-    <script type="module" src="assets/js/firebase-config.js"></script>
-    <script type="module" src="assets/js/firebase-db.js"></script>
-    <script type="module" src="assets/js/auth-firebase.js"></script>
-    <script type="module" src="assets/js/residents-firebase.js"></script>
-    
-    <script>
-        initAuth();
-        document.addEventListener('DOMContentLoaded', loadResidentsFirebase);
+    <script type="module">
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+        import { loadResidentsFirebase } from './assets/js/residents-firebase.js';
+
+        window.logout = async () => { await signOut(auth); window.location.href = 'login.html'; };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            onAuthStateChanged(auth, async (firebaseUser) => {
+                if (!firebaseUser) { window.location.href = 'login.html'; return; }
+
+                try {
+                    const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+                    if (userDoc.exists()) {
+                        const data = userDoc.data();
+                        const el = document.getElementById('userName');
+                        if (el) el.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || firebaseUser.email;
+                        // Update topbar avatar with saved profile photo
+                        if (data.profilePhoto) {
+                            document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => {
+                                img.src = data.profilePhoto;
+                            });
+                        }
+                    }
+                } catch (e) { console.warn('Could not load user profile:', e.message); }
+
+                await loadResidentsFirebase();
+            });
+        });
+    </script>
+    <script type="module">
+        import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        // Show admin-only sidebar items if user is admin
+        onAuthStateChanged(auth, async (firebaseUser) => {
+            if (!firebaseUser) return;
+            try {
+                const snap = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+                if (snap.exists() && snap.data().role === 'admin') {
+                    const el = document.getElementById('adminSidebarItems');
+                    if (el) el.style.display = 'block';
+                }
+            } catch(e) { console.warn(e.message); }
+        });
     </script>
 </body>
 

@@ -1,2 +1,6 @@
 firebase-debug.log
 .env
+.env.local
+.env.*.local
+node_modules/
+public/assets/js/firebase-config.js

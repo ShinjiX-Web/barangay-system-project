@@ -9,10 +9,18 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
 </head>
 
 <body class="bg-gradient-primary">
+    <!-- Theme Toggle Button (Fixed Position) -->
+    <div class="position-fixed top-0 end-0 p-3" style="z-index: 1050;">
+        <button class="btn btn-link text-white" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+            <i class="fas fa-moon fa-fw fa-2x"></i>
+        </button>
+    </div>
+    
     <div class="container d-flex align-items-center min-vh-100">
         <div class="row justify-content-center w-100">
             <div class="col-md-9 col-lg-12 col-xl-10">
@@ -32,13 +40,30 @@
                                     <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="text" id="exampleFirstName" placeholder="First Name" name="first_name"></div>
                                     <div class="col-sm-6"><input class="form-control form-control-user" type="text" id="exampleLastName" placeholder="Last Name" name="last_name"></div>
                                 </div>
+                                <div class="mb-3"><input class="form-control form-control-user" type="text" id="exampleUsername" placeholder="Username (optional — defaults to email)" name="username"></div>
                                 <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email Address" name="email"></div>
+                                <div class="mb-3">
+                                    <select class="form-control form-control-user" id="exampleRole" name="role" required>
+                                        <option value="">Register as...</option>
+                                        <option value="staff">Staff / Barangay Employee</option>
+                                        <option value="resident">Resident</option>
+                                    </select>
+                                </div>
                                 <div class="mb-3 row">
-                                    <div class="col-sm-6 mb-3 mb-sm-0"><input class="form-control form-control-user" type="password" id="examplePasswordInput" placeholder="Password" name="password"></div>
-                                    <div class="col-sm-6"><input class="form-control form-control-user" type="password" id="exampleRepeatPasswordInput" placeholder="Repeat Password" name="password_repeat"></div>
+                                    <div class="col-sm-6 mb-3 mb-sm-0 position-relative">
+                                        <input class="form-control form-control-user" type="password" id="examplePasswordInput" placeholder="Password" name="password">
+                                        <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y" onclick="togglePassword('examplePasswordInput', this)" style="z-index: 10; padding-right: 20px;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-6 position-relative">
+                                        <input class="form-control form-control-user" type="password" id="exampleRepeatPasswordInput" placeholder="Repeat Password" name="password_repeat">
+                                        <button type="button" class="btn btn-link position-absolute end-0 top-50 translate-middle-y" onclick="togglePassword('exampleRepeatPasswordInput', this)" style="z-index: 10; padding-right: 20px;">
+                                            <i class="fas fa-eye"></i>
+                                        </button>
+                                    </div>
                                 </div><button class="btn btn-primary d-block w-100 btn-user" type="submit">Register Account</button>
-                                <hr><a class="btn btn-primary d-block w-100 mb-2 btn-google btn-user" role="button"><i class="fab fa-google"></i>&nbsp; Register with Google</a><a class="btn btn-primary d-block w-100 btn-facebook btn-user" role="button"><i class="fab fa-facebook-f"></i>&nbsp; Register with Facebook</a>
-                                <hr>
+
                             </form>
                             <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
                             <div class="text-center"><a class="small" href="login.html">Already have an account? Login!</a></div>
@@ -50,38 +75,86 @@
             </div>
         </div>
     </div>
-    <!-- Firebase SDKs -->
-    <script type="module" src="assets/js/firebase-config.js"></script>
-    <script type="module" src="assets/js/firebase-db.js"></script>
-    
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="assets/js/bs-init.js"></script>
     <script src="assets/js/theme.js"></script>
+    <script src="assets/js/theme-toggle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script type="module" src="assets/js/auth-firebase.js"></script>
+    
+    <!-- Password Toggle Function -->
     <script>
-        // Firebase register handler
+        function togglePassword(inputId, button) {
+            const input = document.getElementById(inputId);
+            const icon = button.querySelector('i');
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+    <script type="module">
+        import { registerUser } from './assets/js/auth-firebase.js';
+        import { db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('form.user');
             if (form) {
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
-                    const firstName = document.getElementById('exampleFirstName').value;
-                    const lastName = document.getElementById('exampleLastName').value;
-                    const email = document.getElementById('exampleInputEmail').value;
-                    const password = document.getElementById('examplePasswordInput').value;
-                    
+                    const firstName = document.getElementById('exampleFirstName').value.trim();
+                    const lastName  = document.getElementById('exampleLastName').value.trim();
+                    const username  = document.getElementById('exampleUsername').value.trim();
+                    const email     = document.getElementById('exampleInputEmail').value.trim();
+                    const role      = document.getElementById('exampleRole').value;
+                    const password  = document.getElementById('examplePasswordInput').value;
+                    const repeat    = document.getElementById('exampleRepeatPasswordInput').value;
+
+                    if (!firstName || !lastName || !email || !role || !password) {
+                        Swal.fire('Error', 'Please fill all required fields including role.', 'warning');
+                        return;
+                    }
+                    if (password.length < 6) {
+                        Swal.fire('Error', 'Password must be at least 6 characters.', 'warning');
+                        return;
+                    }
+                    if (password !== repeat) {
+                        Swal.fire('Error', 'Passwords do not match.', 'warning');
+                        return;
+                    }
+
                     try {
-                        await registerUser(firstName, lastName, email, password);
-                        Swal.fire('Success', 'Account created! Please login.', 'success').then(() => {
-                            window.location.href = 'login.html';
-                        });
+                        const uid = await registerUser(firstName, lastName, email, password, role);
+
+                        // Save username (default to email if not provided)
+                        if (uid) {
+                            await updateDoc(doc(db, COLLECTIONS.users, uid), {
+                                username: username || email,
+                                updatedAt: serverTimestamp()
+                            });
+                        }
+
+                        Swal.fire({
+                            icon: 'info',
+                            title: 'Registration Submitted!',
+                            html: `Your account is <strong>pending approval</strong> from the Barangay Captain.<br><br>You will be notified once your account is activated.`,
+                            confirmButtonText: 'Go to Login',
+                            confirmButtonColor: '#4e73df'
+                        }).then(() => { window.location.href = 'login.html'; });
                     } catch (error) {
-                        Swal.fire('Registration Failed', error.message, 'error');
+                        const msg = error.code === 'auth/email-already-in-use'
+                            ? 'This email is already registered.'
+                            : error.message;
+                        Swal.fire('Registration Failed', msg, 'error');
                     }
                 });
             }
-            initAuth();
         });
     </script>
 </body>
