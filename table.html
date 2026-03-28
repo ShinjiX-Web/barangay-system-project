@@ -28,8 +28,12 @@
                     <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <hr class="my-0 sidebar-divider">
-                    <li class="nav-item"><a class="nav-link" href="activity-log.html"><i class="fas fa-list-alt"></i><span>Activity Log</span></a></li>
-                    <li class="nav-item"><a class="nav-link" href="system-settings.html"><i class="fas fa-cogs"></i><span>System Settings</span></a></li>
+                    <!-- wrap these two items -->
+                    <div id="adminSidebarItems" style="display:none;">
+                        <hr class="my-0 sidebar-divider">
+                        <li class="nav-item"><a class="nav-link" href="activity-log.html">...</a></li>
+                        <li class="nav-item"><a class="nav-link" href="system-settings.html">...</a></li>
+                    </div>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -157,7 +161,7 @@
             </div>
             <footer class="bg-white sticky-footer">
                 <div class="container my-auto">
-                    <div class="text-center my-auto copyright"><span>Copyright © Brand 2026</span></div>
+                    <div class="text-center my-auto copyright"><span>Copyright © Barangay 14 Zone 2 District 2 2026</span></div>
                 </div>
             </footer>
         </div><a class="border rounded d-inline scroll-to-top" href="#page-top"><i class="fas fa-angle-up"></i></a>
@@ -199,6 +203,8 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
                         if (currentUserRole === 'admin') {
                             document.getElementById('pendingCard').style.display = 'block';
                             await loadPendingUsers();
+                            const el = document.getElementById('adminSidebarItems');
+                            if (el) el.style.display = 'block';
                         }
                     }
                 } catch(e) { console.warn(e.message); }
@@ -213,7 +219,8 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
             try {
                 const snap = await getDocs(query(
                     collection(db, COLLECTIONS.users),
-                    where('status', '==', 'pending')
+                    where('status', '==', 'pending'),
+                    where('role', 'in', ['admin', 'staff', 'secretary'])  // ← add this
                 ));
 
                 document.getElementById('pendingCount').textContent = snap.size;
@@ -306,6 +313,7 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
                 const snap = await getDocs(query(
                     collection(db, COLLECTIONS.users),
                     where('status', '==', 'approved'),
+                    where('role', 'in', ['admin', 'staff', 'secretary']),  // ← add this
                     orderBy('createdAt', 'desc')
                 ));
 
