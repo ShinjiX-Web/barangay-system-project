@@ -132,21 +132,29 @@
                     try {
                         const uid = await registerUser(firstName, lastName, email, password, role);
 
-                        // Save username (default to email if not provided)
+                        // Save username — non-critical, ignore if it fails
                         if (uid) {
-                            await updateDoc(doc(db, COLLECTIONS.users, uid), {
-                                username: username || email,
-                                updatedAt: serverTimestamp()
-                            });
+                            try {
+                                await updateDoc(doc(db, COLLECTIONS.users, uid), {
+                                    username: username || email,
+                                    updatedAt: serverTimestamp()
+                                });
+                            } catch (updateErr) {
+                                console.warn('Username update skipped:', updateErr.message);
+                            }
                         }
 
                         Swal.fire({
-                            icon: 'info',
-                            title: 'Registration Submitted!',
-                            html: `Your account is <strong>pending approval</strong> from the Barangay Captain.<br><br>You will be notified once your account is activated.`,
-                            confirmButtonText: 'Go to Login',
-                            confirmButtonColor: '#4e73df'
-                        }).then(() => { window.location.href = 'login.html'; });
+                            icon: 'success',
+                            title: '🎉 Registration Successful!',
+                            html: `Welcome, <strong>${firstName} ${lastName}</strong>!<br><br>
+                                Your account is <strong>pending approval</strong> from the Barangay Captain.<br>
+                                You will receive a notification once your account is activated.`,
+                            confirmButtonText: 'Back to Homepage',
+                            confirmButtonColor: '#4e73df',
+                            allowOutsideClick: false
+                        }).then(() => { window.location.href = 'index.html'; });
+
                     } catch (error) {
                         const msg = error.code === 'auth/email-already-in-use'
                             ? 'This email is already registered.'

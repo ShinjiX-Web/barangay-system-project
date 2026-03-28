@@ -258,8 +258,8 @@
         // ── globals ──────────────────────────────────────────────────────────
         let allCertificates = [];
 
-        window.logout            = async () => { await signOut(auth); window.location.href = 'login.html'; };
-        window.showRequestForm   = showRequestForm;
+window.logout = async () => { await signOut(auth); window.location.href = 'index.html'; };
+        window.showRequestsForm   = showRequestForm;
         window.cancelRequestForm = cancelRequestForm;
         window.submitRequest     = submitRequest;
         window.loadCertificates  = loadCertificates;

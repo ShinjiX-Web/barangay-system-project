@@ -172,7 +172,7 @@
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
         import { collection, getDocs, getDoc, doc, updateDoc, orderBy, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
-        window.logout         = async () => { await signOut(auth); window.location.href = 'login.html'; };
+window.logout = async () => { await signOut(auth); window.location.href = 'index.html'; };
         window.approveUser    = approveUser;
         window.rejectUser     = rejectUser;
         window.changeRole     = changeRole;

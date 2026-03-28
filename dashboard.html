@@ -220,7 +220,7 @@
     <script src="assets/js/theme.js"></script>
     <script src="assets/js/theme-toggle.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="assets/js/auth.js"></script>
+
     
     <!-- Note: database.js deprecated, remove after migration -->
     <script type="module">
@@ -230,7 +230,7 @@
         import { getDoc, getDocs, doc, collection, query, orderBy, limit } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
         import { db, COLLECTIONS } from './assets/js/firebase-config.js';
 
-        window.logout = async () => { await signOut(auth); window.location.href = 'login.html'; };
+
 
         document.addEventListener('DOMContentLoaded', () => {
             // Wait for Firebase Auth to confirm the session BEFORE touching Firestore.
@@ -416,7 +416,7 @@
                                 title: 'Signed Out',
                                 text: 'You have been successfully signed out.',
                                 confirmButtonColor: '#4e73df',
-                                timer: 3500,
+                                timer: 2000,
                                 showConfirmButton: false
                             }).then(() => {
                                 window.location.href = 'index.html';

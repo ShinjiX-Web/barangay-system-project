@@ -222,7 +222,7 @@
         import { getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
         import { loadResidentsFirebase } from './assets/js/residents-firebase.js';
 
-        window.logout = async () => { await signOut(auth); window.location.href = 'login.html'; };
+window.logout = async () => { await signOut(auth); window.location.href = 'index.html'; };
 
         document.addEventListener('DOMContentLoaded', () => {
             onAuthStateChanged(auth, async (firebaseUser) => {
