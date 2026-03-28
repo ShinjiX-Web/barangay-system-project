@@ -28,12 +28,8 @@
                     <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
                     <hr class="my-0 sidebar-divider">
-                    <!-- wrap these two items -->
-                    <div id="adminSidebarItems" style="display:none;">
-                        <hr class="my-0 sidebar-divider">
-                        <li class="nav-item"><a class="nav-link" href="activity-log.html">...</a></li>
-                        <li class="nav-item"><a class="nav-link" href="system-settings.html">...</a></li>
-                    </div>
+                    <li class="nav-item"><a class="nav-link" href="activity-log.html">...</a></li>
+                    <li class="nav-item"><a class="nav-link" href="system-settings.html">...</a></li>
                 </ul>
                 <div class="text-center d-none d-md-inline"><button class="btn rounded-circle border-0" id="sidebarToggle" type="button"></button></div>
             </div>
@@ -200,12 +196,12 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
                         }
 
                         // Show pending approvals card only for admin
-                        if (currentUserRole === 'admin') {
-                            document.getElementById('pendingCard').style.display = 'block';
-                            await loadPendingUsers();
-                            const el = document.getElementById('adminSidebarItems');
-                            if (el) el.style.display = 'block';
-                        }
+                    if (currentUserRole === 'admin') {
+                        document.getElementById('pendingCard').style.display = 'block';
+                        await loadPendingUsers();
+                        const el = document.getElementById('adminSidebarItems');
+                        if (el) el.style.display = 'block';
+                    }
                     }
                 } catch(e) { console.warn(e.message); }
 
@@ -220,7 +216,6 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
                 const snap = await getDocs(query(
                     collection(db, COLLECTIONS.users),
                     where('status', '==', 'pending'),
-                    where('role', 'in', ['admin', 'staff', 'secretary'])  // ← add this
                 ));
 
                 document.getElementById('pendingCount').textContent = snap.size;

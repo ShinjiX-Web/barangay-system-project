@@ -5,7 +5,7 @@ import { db, COLLECTIONS } from './firebase-config.js';
 import { logActivity } from './auth-firebase.js';
 import {
   collection, doc, addDoc, getDoc, getDocs,
-  updateDoc, deleteDoc, query, orderBy, serverTimestamp
+  updateDoc, deleteDoc, query, where, orderBy, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -62,10 +62,39 @@ async function loadResidents() {
   tbody.innerHTML = '<tr><td colspan="7" class="text-center"><span class="spinner-border spinner-border-sm me-2"></span>Loading residents...</td></tr>';
 
   try {
-    const q = query(collection(db, COLLECTIONS.residents), orderBy('lastName'));
-    const snap = await getDocs(q);
     allResidents = [];
-    snap.forEach(d => allResidents.push({ id: d.id, ...d.data() }));
+
+    // 1. Load from dedicated residents collection
+    const residentsSnap = await getDocs(query(collection(db, COLLECTIONS.residents), orderBy('lastName')));
+    residentsSnap.forEach(d => allResidents.push({ id: d.id, ...d.data() }));
+
+    // 2. Also load approved users with role 'resident' from the users collection
+    const usersSnap = await getDocs(query(
+      collection(db, COLLECTIONS.users),
+      where('role', '==', 'resident'),
+      where('status', '==', 'approved')
+    ));
+    usersSnap.forEach(d => {
+      const data = d.data();
+      allResidents.push({
+        id: 'user_' + d.id,
+        firstName:     data.firstName     || '',
+        middleName:    data.middleName     || '',
+        lastName:      data.lastName      || '',
+        suffix:        data.suffix        || '',
+        gender:        data.gender        || '',
+        age:           data.age           || '',
+        civilStatus:   data.civilStatus   || '',
+        address:       data.address       || '',
+        contactNumber: data.contactNumber || '',
+        email:         data.email         || '',
+        photoURL:      '',
+      });
+    });
+
+    // Sort combined list by lastName
+    allResidents.sort((a, b) => (a.lastName || '').localeCompare(b.lastName || ''));
+
     renderResidents(allResidents);
   } catch (err) {
     console.error('Error loading residents:', err);
@@ -85,10 +114,10 @@ function renderResidents(residents) {
 
   tbody.innerHTML = residents.map(r => {
     const fullName = [r.firstName, r.middleName, r.lastName, r.suffix].filter(Boolean).join(' ');
-    const photo    = r.photoURL || 'assets/img/avatars/avatar1.jpeg';
+    const photo    = r.photoURL || 'assets/img/avatars/user-avatar.png';
     return `
       <tr>
-        <td><img src="${photo}" style="width:45px;height:45px;object-fit:cover;border-radius:50%;" onerror="this.src='assets/img/avatars/avatar1.jpeg'"></td>
+        <td><img src="${photo}" style="width:45px;height:45px;object-fit:cover;border-radius:50%;" onerror="this.src='assets/img/avatars/user-avatar.png'"></td>
         <td>${fullName}</td>
         <td>${r.gender || '—'}</td>
         <td>${r.age || '—'}</td>
@@ -201,13 +230,16 @@ async function saveResident(event) {
     }
 
     if (id) {
-      await updateDoc(doc(db, COLLECTIONS.residents, id), residentData);
-      await logActivity('update', 'residents', `Updated resident: ${firstName} ${lastName}`);
+      const isUser  = id.startsWith('user_');
+      const realId  = isUser ? id.slice(5) : id;
+      const colName = isUser ? COLLECTIONS.users : COLLECTIONS.residents;
+      await updateDoc(doc(db, colName, realId), residentData);
+      await logActivity('update', 'residents', `Updated resident: ${residentData.firstName} ${residentData.lastName}`);
       Swal.fire({ icon: 'success', title: 'Updated!', text: 'Resident updated successfully.', timer: 2000, showConfirmButton: false });
     } else {
       residentData.createdAt = serverTimestamp();
       await addDoc(collection(db, COLLECTIONS.residents), residentData);
-      await logActivity('create', 'residents', `Registered new resident: ${firstName} ${lastName}`);
+      await logActivity('create', 'residents', `Registered new resident: ${residentData.firstName} ${residentData.lastName}`);
       Swal.fire({ icon: 'success', title: 'Saved!', text: 'Resident registered successfully.', timer: 2000, showConfirmButton: false });
     }
 
@@ -221,9 +253,27 @@ async function saveResident(event) {
 
 async function editResident(id) {
   try {
-    const snap = await getDoc(doc(db, COLLECTIONS.residents, id));
+    const isUser   = id.startsWith('user_');
+    const realId   = isUser ? id.slice(5) : id;
+    const colName  = isUser ? COLLECTIONS.users : COLLECTIONS.residents;
+    const snap     = await getDoc(doc(db, colName, realId));
     if (snap.exists()) {
-      showResidentForm({ id: snap.id, ...snap.data() });
+      const data = snap.data();
+      showResidentForm({
+        id,
+        firstName:     data.firstName     || '',
+        middleName:    data.middleName     || '',
+        lastName:      data.lastName      || '',
+        suffix:        data.suffix        || '',
+        gender:        data.gender        || '',
+        dateOfBirth:   data.dateOfBirth   || '',
+        age:           data.age           || '',
+        civilStatus:   data.civilStatus   || '',
+        address:       data.address       || '',
+        contactNumber: data.contactNumber || '',
+        email:         data.email         || '',
+        photoURL:      isUser ? '' : (data.photoURL || ''),
+      });
     } else {
       Swal.fire({ icon: 'error', title: 'Not Found', text: 'Resident record not found.' });
     }
@@ -242,7 +292,10 @@ async function deleteResident(id) {
 
   try {
     const resident = allResidents.find(r => r.id === id);
-    await deleteDoc(doc(db, COLLECTIONS.residents, id));
+    const isUser   = id.startsWith('user_');
+    const realId   = isUser ? id.slice(5) : id;
+    const colName  = isUser ? COLLECTIONS.users : COLLECTIONS.residents;
+    await deleteDoc(doc(db, colName, realId));
     await logActivity('delete', 'residents', `Deleted resident: ${resident?.firstName || ''} ${resident?.lastName || ''}`);
     Swal.fire({ icon: 'success', title: 'Deleted!', text: 'Resident removed.', timer: 1800, showConfirmButton: false });
     await loadResidents();

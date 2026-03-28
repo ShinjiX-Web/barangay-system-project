@@ -374,16 +374,36 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
         // ── resident dropdown ─────────────────────────────────────────────────
         async function populateResidentDropdown() {
             try {
-                const snap = await getDocs(query(collection(db, COLLECTIONS.residents), orderBy('lastName')));
                 const sel = document.getElementById('residentSelect');
-                snap.forEach(d => {
+                const residents = [];
+
+                // 1. From dedicated residents collection
+                const residentsSnap = await getDocs(query(collection(db, COLLECTIONS.residents), orderBy('lastName')));
+                residentsSnap.forEach(d => {
                     const r = d.data();
-                    const name = `${r.firstName || ''} ${r.lastName || ''}`.trim();
+                    residents.push({ id: d.id, firstName: r.firstName || '', lastName: r.lastName || '', address: r.address || '', age: r.age || '' });
+                });
+
+                // 2. From users collection — approved residents
+                const usersSnap = await getDocs(query(
+                    collection(db, COLLECTIONS.users),
+                    where('role', '==', 'resident'),
+                    where('status', '==', 'approved')
+                ));
+                usersSnap.forEach(d => {
+                    const r = d.data();
+                    residents.push({ id: 'user_' + d.id, firstName: r.firstName || '', lastName: r.lastName || '', address: r.address || '', age: r.age || '' });
+                });
+
+                residents.sort((a, b) => `${a.lastName}${a.firstName}`.localeCompare(`${b.lastName}${b.firstName}`));
+
+                residents.forEach(r => {
+                    const name = `${r.firstName} ${r.lastName}`.trim();
                     const opt = document.createElement('option');
-                    opt.value = d.id;
+                    opt.value = r.id;
                     opt.textContent = name;
-                    opt.dataset.address = r.address || '';
-                    opt.dataset.age = r.age || '';
+                    opt.dataset.address = r.address;
+                    opt.dataset.age = r.age;
                     sel.appendChild(opt);
                 });
             } catch(e) { console.warn('Could not load residents:', e.message); }
@@ -414,14 +434,15 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
         async function submitRequest(e) {
             e.preventDefault();
             const sel = document.getElementById('residentSelect');
-            const residentId   = sel.value;
-            const residentName = sel.options[sel.selectedIndex].textContent;
-            const certType     = document.getElementById('certificateType').value;
-            const purpose      = document.getElementById('purpose').value.trim();
+            const residentId      = sel.value;
+            const residentName    = sel.options[sel.selectedIndex].textContent;
+            const residentAddress = sel.options[sel.selectedIndex].dataset.address || '';
+            const certType        = document.getElementById('certificateType').value;
+            const purpose         = document.getElementById('purpose').value.trim();
 
             try {
                 await addDoc(collection(db, COLLECTIONS.certificates), {
-                    residentId, residentName, certificateType: certType,
+                    residentId, residentName, residentAddress, certificateType: certType,
                     purpose, status: 'pending',
                     requestDate: serverTimestamp(), updatedAt: serverTimestamp()
                 });
@@ -536,7 +557,7 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
 
                         <!-- Body -->
                         <p style="text-align: justify; font-size: 15px; line-height: 2; margin-bottom: 16px; text-indent: 48px;">
-                            This is to certify that <u><strong>${cert.residentName || '—'}</strong></u> is a bonafide resident of Barangay 14, Zone 2, District 2, Angeles City, Pampanga and that the purpose of this certificate is for <strong>${cert.purpose || '—'}</strong>.
+                            This is to certify that <u><strong>${cert.residentName || '—'}</strong></u> is a bonafide resident of ${cert.residentAddress || 'Barangay 14, Zone 2, District 2, Angeles City, Pampanga'} and that the purpose of this certificate is for <strong>${cert.purpose || '—'}</strong>.
                         </p>
                         <p style="text-align: justify; font-size: 15px; line-height: 2; margin-bottom: 48px; text-indent: 48px;">
                             This certificate is issued upon the request of the above-named person for whatever legal purpose it may serve.

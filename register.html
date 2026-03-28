@@ -43,11 +43,32 @@
                                 <div class="mb-3"><input class="form-control form-control-user" type="text" id="exampleUsername" placeholder="Username (optional — defaults to email)" name="username"></div>
                                 <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Email Address" name="email"></div>
                                 <div class="mb-3">
-                                    <select class="form-control form-control-user" id="exampleRole" name="role" required>
+                                    <select class="form-control form-control-user" id="exampleRole" name="role" required onchange="toggleResidentFields(this.value)">
                                         <option value="">Register as...</option>
                                         <option value="staff">Staff / Barangay Employee</option>
                                         <option value="resident">Resident</option>
                                     </select>
+                                </div>
+                                <div id="residentFields" style="display:none;">
+                                    <div class="mb-3 row">
+                                        <div class="col-sm-6 mb-3 mb-sm-0">
+                                            <select class="form-control form-control-user" id="exampleGender" name="gender">
+                                                <option value="">Gender</option>
+                                                <option value="Male">Male</option>
+                                                <option value="Female">Female</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <input class="form-control form-control-user" type="number" id="exampleAge" placeholder="Age" name="age" min="1" max="120">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 position-relative">
+                                        <input class="form-control form-control-user" type="text" id="exampleAddress" placeholder="Complete Address" name="address" autocomplete="off">
+                                        <ul id="addressSuggestions" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:9999;list-style:none;margin:0;padding:0;background:#fff;border:1px solid #d1d3e2;border-radius:0 0 .35rem .35rem;max-height:200px;overflow-y:auto;box-shadow:0 4px 8px rgba(0,0,0,.1);"></ul>
+                                    </div>
+                                    <div class="mb-3">
+                                        <input class="form-control form-control-user" type="tel" id="exampleContact" placeholder="Contact Number (09XXXXXXXXX)" name="contact">
+                                    </div>
                                 </div>
                                 <div class="mb-3 row">
                                     <div class="col-sm-6 mb-3 mb-sm-0 position-relative">
@@ -83,6 +104,59 @@
     
     <!-- Password Toggle Function -->
     <script>
+        function toggleResidentFields(role) {
+            document.getElementById('residentFields').style.display = role === 'resident' ? 'block' : 'none';
+        }
+
+        // ── Address autocomplete (Nominatim / OpenStreetMap) ──────────────────
+        (function () {
+            let debounceTimer;
+            const input = document.getElementById('exampleAddress');
+            const list  = document.getElementById('addressSuggestions');
+
+            function closeList() {
+                list.innerHTML = '';
+                list.style.display = 'none';
+            }
+
+            input.addEventListener('input', function () {
+                clearTimeout(debounceTimer);
+                const q = this.value.trim();
+                if (q.length < 3) { closeList(); return; }
+
+                debounceTimer = setTimeout(async () => {
+                    try {
+                        const res  = await fetch(
+                            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&countrycodes=ph&addressdetails=0`,
+                            { headers: { 'Accept-Language': 'en' } }
+                        );
+                        const data = await res.json();
+                        closeList();
+                        if (!data.length) return;
+
+                        data.forEach(place => {
+                            const li = document.createElement('li');
+                            li.textContent = place.display_name;
+                            li.style.cssText = 'padding:8px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid #f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+                            li.addEventListener('mouseenter', () => li.style.background = '#eaecf4');
+                            li.addEventListener('mouseleave', () => li.style.background = '');
+                            li.addEventListener('mousedown', (e) => {
+                                e.preventDefault(); // prevent input blur before click fires
+                                input.value = place.display_name;
+                                closeList();
+                            });
+                            list.appendChild(li);
+                        });
+                        list.style.display = 'block';
+                    } catch (_) { closeList(); }
+                }, 350);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (e.target !== input) closeList();
+            });
+        })();
+
         function togglePassword(inputId, button) {
             const input = document.getElementById(inputId);
             const icon = button.querySelector('i');
@@ -115,6 +189,10 @@
                     const role      = document.getElementById('exampleRole').value;
                     const password  = document.getElementById('examplePasswordInput').value;
                     const repeat    = document.getElementById('exampleRepeatPasswordInput').value;
+                    const gender    = document.getElementById('exampleGender').value;
+                    const age       = document.getElementById('exampleAge').value.trim();
+                    const address   = document.getElementById('exampleAddress').value.trim();
+                    const contact   = document.getElementById('exampleContact').value.trim();
 
                     if (!firstName || !lastName || !email || !role || !password) {
                         Swal.fire('Error', 'Please fill all required fields including role.', 'warning');
@@ -132,15 +210,19 @@
                     try {
                         const uid = await registerUser(firstName, lastName, email, password, role);
 
-                        // Save username — non-critical, ignore if it fails
+                        // Save extra fields — non-critical, ignore if it fails
                         if (uid) {
                             try {
-                                await updateDoc(doc(db, COLLECTIONS.users, uid), {
-                                    username: username || email,
-                                    updatedAt: serverTimestamp()
-                                });
+                                const extra = { username: username || email, updatedAt: serverTimestamp() };
+                                if (role === 'resident') {
+                                    if (gender)  extra.gender        = gender;
+                                    if (age)     extra.age           = parseInt(age);
+                                    if (address) extra.address       = address;
+                                    if (contact) extra.contactNumber = contact;
+                                }
+                                await updateDoc(doc(db, COLLECTIONS.users, uid), extra);
                             } catch (updateErr) {
-                                console.warn('Username update skipped:', updateErr.message);
+                                console.warn('Extra fields update skipped:', updateErr.message);
                             }
                         }
 

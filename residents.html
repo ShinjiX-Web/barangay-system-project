@@ -165,13 +165,14 @@
                                     </div>
                                 </div>
                                 <div class="row">
-                                    <div class="col-md-6 mb-3">
+                                    <div class="col-md-6 mb-3 position-relative">
                                         <label class="form-label">Complete Address *</label>
-                                        <input type="text" class="form-control" id="address" placeholder="House No., Street, Zone" required>
+                                        <input type="text" class="form-control" id="address" placeholder="House No., Street, Zone" required autocomplete="off">
+                                        <ul id="addressSuggestions" style="display:none;position:absolute;top:100%;left:0;right:0;z-index:9999;list-style:none;margin:0;padding:0;background:#fff;border:1px solid #d1d3e2;border-radius:0 0 .35rem .35rem;max-height:200px;overflow-y:auto;box-shadow:0 4px 8px rgba(0,0,0,.1);"></ul>
                                     </div>
                                     <div class="col-md-3 mb-3">
-                                        <label class="form-label">Contact Number</label>
-                                        <input type="tel" class="form-control" id="contactNumber" placeholder="09XXXXXXXXX">
+                                        <label class="form-label">Contact Number *</label>
+                                        <input type="tel" class="form-control" id="contactNumber" placeholder="09XXXXXXXXX" required>
                                     </div>
                                     <div class="col-md-3 mb-3">
                                         <label class="form-label">Email (Optional)</label>
@@ -263,6 +264,55 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
                 }
             } catch(e) { console.warn(e.message); }
         });
+    </script>
+    <script>
+        (function () {
+            let debounceTimer;
+            const input = document.getElementById('address');
+            const list  = document.getElementById('addressSuggestions');
+
+            function closeList() {
+                list.innerHTML = '';
+                list.style.display = 'none';
+            }
+
+            input.addEventListener('input', function () {
+                clearTimeout(debounceTimer);
+                const q = this.value.trim();
+                if (q.length < 3) { closeList(); return; }
+
+                debounceTimer = setTimeout(async () => {
+                    try {
+                        const res  = await fetch(
+                            `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(q)}&format=json&limit=6&countrycodes=ph&addressdetails=0`,
+                            { headers: { 'Accept-Language': 'en' } }
+                        );
+                        const data = await res.json();
+                        closeList();
+                        if (!data.length) return;
+
+                        data.forEach(place => {
+                            const li = document.createElement('li');
+                            li.textContent = place.display_name;
+                            li.style.cssText = 'padding:8px 12px;cursor:pointer;font-size:.85rem;border-bottom:1px solid #f0f0f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;';
+                            li.addEventListener('mouseenter', () => li.style.background = '#eaecf4');
+                            li.addEventListener('mouseleave', () => li.style.background = '');
+                            li.addEventListener('mousedown', (e) => {
+                                e.preventDefault();
+                                input.value = place.display_name;
+                                closeList();
+                            });
+                            list.appendChild(li);
+                        });
+                        list.style.display = 'block';
+                    } catch (_) { closeList(); }
+                }, 350);
+            });
+
+            document.addEventListener('click', (e) => {
+                if (e.target !== input) closeList();
+            });
+        })();
     </script>
 </body>
 
