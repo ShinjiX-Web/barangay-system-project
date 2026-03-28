@@ -9,99 +9,8 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
-    <style>
-        .queue-card {
-            border-left: 4px solid #4e73df;
-        }
-        .queue-card.processing {
-            border-left-color: #f6c23e;
-        }
-        .queue-card.completed {
-            border-left-color: #1cc88a;
-        }
-        .cert-print-area {
-            display: none;
-        }
-        @media print {
-            body > *:not(.cert-print-area) {
-                display: none !important;
-            }
-            .cert-print-area {
-                display: block !important;
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                margin: 0;
-                padding: 0;
-            }
-            .cert-print-area img {
-                display: block !important;
-                visibility: visible !important;
-            }
-        }
-    </style>
-
-    <style>
-        /* Dark mode overrides for SB Admin custom elements */
-        [data-bs-theme="dark"] .topbar,
-        [data-bs-theme="dark"] .sticky-footer,
-        [data-bs-theme="dark"] .footer {
-            background-color: #1a1d23 !important;
-        }
-        [data-bs-theme="dark"] .topbar {
-            border-bottom: 1px solid #2d3139;
-        }
-        [data-bs-theme="dark"] .card {
-            background-color: #212529;
-            border-color: #2d3139;
-        }
-        [data-bs-theme="dark"] .dropdown-menu {
-            background-color: #2d3139;
-            border-color: #3d4149;
-        }
-        [data-bs-theme="dark"] .dropdown-item {
-            color: #dee2e6;
-        }
-        [data-bs-theme="dark"] .dropdown-item:hover {
-            background-color: #3d4149;
-            color: #fff;
-        }
-        [data-bs-theme="dark"] .text-gray-600 {
-            color: #adb5bd !important;
-        }
-        [data-bs-theme="dark"] .text-gray-800 {
-            color: #dee2e6 !important;
-        }
-        [data-bs-theme="dark"] .text-dark {
-            color: #f8f9fa !important;
-        }
-        [data-bs-theme="dark"] .bg-white {
-            background-color: #1a1d23 !important;
-        }
-        [data-bs-theme="dark"] .border-left-primary { border-left-color: #4e73df !important; }
-        [data-bs-theme="dark"] .border-left-success { border-left-color: #1cc88a !important; }
-        [data-bs-theme="dark"] .border-left-info    { border-left-color: #36b9cc !important; }
-        [data-bs-theme="dark"] .border-left-warning { border-left-color: #f6c23e !important; }
-        [data-bs-theme="dark"] .border-left-danger  { border-left-color: #e74a3b !important; }
-        [data-bs-theme="dark"] .table {
-            color: #dee2e6;
-        }
-        [data-bs-theme="dark"] .table-hover tbody tr:hover {
-            background-color: rgba(255,255,255,0.05);
-        }
-        [data-bs-theme="dark"] #themeToggleBtn {
-            color: #f6c23e;
-        }
-        [data-bs-theme="light"] #themeToggleBtn {
-            color: #4e73df;
-        }
-        /* Smooth transition */
-        html {
-            transition: background-color 0.2s ease, color 0.2s ease;
-        }
-    </style>
 </head>
 
 <body id="page-top">
@@ -132,7 +41,7 @@
                 <nav class="navbar navbar-expand bg-white shadow mb-4 topbar">
                     <div class="container-fluid"><button class="btn btn-link d-md-none me-3 rounded-circle" id="sidebarToggleTop" type="button"><i class="fas fa-bars"></i></button>
                         <ul class="navbar-nav flex-nowrap ms-auto">
-<li class="nav-item me-1">
+                            <li class="nav-item me-1">
                                 <button class="btn btn-link nav-link px-2" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
                                     <i class="fas fa-moon fa-fw"></i>
                                 </button>
@@ -320,8 +229,8 @@
                     <h5 class="modal-title"><i class="fas fa-file-alt me-2"></i>Certificate Preview</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body p-0">
-                    <div id="certPreviewContent" style="background:#fff; color:#000;"></div>
+                <div class="modal-body p-0" style="background: #fff !important;">
+                    <div id="certPreviewContent" style="background:#fff !important; color:#000 !important;"></div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fas fa-times me-1"></i>Close</button>
@@ -341,6 +250,7 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module">
         import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { logActivity } from './assets/js/auth-firebase.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
         import { collection, doc, getDoc, getDocs, addDoc, updateDoc, query, orderBy, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
@@ -514,6 +424,10 @@
                     purpose, status: 'pending',
                     requestDate: serverTimestamp(), updatedAt: serverTimestamp()
                 });
+                
+                // Log activity
+                await logActivity('create', 'certificates', `Created ${certType} certificate request for ${residentName}`);
+                
                 Swal.fire({ icon:'success', title:'Request Submitted!', text:'Certificate request added to queue.', timer:2000, showConfirmButton:false });
                 cancelRequestForm();
                 await loadCertificates();
@@ -526,7 +440,12 @@
         // ── status update ─────────────────────────────────────────────────────
         async function updateStatus(id, status) {
             try {
+                const cert = allCertificates.find(c => c.id === id);
                 await updateDoc(doc(db, COLLECTIONS.certificates, id), { status, updatedAt: serverTimestamp() });
+                
+                // Log activity
+                await logActivity('update', 'certificates', `Updated certificate ${cert?.residentName || id} status to ${status}`);
+                
                 await loadCertificates();
                 await updateStats();
             } catch(err) {
@@ -534,7 +453,10 @@
             }
         }
 
-        // ── print ─────────────────────────────────────────────────────────────
+        // ── certificate HTML builder ──────────────────────────────────────────
+        // KEY FIX: The watermark is now an <img> tag absolutely positioned behind
+        // the content. This is immune to dark-mode CSS overrides and always prints
+        // correctly — unlike CSS background-image which gets stripped or filtered.
         function buildCertHTML(cert) {
             const typeLabels = { clearance:'Barangay Clearance', residency:'Certificate of Residency', indigency:'Certificate of Indigency', job_seeker:'First-time Job Seeker' };
             const certType = typeLabels[cert.certificateType] || cert.certificateType || '—';
@@ -542,93 +464,110 @@
                 ? cert.requestDate.toDate().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'})
                 : new Date().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'});
             const qrId = `qr-${cert.id}`;
-            const qrData = `Barangay 14 | ${certType} | ${cert.residentName || ''} | Ref: ${cert.id || ''} | Issued: ${date}`;
+            // QR encodes a verification URL so anyone who scans it is directed
+            // to verify.html which confirms this is a legitimate document issued
+            // by Barangay 14. The cert ID is passed as a query parameter so the
+            // page can look it up in Firestore and display the verified details.
+            const qrData = `${window.location.origin}${window.location.pathname.replace('certificates.html','verify.html')}?id=${cert.id || ''}`;
 
             const html = `
                 <div style="
-                    padding:60px 80px;
-                    font-family:'Times New Roman',serif;
-                    max-width:750px;
-                    margin:auto;
-                    background:#fff;
-                    -webkit-print-color-adjust:exact;
-                    print-color-adjust:exact;
-                    color:#000;
-                    position:relative;
+                    padding: 60px 80px;
+                    font-family: 'Times New Roman', serif;
+                    max-width: 750px;
+                    margin: auto;
+                    background: #fff;
+                    -webkit-print-color-adjust: exact;
+                    print-color-adjust: exact;
+                    color: #000;
+                    position: relative;
                 ">
-                    <!-- Watermark: positioned to sit behind body text only, not header -->
-                    <div style="
-                        position:absolute;
-                        top:55%;
-                        left:50%;
-                        transform:translate(-50%, -50%);
-                        width:420px; height:420px;
-                        background: url('assets/img/Seal_of_Angeles_City.png') no-repeat center center;
-                        background-size:contain;
-                        opacity:0.13;
-                        pointer-events:none;
-                        z-index:0;
-                        -webkit-print-color-adjust:exact;
-                        print-color-adjust:exact;
-                    "></div>
+                    <!--
+                        WATERMARK — rendered as <img> so dark-mode CSS filters
+                        and background-image overrides cannot touch it.
+                        opacity is set via the element style attribute.
+                    -->
+                    <img
+                        src="assets/img/Seal_of_Angeles_City.png"
+                        class="cert-watermark-img"
+                        alt=""
+                        aria-hidden="true"
+                        style="
+                            position: absolute;
+                            top: 55%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            width: 420px;
+                            height: 420px;
+                            object-fit: contain;
+                            opacity: 0.13;
+                            pointer-events: none;
+                            z-index: 0;
+                            display: block;
+                            filter: none;
+                            -webkit-filter: none;
+                            -webkit-print-color-adjust: exact;
+                            print-color-adjust: exact;
+                        "
+                    >
 
                     <!-- All content above watermark -->
-                    <div style="position:relative; z-index:1;">
+                    <div style="position: relative; z-index: 1;">
 
                         <!-- Seal / Logo -->
-                        <div style="text-align:center; margin-bottom:12px;">
+                        <div style="text-align: center; margin-bottom: 12px;">
                             <img src="assets/img/Seal_of_Angeles_City.png"
-                                 style="width:100px; height:100px; object-fit:contain; display:block; margin:0 auto;"
+                                 style="width: 100px; height: 100px; object-fit: contain; display: block; margin: 0 auto;"
                                  onerror="this.style.display='none'">
                         </div>
 
                         <!-- Header -->
-                        <div style="text-align:center; margin-bottom:24px;">
-                            <p style="margin:0; font-size:15px;">Republic of the Philippines</p>
-                            <p style="margin:0; font-size:15px;">City of Angeles</p>
-                            <p style="margin:0; font-size:15px;">Barangay 14, Zone 2, District 2</p>
+                        <div style="text-align: center; margin-bottom: 24px;">
+                            <p style="margin: 0; font-size: 15px;">Republic of the Philippines</p>
+                            <p style="margin: 0; font-size: 15px;">City of Angeles</p>
+                            <p style="margin: 0; font-size: 15px;">Barangay 14, Zone 2, District 2</p>
                         </div>
 
                         <!-- Title -->
-                        <div style="text-align:center; margin-bottom:32px;">
-                            <h2 style="margin:0; font-size:22px; font-weight:bold; letter-spacing:3px; text-transform:uppercase;">${certType}</h2>
+                        <div style="text-align: center; margin-bottom: 32px;">
+                            <h2 style="margin: 0; font-size: 22px; font-weight: bold; letter-spacing: 3px; text-transform: uppercase;">${certType}</h2>
                         </div>
 
                         <!-- Body -->
-                        <p style="text-align:justify; font-size:15px; line-height:2; margin-bottom:16px; text-indent:48px;">
+                        <p style="text-align: justify; font-size: 15px; line-height: 2; margin-bottom: 16px; text-indent: 48px;">
                             This is to certify that <u><strong>${cert.residentName || '—'}</strong></u> is a bonafide resident of Barangay 14, Zone 2, District 2, Angeles City, Pampanga and that the purpose of this certificate is for <strong>${cert.purpose || '—'}</strong>.
                         </p>
-                        <p style="text-align:justify; font-size:15px; line-height:2; margin-bottom:48px; text-indent:48px;">
+                        <p style="text-align: justify; font-size: 15px; line-height: 2; margin-bottom: 48px; text-indent: 48px;">
                             This certificate is issued upon the request of the above-named person for whatever legal purpose it may serve.
                         </p>
 
                         <!-- Issued on (right-aligned) -->
-                        <p style="text-align:right; font-size:14px; margin-bottom:24px;">
+                        <p style="text-align: right; font-size: 14px; margin-bottom: 24px;">
                             <strong>Issued on:</strong> ${date}
                         </p>
 
                         <!-- Signature + QR side by side -->
-                        <div style="display:table; width:100%; margin-bottom:0;">
+                        <div style="display: table; width: 100%; margin-bottom: 0;">
                             <!-- QR Code (left side) -->
-                            <div style="display:table-cell; width:30%; vertical-align:bottom; padding-bottom:4px;">
-                                <div id="${qrId}" style="width:80px; height:80px;"></div>
-                                <p style="margin:4px 0 0; font-size:10px; color:#666;">Scan to verify</p>
+                            <div style="display: table-cell; width: 30%; vertical-align: bottom; padding-bottom: 4px;">
+                                <div id="${qrId}" style="width: 80px; height: 80px;"></div>
+                                <p style="margin: 4px 0 0; font-size: 10px; color: #666;">Scan to verify</p>
                             </div>
                             <!-- Signature (right side) -->
-                            <div style="display:table-cell; width:10%; text-align:center; vertical-align:bottom;">
+                            <div style="display: table-cell; width: 10%; text-align: center; vertical-align: bottom;">
                                 <img src="assets/img/signature.png"
-                                     style="height:60px; max-width:180px; object-fit:contain; display:block; margin:0 auto;"
+                                     style="height: 60px; max-width: 180px; object-fit: contain; display: block; margin: 0 auto;"
                                      onerror="this.style.display='none'">
-                                <div style="border-top:2px solid #000; padding-top:4px; margin-top:2px;">
-                                    <p style="margin:0; font-weight:bold; font-size:14px;">${cert.captainName || 'Nathaniel Castro Panares'}</p>
-                                    <p style="margin:0; font-weight:bold; font-size:13px;">Barangay Captain</p>
-                                    <p style="margin:0; font-size:13px;">Barangay 14, Zone 2, District 2</p>
+                                <div style="border-top: 2px solid #000; padding-top: 4px; margin-top: 2px;">
+                                    <p style="margin: 0; font-weight: bold; font-size: 14px;">${cert.captainName || 'Nathaniel Castro Panares'}</p>
+                                    <p style="margin: 0; font-weight: bold; font-size: 13px;">Barangay Captain</p>
+                                    <p style="margin: 0; font-size: 13px;">Barangay 14, Zone 2, District 2</p>
                                 </div>
                             </div>
                         </div>
 
-                        <!-- Doc Ref footer (no status) -->
-                        <div style="margin-top:40px; border-top:1px solid #ccc; padding-top:8px; font-size:11px; color:#666; text-align:center;">
+                        <!-- Doc Ref footer -->
+                        <div style="margin-top: 40px; border-top: 1px solid #ccc; padding-top: 8px; font-size: 11px; color: #666; text-align: center;">
                             Doc Ref: ${cert.id || 'N/A'} &nbsp;|&nbsp; Issued: ${date}
                         </div>
 
@@ -643,14 +582,13 @@
             return new Promise((resolve) => {
                 const qrEl = document.getElementById(qrId);
                 if (qrEl && typeof QRCode !== 'undefined') {
-                    qrEl.innerHTML = ''; // clear any previous QR
+                    qrEl.innerHTML = '';
                     new QRCode(qrEl, {
                         text: qrData,
                         width: 80, height: 80,
                         colorDark: '#000000', colorLight: '#ffffff',
                         correctLevel: QRCode.CorrectLevel.M
                     });
-                    // QRCode renders synchronously, small delay for img to paint
                     setTimeout(resolve, 150);
                 } else {
                     resolve();
@@ -663,19 +601,16 @@
             if (!cert) return;
             const { html, qrId, qrData } = buildCertHTML(cert);
             document.getElementById('certPreviewContent').innerHTML = html;
-            generateQR(qrId, qrData); // don't need to wait for modal view
+            generateQR(qrId, qrData);
             const modal = new bootstrap.Modal(document.getElementById('certPreviewModal'));
             modal.show();
         }
 
         function printFromPreview() {
-            // Re-build fresh into printArea so QR renders correctly there
-            // Get cert id from the preview content's qr div
             const qrDiv = document.querySelector('#certPreviewContent [id^="qr-"]');
             const certId = qrDiv ? qrDiv.id.replace('qr-', '') : null;
             const cert = certId ? allCertificates.find(c => c.id === certId) : null;
             if (!cert) {
-                // fallback: copy HTML as-is and hope QR img tag survived
                 const content = document.getElementById('certPreviewContent').innerHTML;
                 document.getElementById('printArea').innerHTML = content;
                 setTimeout(() => window.print(), 400);
@@ -700,7 +635,6 @@
         import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
         import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
-        // Show admin-only sidebar items if user is admin
         onAuthStateChanged(auth, async (firebaseUser) => {
             if (!firebaseUser) return;
             try {

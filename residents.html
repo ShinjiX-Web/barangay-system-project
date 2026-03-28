@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
 
     <style>
         /* Dark mode overrides for SB Admin custom elements */
@@ -275,6 +276,7 @@
     <!-- Firebase + Migrated Scripts -->
     <script type="module">
         import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { logActivity } from './assets/js/auth-firebase.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
         import { getDoc, doc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
         import { loadResidentsFirebase } from './assets/js/residents-firebase.js';

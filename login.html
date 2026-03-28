@@ -5,11 +5,13 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
     <title>Login - Brand</title>
+    <link rel="icon" type="image/png" href="assets/img/Seal_of_Angeles_City.png">
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+    <link rel="stylesheet" href="css/dark-theme.css">
 </head>
 
 <body class="bg-gradient-primary">
@@ -56,7 +58,7 @@
     <script src="assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="module">
-        import { loginUser } from './assets/js/auth-firebase.js';
+        import { loginUser, logActivity } from './assets/js/auth-firebase.js';
         import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
         import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
@@ -122,6 +124,7 @@
                         }
 
                         // Approved — go to dashboard
+                        await logActivity('login', 'auth', `User logged in: ${email}`);
                         window.location.href = 'index.html';
 
                     } catch (error) {
@@ -135,6 +138,7 @@
             }
         });
     </script>
+    <script src="assets/js/theme-toggle.js"></script>
 </body>
 
 </html>

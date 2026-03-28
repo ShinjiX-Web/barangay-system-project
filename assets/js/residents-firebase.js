@@ -2,6 +2,7 @@
 // Resident management — photos stored as compressed base64 in Firestore (no Storage needed)
 
 import { db, COLLECTIONS } from './firebase-config.js';
+import { logActivity } from './auth-firebase.js';
 import {
   collection, doc, addDoc, getDoc, getDocs,
   updateDoc, deleteDoc, query, orderBy, serverTimestamp
@@ -201,10 +202,12 @@ async function saveResident(event) {
 
     if (id) {
       await updateDoc(doc(db, COLLECTIONS.residents, id), residentData);
+      await logActivity('update', 'residents', `Updated resident: ${firstName} ${lastName}`);
       Swal.fire({ icon: 'success', title: 'Updated!', text: 'Resident updated successfully.', timer: 2000, showConfirmButton: false });
     } else {
       residentData.createdAt = serverTimestamp();
       await addDoc(collection(db, COLLECTIONS.residents), residentData);
+      await logActivity('create', 'residents', `Registered new resident: ${firstName} ${lastName}`);
       Swal.fire({ icon: 'success', title: 'Saved!', text: 'Resident registered successfully.', timer: 2000, showConfirmButton: false });
     }
 
@@ -238,7 +241,9 @@ async function deleteResident(id) {
   if (!result.isConfirmed) return;
 
   try {
+    const resident = allResidents.find(r => r.id === id);
     await deleteDoc(doc(db, COLLECTIONS.residents, id));
+    await logActivity('delete', 'residents', `Deleted resident: ${resident?.firstName || ''} ${resident?.lastName || ''}`);
     Swal.fire({ icon: 'success', title: 'Deleted!', text: 'Resident removed.', timer: 1800, showConfirmButton: false });
     await loadResidents();
   } catch (err) {

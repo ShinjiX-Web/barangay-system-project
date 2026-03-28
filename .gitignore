@@ -4,4 +4,5 @@ firebase-debug.log
 .env.*.local
 node_modules/
 public/assets/js/firebase-config.js
+assets/js/firebase-config.dev.js
 build.bat

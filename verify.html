@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>Certificate Verification – Barangay 14</title>
+    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800&display=swap">
+    <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+    <style>
+        /* ── page chrome ──────────────────────────────────────────────────── */
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: linear-gradient(135deg, #1a4a8a 0%, #0d2b55 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        /* ── card ─────────────────────────────────────────────────────────── */
+        .verify-card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
+            max-width: 560px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        /* ── header strip ─────────────────────────────────────────────────── */
+        .verify-header {
+            background: linear-gradient(135deg, #1a4a8a, #0d2b55);
+            color: #fff;
+            padding: 32px 32px 24px;
+            text-align: center;
+        }
+        .verify-header img {
+            width: 72px;
+            height: 72px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
+        }
+        .verify-header h4 {
+            margin: 0 0 4px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+        }
+        .verify-header p {
+            margin: 0;
+            font-size: 0.82rem;
+            opacity: 0.75;
+        }
+
+        /* ── body ─────────────────────────────────────────────────────────── */
+        .verify-body {
+            padding: 32px;
+        }
+
+        /* ── status badges ────────────────────────────────────────────────── */
+        .status-box {
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        .status-box.verified {
+            background: #eafaf1;
+            border: 2px solid #27ae60;
+        }
+        .status-box.invalid {
+            background: #fdf3f3;
+            border: 2px solid #e74c3c;
+        }
+        .status-box.loading {
+            background: #f0f4ff;
+            border: 2px solid #1a4a8a;
+        }
+        .status-icon {
+            font-size: 3rem;
+            margin-bottom: 10px;
+        }
+        .status-box.verified .status-icon { color: #27ae60; }
+        .status-box.invalid  .status-icon { color: #e74c3c; }
+        .status-box.loading  .status-icon { color: #1a4a8a; }
+        .status-title {
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin: 0 0 4px;
+        }
+        .status-box.verified .status-title { color: #1e8449; }
+        .status-box.invalid  .status-title { color: #c0392b; }
+        .status-box.loading  .status-title { color: #1a4a8a; }
+        .status-sub {
+            font-size: 0.85rem;
+            color: #666;
+            margin: 0;
+        }
+
+        /* ── detail rows ──────────────────────────────────────────────────── */
+        .detail-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+        .detail-table tr:not(:last-child) td {
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .detail-table td {
+            padding: 10px 4px;
+            vertical-align: top;
+        }
+        .detail-table td:first-child {
+            color: #888;
+            width: 42%;
+            font-weight: 600;
+        }
+        .detail-table td:last-child {
+            color: #111;
+            font-weight: 700;
+        }
+
+        /* ── footer note ──────────────────────────────────────────────────── */
+        .verify-footer-note {
+            background: #f8f9ff;
+            border-top: 1px solid #e8ecf0;
+            padding: 16px 32px;
+            font-size: 0.78rem;
+            color: #888;
+            text-align: center;
+        }
+        .verify-footer-note strong { color: #1a4a8a; }
+    </style>
+</head>
+
+<body>
+    <div class="verify-card">
+
+        <!-- Header -->
+        <div class="verify-header">
+            <img src="assets/img/Seal_of_Angeles_City.png"
+                 onerror="this.style.display='none'" alt="Seal">
+            <h4>BARANGAY 14, ZONE 2, DISTRICT 2</h4>
+            <p>City of Angeles, Pampanga &nbsp;·&nbsp; Document Verification Portal</p>
+        </div>
+
+        <!-- Body -->
+        <div class="verify-body">
+
+            <!-- Status box – filled by JS -->
+            <div id="statusBox" class="status-box loading">
+                <div class="status-icon"><i class="fas fa-circle-notch fa-spin"></i></div>
+                <p class="status-title">Verifying Document…</p>
+                <p class="status-sub">Please wait while we look up this certificate.</p>
+            </div>
+
+            <!-- Certificate details – hidden until verified -->
+            <div id="certDetails" style="display:none;">
+                <table class="detail-table">
+                    <tbody id="detailRows"></tbody>
+                </table>
+            </div>
+
+        </div><!-- /verify-body -->
+
+        <!-- Footer note -->
+        <div class="verify-footer-note">
+            This verification page is provided by
+            <strong>Barangay 14, Zone 2, District 2 – Angeles City</strong>.
+            If you believe this document is fraudulent, please report it to the barangay office immediately.
+        </div>
+
+    </div><!-- /verify-card -->
+
+    <script type="module">
+        import { db, COLLECTIONS } from './assets/js/firebase-config.js';
+        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        // ── helpers ────────────────────────────────────────────────────────
+        const typeLabels = {
+            clearance  : 'Barangay Clearance',
+            residency  : 'Certificate of Residency',
+            indigency  : 'Certificate of Indigency',
+            job_seeker : 'First-time Job Seeker'
+        };
+
+        const statusLabels = {
+            pending    : 'Pending',
+            processing : 'Processing',
+            completed  : 'Completed / Released',
+            rejected   : 'Rejected'
+        };
+
+        function fmt(ts) {
+            if (!ts) return '—';
+            const d = ts.toDate ? ts.toDate() : new Date(ts);
+            return d.toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+        }
+
+        function showVerified(cert, id) {
+            const box = document.getElementById('statusBox');
+            box.className = 'status-box verified';
+            box.innerHTML = `
+                <div class="status-icon"><i class="fas fa-check-circle"></i></div>
+                <p class="status-title">✔ Verified – Authentic Document</p>
+                <p class="status-sub">This certificate was officially issued by Barangay 14.</p>`;
+
+            const rows = [
+                ['Document Type',  typeLabels[cert.certificateType] || cert.certificateType || '—'],
+                ['Issued To',      cert.residentName || '—'],
+                ['Purpose',        cert.purpose       || '—'],
+                ['Date Issued',    fmt(cert.requestDate)],
+                ['Document Status',statusLabels[cert.status] || cert.status || '—'],
+                ['Reference No.',  id],
+            ];
+
+            document.getElementById('detailRows').innerHTML = rows
+                .map(([label, value]) => `<tr><td>${label}</td><td>${value}</td></tr>`)
+                .join('');
+
+            document.getElementById('certDetails').style.display = 'block';
+        }
+
+        function showInvalid(reason) {
+            const box = document.getElementById('statusBox');
+            box.className = 'status-box invalid';
+            box.innerHTML = `
+                <div class="status-icon"><i class="fas fa-times-circle"></i></div>
+                <p class="status-title">⚠ Not Verified</p>
+                <p class="status-sub">${reason}</p>`;
+        }
+
+        // ── main ───────────────────────────────────────────────────────────
+        const params = new URLSearchParams(window.location.search);
+        const certId = params.get('id');
+
+        if (!certId) {
+            showInvalid('No certificate ID was provided in this QR code. The document may be invalid or tampered with.');
+        } else {
+            (async () => {
+                try {
+                    const snap = await getDoc(doc(db, COLLECTIONS.certificates, certId));
+                    if (snap.exists()) {
+                        showVerified(snap.data(), certId);
+                    } else {
+                        showInvalid('No matching certificate was found in our records. This document may be fraudulent or has not been issued by Barangay 14.');
+                    }
+                } catch (err) {
+                    showInvalid(`Could not connect to the verification server. Please try again later. (${err.message})`);
+                }
+            })();
+        }
+    </script>
+
+</body>
+</html>

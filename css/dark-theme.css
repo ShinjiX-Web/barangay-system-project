@@ -133,7 +133,7 @@
 
 /* Specific utility class overrides */
 [data-bs-theme="dark"] .text-primary {
-    color: #1a1d23 !important;
+    color: #4e9cdf !important;
 }
 
 [data-bs-theme="dark"] .text-success {
@@ -287,3 +287,277 @@ body,
 .footer {
     transition: background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
 }
+
+/* ====================================================== */
+/* CERTIFICATE PRINT & PREVIEW - ALWAYS LIGHT MODE       */
+/* ====================================================== */
+
+/* Exclude certificate preview and print areas from dark mode */
+[data-bs-theme="dark"] #certPreviewContent,
+[data-bs-theme="dark"] #certPreviewContent *:not(.cert-watermark),
+[data-bs-theme="dark"] .cert-print-area,
+[data-bs-theme="dark"] .cert-print-area *:not(.cert-watermark),
+[data-bs-theme="dark"] .certificate-document,
+[data-bs-theme="dark"] .certificate-document *:not(.cert-watermark) {
+    color: #000 !important;
+    border-color: #000 !important;
+    filter: none !important;
+}
+
+/* Preserve watermark background image */
+[data-bs-theme="dark"] .cert-watermark {
+    background: url('assets/img/Seal_of_Angeles_City.png') no-repeat center center !important;
+    background-size: contain !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+/* Extra specificity to ensure watermark shows */
+[data-bs-theme="dark"] #certPreviewContent .cert-watermark,
+[data-bs-theme="dark"] .cert-print-area .cert-watermark,
+[data-bs-theme="dark"] #certPreviewModal .cert-watermark {
+    background: url('assets/img/Seal_of_Angeles_City.png') no-repeat center center !important;
+    background-size: contain !important;
+    filter: none !important;
+    -webkit-filter: none !important;
+}
+
+[data-bs-theme="dark"] #certPreviewModal .modal-title {
+    color: #f8f9fa !important;
+}
+
+/* Print media - force light mode for certificates */
+@media print {
+    * {
+        color: #000 !important;
+        border-color: #000 !important;
+    }
+    
+    body {
+        background: #fff !important;
+        color: #000 !important;
+    }
+    
+    /* Preserve watermark in print */
+    .cert-watermark {
+        background: url('assets/img/Seal_of_Angeles_City.png') no-repeat center center !important;
+        background-size: contain !important;
+        background-color: transparent !important;
+        opacity: 0.13 !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+}
+        /* Dark mode overrides for SB Admin custom elements */
+        [data-bs-theme="dark"] .topbar,
+        [data-bs-theme="dark"] .sticky-footer,
+        [data-bs-theme="dark"] .footer {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .topbar {
+            border-bottom: 1px solid #2d3139;
+        }
+        [data-bs-theme="dark"] .card {
+            background-color: #212529;
+            border-color: #2d3139;
+        }
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #2d3139;
+            border-color: #3d4149;
+        }
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #3d4149;
+            color: #fff;
+        }
+        [data-bs-theme="dark"] .text-gray-600 {
+            color: #adb5bd !important;
+        }
+        [data-bs-theme="dark"] .text-gray-800 {
+            color: #dee2e6 !important;
+        }
+        [data-bs-theme="dark"] .text-dark {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .border-left-primary { border-left-color: #4e73df !important; }
+        [data-bs-theme="dark"] .border-left-success { border-left-color: #1cc88a !important; }
+        [data-bs-theme="dark"] .border-left-info    { border-left-color: #36b9cc !important; }
+        [data-bs-theme="dark"] .border-left-warning { border-left-color: #f6c23e !important; }
+        [data-bs-theme="dark"] .border-left-danger  { border-left-color: #e74a3b !important; }
+        [data-bs-theme="dark"] .table {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        [data-bs-theme="dark"] #themeToggleBtn {
+            color: #f6c23e;
+        }
+        [data-bs-theme="light"] #themeToggleBtn {
+            color: #4e73df;
+        }
+        /* Smooth transition */
+        html {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }
+ 
+        .queue-card {
+            border-left: 4px solid #4e73df;
+        }
+        .queue-card.processing {
+            border-left-color: #f6c23e;
+        }
+        .queue-card.completed {
+            border-left-color: #1cc88a;
+        }
+        .cert-print-area {
+            display: none;
+        }
+
+        /*
+         * Certificate Preview & Print – Force Light Mode
+         * NOTE: The watermark is now an <img> tag, NOT a CSS background.
+         * This means it is unaffected by dark-mode color/filter overrides
+         * and prints correctly in all browsers without special workarounds.
+         */
+        #certPreviewContent,
+        #certPreviewContent *,
+        .cert-print-area,
+        .cert-print-area * {
+            color: #000 !important;
+            border-color: #000 !important;
+        }
+
+        /* Exclude certificate areas from dark mode filter */
+        [data-bs-theme="dark"] #certPreviewContent,
+        [data-bs-theme="dark"] #certPreviewContent *,
+        [data-bs-theme="dark"] .cert-print-area,
+        [data-bs-theme="dark"] .cert-print-area * {
+            color: #000 !important;
+            border-color: #000 !important;
+            filter: none !important;
+            -webkit-filter: none !important;
+        }
+
+        /* Watermark <img> — never let dark mode or any rule hide/tint it */
+        .cert-watermark-img {
+            position: absolute !important;
+            top: 55% !important;
+            left: 50% !important;
+            transform: translate(-50%, -50%) !important;
+            width: 420px !important;
+            height: 420px !important;
+            opacity: 0.13 !important;
+            pointer-events: none !important;
+            z-index: 0 !important;
+            display: block !important;
+            filter: none !important;
+            -webkit-filter: none !important;
+            /* Preserve colour in print */
+            -webkit-print-color-adjust: exact !important;
+            print-color-adjust: exact !important;
+        }
+
+        @media print {
+            body {
+                background: #fff !important;
+                color: #000 !important;
+            }
+            body > *:not(.cert-print-area) {
+                display: none !important;
+            }
+            .cert-print-area {
+                display: block !important;
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                margin: 0;
+                padding: 0;
+                background: #fff !important;
+                color: #000 !important;
+            }
+            .cert-print-area img {
+                display: block !important;
+                visibility: visible !important;
+            }
+            .cert-print-area *,
+            .cert-print-area {
+                color: #000 !important;
+                border-color: #000 !important;
+                filter: none !important;
+                -webkit-filter: none !important;
+            }
+            /* Watermark img in print – keep it visible */
+            .cert-watermark-img {
+                opacity: 0.13 !important;
+                display: block !important;
+                visibility: visible !important;
+                filter: none !important;
+                -webkit-filter: none !important;
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+            }
+        }
+        
+        /* Dark mode overrides for SB Admin custom elements */
+        [data-bs-theme="dark"] .topbar,
+        [data-bs-theme="dark"] .sticky-footer,
+        [data-bs-theme="dark"] .footer {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .topbar {
+            border-bottom: 1px solid #2d3139;
+        }
+        [data-bs-theme="dark"] .card {
+            background-color: #212529;
+            border-color: #2d3139;
+        }
+        [data-bs-theme="dark"] .dropdown-menu {
+            background-color: #2d3139;
+            border-color: #3d4149;
+        }
+        [data-bs-theme="dark"] .dropdown-item {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .dropdown-item:hover {
+            background-color: #3d4149;
+            color: #fff;
+        }
+        [data-bs-theme="dark"] .text-gray-600 {
+            color: #adb5bd !important;
+        }
+        [data-bs-theme="dark"] .text-gray-800 {
+            color: #dee2e6 !important;
+        }
+        [data-bs-theme="dark"] .text-dark {
+            color: #f8f9fa !important;
+        }
+        [data-bs-theme="dark"] .bg-white {
+            background-color: #1a1d23 !important;
+        }
+        [data-bs-theme="dark"] .border-left-primary { border-left-color: #4e73df !important; }
+        [data-bs-theme="dark"] .border-left-success { border-left-color: #1cc88a !important; }
+        [data-bs-theme="dark"] .border-left-info    { border-left-color: #36b9cc !important; }
+        [data-bs-theme="dark"] .border-left-warning { border-left-color: #f6c23e !important; }
+        [data-bs-theme="dark"] .border-left-danger  { border-left-color: #e74a3b !important; }
+        [data-bs-theme="dark"] .table {
+            color: #dee2e6;
+        }
+        [data-bs-theme="dark"] .table-hover tbody tr:hover {
+            background-color: rgba(255,255,255,0.05);
+        }
+        [data-bs-theme="dark"] #themeToggleBtn {
+            color: #f6c23e;
+        }
+        [data-bs-theme="light"] #themeToggleBtn {
+            color: #4e73df;
+        }
+        html {
+            transition: background-color 0.2s ease, color 0.2s ease;
+        }

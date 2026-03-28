@@ -8,7 +8,10 @@ service cloud.firestore {
     }
 
     match /users/{userId} {
+      // Allow read/write if authenticated
       allow read, write: if isAuthenticated();
+      // Allow create (registration) for new users (unauthenticated)
+      allow create: if request.auth == null;
     }
 
     match /residents/{residentId} {

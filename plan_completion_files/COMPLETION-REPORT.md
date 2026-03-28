@@ -121,7 +121,7 @@
 
 ---
 
-## 🚀 HOW TO USE THE SYSTEM
+## HOW TO USE THE SYSTEM
 
 ### 1. Login
 ```
