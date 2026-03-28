@@ -178,7 +178,7 @@ function loginUser(event) {
         timer: 1500,
         showConfirmButton: false
     }).then(() => {
-        window.location.href = 'index.html';
+        window.location.href = 'dashboard.html';
     });
 }
 
