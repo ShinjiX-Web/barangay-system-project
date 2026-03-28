@@ -55,7 +55,7 @@ export async function registerUser(firstName, lastName, email, password, role = 
       username:     email,
       role:         assignedRole,
       position:     isFirstUser ? 'Barangay Captain' : '',
-      profilePhoto: 'assets/img/avatars/avatar1.jpeg',
+      profilePhoto: role === 'resident' ? 'assets/img/avatars/user-avatar.png' : 'assets/img/avatars/avatar1.jpeg',
       isActive:     isFirstUser,   // first user active immediately, others wait
       status,                      // 'pending' | 'approved' | 'rejected'
       dateHired:    serverTimestamp(),
@@ -136,8 +136,24 @@ export function isSuperAdmin() { return getCurrentUser()?.role === 'superadmin';
 
 // Activity log
 export async function logActivity(action, module, description) {
-  const user = getCurrentUser();
-  if (!user) return;
+  let user = getCurrentUser();
+
+  // If currentUserData isn't cached yet, fetch it directly from Firebase Auth + Firestore
+  if (!user) {
+    const firebaseUser = auth.currentUser;
+    if (!firebaseUser) return;
+    try {
+      const snap = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
+      if (snap.exists()) {
+        user = { uid: firebaseUser.uid, ...snap.data() };
+      } else {
+        user = { uid: firebaseUser.uid, email: firebaseUser.email };
+      }
+    } catch (e) {
+      return;
+    }
+  }
+
   try {
     await addDoc(collection(db, COLLECTIONS.activityLogs), {
       userId:      user.uid,

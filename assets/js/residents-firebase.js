@@ -22,6 +22,8 @@ window.searchResidentTable = searchResidentTable;
 window.filterResidents     = filterResidents;
 window.calculateAge        = calculateAge;
 window.previewPhoto        = previewPhoto;
+window.triggerPhotoUpdate  = triggerPhotoUpdate;
+window.updateResidentPhoto = updateResidentPhoto;
 
 // Called by residents.html after DOM is ready
 export async function loadResidentsFirebase() {
@@ -88,7 +90,8 @@ async function loadResidents() {
         address:       data.address       || '',
         contactNumber: data.contactNumber || '',
         email:         data.email         || '',
-        photoURL:      '',
+        // profilePhoto is the field name in the users collection
+        photoURL:      data.profilePhoto  || data.photoURL || '',
       });
     });
 
@@ -117,7 +120,15 @@ function renderResidents(residents) {
     const photo    = r.photoURL || 'assets/img/avatars/user-avatar.png';
     return `
       <tr>
-        <td><img src="${photo}" style="width:45px;height:45px;object-fit:cover;border-radius:50%;" onerror="this.src='assets/img/avatars/user-avatar.png'"></td>
+        <td>
+          <div style="position:relative;display:inline-block;cursor:pointer;" title="Click to update photo" onclick="triggerPhotoUpdate('${r.id}')">
+            <img id="resident-photo-${r.id}" src="${photo}" style="width:45px;height:45px;object-fit:cover;border-radius:50%;" onerror="this.src='assets/img/avatars/user-avatar.png'">
+            <div style="position:absolute;bottom:0;right:0;background:rgba(0,0,0,0.55);border-radius:50%;width:16px;height:16px;display:flex;align-items:center;justify-content:center;">
+              <i class="fas fa-camera" style="color:white;font-size:7px;"></i>
+            </div>
+          </div>
+          <input type="file" id="photo-input-${r.id}" accept="image/*" style="display:none;" onchange="updateResidentPhoto('${r.id}', this)">
+        </td>
         <td>${fullName}</td>
         <td>${r.gender || '—'}</td>
         <td>${r.age || '—'}</td>
@@ -131,6 +142,47 @@ function renderResidents(residents) {
   }).join('');
 
   counter.textContent = `Total: ${residents.length} resident${residents.length !== 1 ? 's' : ''}`;
+}
+
+// ─── Inline photo update from list ───────────────────────────────────────────
+function triggerPhotoUpdate(id) {
+  const input = document.getElementById(`photo-input-${id}`);
+  if (input) input.click();
+}
+
+async function updateResidentPhoto(id, input) {
+  const file = input.files[0];
+  if (!file) return;
+
+  try {
+    Swal.fire({ title: 'Updating photo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
+    const photoURL = await compressImageToBase64(file);
+
+    const isUser  = id.startsWith('user_');
+    const realId  = isUser ? id.slice(5) : id;
+    const colName = isUser ? COLLECTIONS.users : COLLECTIONS.residents;
+
+    // Users collection stores photo as 'profilePhoto'; residents collection uses 'photoURL'
+    const updateData = isUser
+      ? { profilePhoto: photoURL, updatedAt: serverTimestamp() }
+      : { photoURL,               updatedAt: serverTimestamp() };
+
+    await updateDoc(doc(db, colName, realId), updateData);
+
+    // Update in-memory cache and the image element immediately
+    const resident = allResidents.find(r => r.id === id);
+    if (resident) resident.photoURL = photoURL;
+    const img = document.getElementById(`resident-photo-${id}`);
+    if (img) img.src = photoURL;
+
+    // Reset the file input so the same file can be re-selected later
+    input.value = '';
+
+    await logActivity('update', 'residents', `Updated photo for resident: ${resident?.firstName || ''} ${resident?.lastName || ''}`);
+    Swal.fire({ icon: 'success', title: 'Photo updated!', timer: 1500, showConfirmButton: false });
+  } catch (err) {
+    Swal.fire({ icon: 'error', title: 'Error', text: err.message });
+  }
 }
 
 // ─── Search & filter ──────────────────────────────────────────────────────────
@@ -233,7 +285,15 @@ async function saveResident(event) {
       const isUser  = id.startsWith('user_');
       const realId  = isUser ? id.slice(5) : id;
       const colName = isUser ? COLLECTIONS.users : COLLECTIONS.residents;
-      await updateDoc(doc(db, colName, realId), residentData);
+
+      // Users collection stores photo as 'profilePhoto'; map accordingly
+      const dataToSave = { ...residentData };
+      if (isUser && dataToSave.photoURL) {
+        dataToSave.profilePhoto = dataToSave.photoURL;
+        delete dataToSave.photoURL;
+      }
+
+      await updateDoc(doc(db, colName, realId), dataToSave);
       await logActivity('update', 'residents', `Updated resident: ${residentData.firstName} ${residentData.lastName}`);
       Swal.fire({ icon: 'success', title: 'Updated!', text: 'Resident updated successfully.', timer: 2000, showConfirmButton: false });
     } else {
@@ -272,7 +332,8 @@ async function editResident(id) {
         address:       data.address       || '',
         contactNumber: data.contactNumber || '',
         email:         data.email         || '',
-        photoURL:      isUser ? '' : (data.photoURL || ''),
+        // For users, photo is stored as profilePhoto; for residents, as photoURL
+        photoURL:      isUser ? (data.profilePhoto || data.photoURL || '') : (data.photoURL || ''),
       });
     } else {
       Swal.fire({ icon: 'error', title: 'Not Found', text: 'Resident record not found.' });
