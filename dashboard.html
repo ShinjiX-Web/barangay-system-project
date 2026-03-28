@@ -16,9 +16,9 @@
 <body id="page-top">
     <div id="wrapper">
         <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark">
-            <div class="container-fluid d-flex flex-column p-2"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand text-wrap" href="dashboard.html">
-                    <div class="sidebar-brand-icon"><img src="/assets/img/Seal_of_Angeles_City.png" alt="Barangay 14 Seal" style="width: 60px; height: 60px;"></div>
-                    <div class="mx-3 sidebar-brand-text"><span>City Of Angeles</span></div>
+            <div class="container-fluid d-flex flex-column p-0"><a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="dashboard.html">
+                    <div class="sidebar-brand-icon"><img src="assets/img/Seal_of_Angeles_City.png" alt="Barangay 14 Seal" style="width: 50px; height: 50px; border-radius: 50%;"></div>
+                    <div class="mx-3 sidebar-brand-text"><p class="m-0 fw-bold" style="font-size:.95rem;line-height:1.1;">Barangay 14</p><small style="font-size:.7rem;opacity:.8;">Zone 2 · District 2</small></div>
                 </a>
                 <hr class="my-0 sidebar-divider">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
@@ -238,8 +238,7 @@
             // was being queried before the auth token was attached to requests.
             onAuthStateChanged(auth, async (firebaseUser) => {
                 if (!firebaseUser) {
-                    // Not logged in — redirect to login page
-                    window.location.href = 'login.html';
+                    if (!window._loggingOut) window.location.href = 'login.html';
                     return;
                 }
 
@@ -391,7 +390,7 @@
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
 
         onAuthStateChanged(auth, (user) => {
-            if (!user) {
+            if (!user && !window._loggingOut) {
                 window.location.href = 'login.html';
             }
         });
@@ -399,7 +398,8 @@
         window.logout = async () => {
             const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
             if (!result.isConfirmed) return;
-            await signOut(auth);
+            window._loggingOut = true;
+    await signOut(auth);
             await Swal.fire({ icon: 'success', title: 'Signed Out', text: 'You have been successfully signed out.', timer: 2000, showConfirmButton: false });
             window.location.href = 'index.html';
         };

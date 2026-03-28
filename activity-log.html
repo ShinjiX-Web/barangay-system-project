@@ -16,8 +16,8 @@
     <nav class="navbar align-items-start p-0 sidebar sidebar-dark accordion bg-gradient-primary navbar-dark">
         <div class="container-fluid d-flex flex-column p-0">
             <a class="navbar-brand d-flex justify-content-center align-items-center m-0 sidebar-brand" href="dashboard.html">
-                <div class="sidebar-brand-icon"><img src="/assets/img/Seal_of_Angeles_City.png" alt="Barangay 14 Seal" style="width: 60px; height: 60px;"></div>
-                <div class="mx-3 sidebar-brand-text"><span>Brgy 14</span></div>
+                <div class="sidebar-brand-icon"><img src="assets/img/Seal_of_Angeles_City.png" alt="Barangay 14 Seal" style="width: 50px; height: 50px; border-radius: 50%;"></div>
+                <div class="mx-3 sidebar-brand-text"><p class="m-0 fw-bold" style="font-size:.95rem;line-height:1.1;">Barangay 14</p><small style="font-size:.7rem;opacity:.8;">Zone 2 · District 2</small></div>
             </a>
             <hr class="my-0 sidebar-divider">
             <ul class="navbar-nav text-light" id="accordionSidebar">
@@ -130,6 +130,12 @@
                                 </tbody>
                             </table>
                         </div>
+                        <div class="d-flex justify-content-between align-items-center mt-2 flex-wrap gap-2">
+                            <small id="paginationInfo" class="text-muted"></small>
+                            <nav>
+                                <ul class="pagination pagination-sm mb-0" id="paginationControls"></ul>
+                            </nav>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,10 +159,14 @@
     import { collection, getDocs, getDoc, doc, addDoc, deleteDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
     let allLogs = [];
+    let filteredLogs = [];
+    let currentPage = 1;
+    const PAGE_SIZE = 10;
 
 window.logout = async () => {
     const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
     if (!result.isConfirmed) return;
+    window._loggingOut = true;
     await signOut(auth);
     await Swal.fire({ icon: 'success', title: 'Signed Out', text: 'You have been successfully signed out.', timer: 2000, showConfirmButton: false });
     window.location.href = 'index.html';
@@ -167,7 +177,7 @@ window.logout = async () => {
 
     document.addEventListener('DOMContentLoaded', () => {
         onAuthStateChanged(auth, async (firebaseUser) => {
-            if (!firebaseUser) { window.location.href = 'login.html'; return; }
+            if (!firebaseUser) { if (!window._loggingOut) window.location.href = 'login.html'; return; }
 
             try {
                 const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
@@ -193,21 +203,31 @@ window.logout = async () => {
             const q = query(collection(db, COLLECTIONS.activityLogs), orderBy('timestamp', 'desc'));
             const snap = await getDocs(q);
             allLogs = snap.docs.map(d => ({ id: d.id, ...d.data() }));
-            renderLogs(allLogs);
+            filteredLogs = allLogs;
+            currentPage = 1;
+            renderLogs();
         } catch(err) {
             tbody.innerHTML = `<tr><td colspan="5" class="text-center text-danger">Error: ${err.message}</td></tr>`;
         }
     }
 
-    function renderLogs(logs) {
-        const tbody  = document.getElementById('logTableBody');
+    function renderLogs() {
+        const tbody   = document.getElementById('logTableBody');
         const countEl = document.getElementById('logCount');
 
-        if (!logs.length) {
+        if (!filteredLogs.length) {
             tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted py-4">No activity logs found.</td></tr>';
             if (countEl) countEl.textContent = '0 entries';
+            document.getElementById('paginationInfo').textContent = '';
+            document.getElementById('paginationControls').innerHTML = '';
             return;
         }
+
+        const totalPages = Math.ceil(filteredLogs.length / PAGE_SIZE);
+        if (currentPage > totalPages) currentPage = totalPages;
+
+        const start  = (currentPage - 1) * PAGE_SIZE;
+        const pageLogs = filteredLogs.slice(start, start + PAGE_SIZE);
 
         const actionBadge = {
             login:   'badge bg-success',
@@ -217,7 +237,7 @@ window.logout = async () => {
             delete:  'badge bg-danger',
         };
 
-        tbody.innerHTML = logs.map(log => {
+        tbody.innerHTML = pageLogs.map(log => {
             const ts = log.timestamp?.toDate
                 ? log.timestamp.toDate().toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: '2-digit', minute: '2-digit' })
                 : '—';
@@ -231,20 +251,58 @@ window.logout = async () => {
             </tr>`;
         }).join('');
 
-        if (countEl) countEl.textContent = `${logs.length} entr${logs.length !== 1 ? 'ies' : 'y'}`;
+        if (countEl) countEl.textContent = `${filteredLogs.length} entr${filteredLogs.length !== 1 ? 'ies' : 'y'}`;
+
+        // Pagination info
+        const end = Math.min(start + PAGE_SIZE, filteredLogs.length);
+        document.getElementById('paginationInfo').textContent =
+            `Showing ${start + 1}–${end} of ${filteredLogs.length} entries`;
+
+        // Pagination controls
+        const ul = document.getElementById('paginationControls');
+        ul.innerHTML = '';
+
+        const addPage = (label, page, disabled, active) => {
+            ul.insertAdjacentHTML('beforeend',
+                `<li class="page-item${disabled ? ' disabled' : ''}${active ? ' active' : ''}">
+                    <a class="page-link" href="#" onclick="goToPage(${page}); return false;">${label}</a>
+                </li>`);
+        };
+
+        addPage('&laquo;', currentPage - 1, currentPage === 1, false);
+
+        // Show up to 5 page numbers around current page
+        const delta = 2;
+        const rangeStart = Math.max(1, currentPage - delta);
+        const rangeEnd   = Math.min(totalPages, currentPage + delta);
+        if (rangeStart > 1) { addPage('1', 1, false, false); if (rangeStart > 2) ul.insertAdjacentHTML('beforeend', '<li class="page-item disabled"><span class="page-link">…</span></li>'); }
+        for (let p = rangeStart; p <= rangeEnd; p++) addPage(p, p, false, p === currentPage);
+        if (rangeEnd < totalPages) { if (rangeEnd < totalPages - 1) ul.insertAdjacentHTML('beforeend', '<li class="page-item disabled"><span class="page-link">…</span></li>'); addPage(totalPages, totalPages, false, false); }
+
+        addPage('&raquo;', currentPage + 1, currentPage === totalPages, false);
     }
+
+    window.goToPage = function(page) {
+        const totalPages = Math.ceil(filteredLogs.length / PAGE_SIZE);
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        renderLogs();
+        document.getElementById('logTableBody').closest('.card').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
 
     function applyFilters() {
         const action = document.getElementById('filterAction').value;
         const module = document.getElementById('filterModule').value;
         const search = document.getElementById('filterSearch').value.toLowerCase();
 
-        renderLogs(allLogs.filter(log =>
+        filteredLogs = allLogs.filter(log =>
             (!action || log.action === action) &&
             (!module || log.module === module) &&
             (!search || (log.userName || '').toLowerCase().includes(search) ||
                         (log.description || '').toLowerCase().includes(search))
-        ));
+        );
+        currentPage = 1;
+        renderLogs();
     }
 
     async function clearLogs() {
@@ -259,7 +317,9 @@ window.logout = async () => {
             const snap = await getDocs(collection(db, COLLECTIONS.activityLogs));
             await Promise.all(snap.docs.map(d => deleteDoc(doc(db, COLLECTIONS.activityLogs, d.id))));
             allLogs = [];
-            renderLogs([]);
+            filteredLogs = [];
+            currentPage = 1;
+            renderLogs();
             Swal.fire({ icon: 'success', title: 'Cleared!', timer: 1500, showConfirmButton: false });
         } catch(err) {
             Swal.fire({ icon: 'error', title: 'Error', text: err.message });
