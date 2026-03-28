@@ -561,3 +561,7 @@ body,
         html {
             transition: background-color 0.2s ease, color 0.2s ease;
         }
+
+        #swal2-title {
+            color: #545454 !important;
+        }
