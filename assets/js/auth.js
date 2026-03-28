@@ -241,7 +241,11 @@ function logout() {
 function checkAuth() {
     const user = getCurrentUser();
     if (!user) {
-        window.location.href = 'login.html';
+        // Only redirect if we're not on login page already
+        if (!window.location.pathname.includes('login')) {
+            window.location.href = 'login.html';
+        }
+        return null;
     }
     return user;
 }

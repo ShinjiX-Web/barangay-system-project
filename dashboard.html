@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <script src="assets/js/auth.js"></script>
     <link rel="stylesheet" href="css/dark-theme.css">
 </head>
 
@@ -381,6 +380,52 @@
                 }
             } catch(e) { console.warn(e.message); }
         });
+    </script>
+
+    <!-- SweetAlert2 JS -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <!-- Auth guard using Firebase — redirect to login if not signed in -->
+    <script type="module">
+        import { auth } from './assets/js/firebase-config.js';
+        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                window.location.href = 'login.html';
+            }
+        });
+
+        // Logout function using Firebase
+        window.logout = function() {
+            import('https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js').then(({ signOut }) => {
+                Swal.fire({
+                    icon: 'question',
+                    title: 'Sign Out?',
+                    text: 'Are you sure you want to sign out?',
+                    showCancelButton: true,
+                    confirmButtonColor: '#4e73df',
+                    cancelButtonColor: '#858796',
+                    confirmButtonText: 'Yes, sign out',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        signOut(auth).then(() => {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Signed Out',
+                                text: 'You have been successfully signed out.',
+                                confirmButtonColor: '#4e73df',
+                                timer: 1500,
+                                showConfirmButton: false
+                            }).then(() => {
+                                window.location.href = 'login.html';
+                            });
+                        });
+                    }
+                });
+            });
+        }
     </script>
 </body>
 
