@@ -199,6 +199,9 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
                     if (currentUserRole === 'admin') {
                         document.getElementById('pendingCard').style.display = 'block';
                         await loadPendingUsers();
+                    }
+                        // Show admin sidebar items for admin and secretary
+                    if (['admin', 'secretary'].includes(currentUserRole)) {
                         const el = document.getElementById('adminSidebarItems');
                         if (el) el.style.display = 'block';
                     }

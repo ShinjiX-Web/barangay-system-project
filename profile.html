@@ -464,7 +464,7 @@ window.logout = async () => { await signOut(auth); window.location.href = 'index
             if (!firebaseUser) return;
             try {
                 const snap = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
-                if (snap.exists() && snap.data().role === 'admin') {
+                if (snap.exists() && ['admin', 'secretary'].includes(snap.data().role)) {
                     const el = document.getElementById('adminSidebarItems');
                     if (el) el.style.display = 'block';
                 }
