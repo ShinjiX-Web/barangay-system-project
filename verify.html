@@ -8,142 +8,15 @@
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:400,600,700,800&display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <style>
-        /* ── page chrome ──────────────────────────────────────────────────── */
-        body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #1a4a8a 0%, #0d2b55 100%);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 24px;
-        }
-
-        /* ── card ─────────────────────────────────────────────────────────── */
-        .verify-card {
-            background: #fff;
-            border-radius: 16px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.35);
-            max-width: 560px;
-            width: 100%;
-            overflow: hidden;
-        }
-
-        /* ── header strip ─────────────────────────────────────────────────── */
-        .verify-header {
-            background: linear-gradient(135deg, #1a4a8a, #0d2b55);
-            color: #fff;
-            padding: 32px 32px 24px;
-            text-align: center;
-        }
-        .verify-header img {
-            width: 72px;
-            height: 72px;
-            object-fit: contain;
-            margin-bottom: 12px;
-            filter: drop-shadow(0 2px 6px rgba(0,0,0,0.4));
-        }
-        .verify-header h4 {
-            margin: 0 0 4px;
-            font-weight: 800;
-            letter-spacing: 1px;
-            font-size: 1.1rem;
-        }
-        .verify-header p {
-            margin: 0;
-            font-size: 0.82rem;
-            opacity: 0.75;
-        }
-
-        /* ── body ─────────────────────────────────────────────────────────── */
-        .verify-body {
-            padding: 32px;
-        }
-
-        /* ── status badges ────────────────────────────────────────────────── */
-        .status-box {
-            border-radius: 12px;
-            padding: 24px;
-            text-align: center;
-            margin-bottom: 24px;
-        }
-        .status-box.verified {
-            background: #eafaf1;
-            border: 2px solid #27ae60;
-        }
-        .status-box.invalid {
-            background: #fdf3f3;
-            border: 2px solid #e74c3c;
-        }
-        .status-box.loading {
-            background: #f0f4ff;
-            border: 2px solid #1a4a8a;
-        }
-        .status-icon {
-            font-size: 3rem;
-            margin-bottom: 10px;
-        }
-        .status-box.verified .status-icon { color: #27ae60; }
-        .status-box.invalid  .status-icon { color: #e74c3c; }
-        .status-box.loading  .status-icon { color: #1a4a8a; }
-        .status-title {
-            font-size: 1.25rem;
-            font-weight: 800;
-            margin: 0 0 4px;
-        }
-        .status-box.verified .status-title { color: #1e8449; }
-        .status-box.invalid  .status-title { color: #c0392b; }
-        .status-box.loading  .status-title { color: #1a4a8a; }
-        .status-sub {
-            font-size: 0.85rem;
-            color: #666;
-            margin: 0;
-        }
-
-        /* ── detail rows ──────────────────────────────────────────────────── */
-        .detail-table {
-            width: 100%;
-            border-collapse: collapse;
-            font-size: 0.9rem;
-        }
-        .detail-table tr:not(:last-child) td {
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .detail-table td {
-            padding: 10px 4px;
-            vertical-align: top;
-        }
-        .detail-table td:first-child {
-            color: #888;
-            width: 42%;
-            font-weight: 600;
-        }
-        .detail-table td:last-child {
-            color: #111;
-            font-weight: 700;
-        }
-
-        /* ── footer note ──────────────────────────────────────────────────── */
-        .verify-footer-note {
-            background: #f8f9ff;
-            border-top: 1px solid #e8ecf0;
-            padding: 16px 32px;
-            font-size: 0.78rem;
-            color: #888;
-            text-align: center;
-        }
-        .verify-footer-note strong { color: #1a4a8a; }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
 </head>
-
 <body>
     <div class="verify-card">
 
         <!-- Header -->
         <div class="verify-header">
             <img src="assets/img/Seal_of_Angeles_City.png"
-                 onerror="this.style.display='none'" alt="Seal">
+                onerror="this.style.display='none'" alt="Seal">
             <h4>BARANGAY 14, ZONE 2, DISTRICT 2</h4>
             <p>City of Angeles, Pampanga &nbsp;·&nbsp; Document Verification Portal</p>
         </div>
@@ -177,8 +50,30 @@
     </div><!-- /verify-card -->
 
     <script type="module">
-        import { db, COLLECTIONS } from './assets/js/firebase-config.js';
-        import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+        // ── Inline Firebase init ───────────────────────────────────────────
+        // verify.html is a PUBLIC page (no login required), so we initialise
+        // Firebase directly here instead of importing firebase-config.js which
+        // may depend on auth state or other app-level setup.
+        // ⚠️  Replace the values below with your actual Firebase project config
+        //     (copy from firebase-config.js in your repo).
+        import { initializeApp, getApps } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-app.js';
+        import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAAMgLqMnsRgovpgV6dRcW459feF_AOd6w",
+            authDomain: "barangay-system-701b9.firebaseapp.com",
+            projectId: "barangay-system-701b9",
+            storageBucket: "barangay-system-701b9.firebasestorage.app",
+            messagingSenderId: "595188953117",
+            appId: "1:595188953117:web:4371ec5d47b6d18da6d6f4"
+        };
+
+        // Avoid duplicate app if page ever reloads mid-session
+        const app = getApps().length ? getApps()[0] : initializeApp(firebaseConfig);
+        const db  = getFirestore(app);
+
+        // ⚠️  Make sure this matches the collection name in your Firestore
+        const CERTIFICATES_COLLECTION = 'certificates';
 
         // ── helpers ────────────────────────────────────────────────────────
         const typeLabels = {
@@ -243,7 +138,7 @@
         } else {
             (async () => {
                 try {
-                    const snap = await getDoc(doc(db, COLLECTIONS.certificates, certId));
+                    const snap = await getDoc(doc(db, CERTIFICATES_COLLECTION, certId));
                     if (snap.exists()) {
                         showVerified(snap.data(), certId);
                     } else {
