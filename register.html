@@ -174,8 +174,6 @@
     </script>
     <script type="module">
         import { registerUser } from './assets/js/auth-firebase.js';
-        import { db, COLLECTIONS } from './assets/js/firebase-config.js';
-        import { doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
         document.addEventListener('DOMContentLoaded', () => {
             const form = document.querySelector('form.user');
@@ -208,23 +206,15 @@
                     }
 
                     try {
-                        const uid = await registerUser(firstName, lastName, email, password, role);
-
-                        // Save extra fields — non-critical, ignore if it fails
-                        if (uid) {
-                            try {
-                                const extra = { username: username || email, updatedAt: serverTimestamp() };
-                                if (role === 'resident') {
-                                    if (gender)  extra.gender        = gender;
-                                    if (age)     extra.age           = parseInt(age);
-                                    if (address) extra.address       = address;
-                                    if (contact) extra.contactNumber = contact;
-                                }
-                                await updateDoc(doc(db, COLLECTIONS.users, uid), extra);
-                            } catch (updateErr) {
-                                console.warn('Extra fields update skipped:', updateErr.message);
-                            }
+                        const extraFields = { username: username || email };
+                        if (role === 'resident') {
+                            if (gender)  extraFields.gender        = gender;
+                            if (age)     extraFields.age           = parseInt(age);
+                            if (address) extraFields.address       = address;
+                            if (contact) extraFields.contactNumber = contact;
                         }
+
+                        await registerUser(firstName, lastName, email, password, role, extraFields);
 
                         Swal.fire({
                             icon: 'success',

@@ -25,7 +25,7 @@ export function onAuthStateChangedCallback(callback) {
 // ─── Register new staff ────────────────────────────────────────────────────────
 // Uses a secondary Firebase app instance so the currently logged-in admin
 // session is NOT interrupted when creating a new user account.
-export async function registerUser(firstName, lastName, email, password, role = 'staff') {
+export async function registerUser(firstName, lastName, email, password, role = 'staff', extraFields = {}) {
   try {
     // Check existing user count BEFORE creating (first user becomes admin)
     const usersSnap = await getDocs(query(collection(db, COLLECTIONS.users), limit(1)));
@@ -60,7 +60,8 @@ export async function registerUser(firstName, lastName, email, password, role = 
       status,                      // 'pending' | 'approved' | 'rejected'
       dateHired:    serverTimestamp(),
       createdAt:    serverTimestamp(),
-      updatedAt:    serverTimestamp()
+      updatedAt:    serverTimestamp(),
+      ...extraFields
     });
 
     console.log(`User registered (${assignedRole}, ${status}):`, uid);
