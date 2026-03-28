@@ -295,7 +295,13 @@
 
         let currentUserId = null;
 
-window.logout = async () => { await signOut(auth); window.location.href = 'index.html'; };
+window.logout = async () => {
+    const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
+    if (!result.isConfirmed) return;
+    await signOut(auth);
+    await Swal.fire({ icon: 'success', title: 'Signed Out', text: 'You have been successfully signed out.', timer: 2000, showConfirmButton: false });
+    window.location.href = 'index.html';
+};
         window.changeProfilePhoto  = changeProfilePhoto;
         window.selectAvatar        = selectAvatar;
         window.uploadProfilePhoto  = uploadProfilePhoto;

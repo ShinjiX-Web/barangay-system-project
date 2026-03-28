@@ -388,7 +388,7 @@
     <!-- Auth guard using Firebase — redirect to login if not signed in -->
     <script type="module">
         import { auth } from './assets/js/firebase-config.js';
-        import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+        import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
 
         onAuthStateChanged(auth, (user) => {
             if (!user) {
@@ -396,36 +396,13 @@
             }
         });
 
-        // Logout function using Firebase
-        window.logout = function() {
-            import('https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js').then(({ signOut }) => {
-                Swal.fire({
-                    icon: 'question',
-                    title: 'Sign Out?',
-                    text: 'Are you sure you want to sign out?',
-                    showCancelButton: true,
-                    confirmButtonColor: '#4e73df',
-                    cancelButtonColor: '#858796',
-                    confirmButtonText: 'Yes, sign out',
-                    cancelButtonText: 'Cancel'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        signOut(auth).then(() => {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Signed Out',
-                                text: 'You have been successfully signed out.',
-                                confirmButtonColor: '#4e73df',
-                                timer: 2000,
-                                showConfirmButton: false
-                            }).then(() => {
-                                window.location.href = 'index.html';
-                            });
-                        });
-                    }
-                });
-            });
-        }
+        window.logout = async () => {
+            const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
+            if (!result.isConfirmed) return;
+            await signOut(auth);
+            await Swal.fire({ icon: 'success', title: 'Signed Out', text: 'You have been successfully signed out.', timer: 2000, showConfirmButton: false });
+            window.location.href = 'index.html';
+        };
     </script>
 </body>
 

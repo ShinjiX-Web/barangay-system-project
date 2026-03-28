@@ -175,7 +175,13 @@
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
         import { collection, getDocs, getDoc, doc, updateDoc, orderBy, query, where, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
-window.logout = async () => { await signOut(auth); window.location.href = 'index.html'; };
+window.logout = async () => {
+    const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
+    if (!result.isConfirmed) return;
+    await signOut(auth);
+    await Swal.fire({ icon: 'success', title: 'Signed Out', text: 'You have been successfully signed out.', timer: 2000, showConfirmButton: false });
+    window.location.href = 'index.html';
+};
         window.approveUser    = approveUser;
         window.rejectUser     = rejectUser;
         window.changeRole     = changeRole;
