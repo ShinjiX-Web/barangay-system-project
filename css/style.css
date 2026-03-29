@@ -239,6 +239,15 @@ nav {
     margin: 0 auto;
     width: 100%;
     position: relative;
+    overflow: hidden;
+}
+
+/* Both grid children must have min-width:0 to prevent blowing out their column */
+.hero-content,
+.hero-card {
+    min-width: 0;
+    width: 100%;
+    overflow: hidden;
 }
 
 .hero-eyebrow {
@@ -290,7 +299,8 @@ nav {
     font-size: 1rem;
     color: rgba(255, 255, 255, 0.6);
     line-height: 1.75;
-    max-width: 500px;
+    max-width: 100%;
+    width: 100%;
     margin-bottom: 2rem;
     font-weight: 400;
     opacity: 0;
@@ -806,6 +816,10 @@ footer a:hover { color: #fafafa; }
     .hero { padding-top: 6rem; padding-bottom: 3rem; }
 
     .hero-grid { gap: 2rem; }
+
+    .hero-content { overflow: hidden; }
+
+    .hero-eyebrow { max-width: 100%; white-space: normal; }
 
     .hero-card { max-width: 100%; }
 
