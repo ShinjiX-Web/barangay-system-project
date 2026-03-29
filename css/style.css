@@ -43,7 +43,10 @@
 }
 
 [data-bs-theme="dark"] {
-    --pg-gradient:      linear-gradient(135deg, #dbeafe 0%, #f1f5f9 50%, #ede9fe 100%);
+    --pg-gradient:      linear-gradient(135deg, #0f172a 0%, #09090b 50%, #1e0a2e 100%);
+    --hero-bg:          linear-gradient(135deg, #02040a 0%, #040208 50%, #0a0118 100%);
+    --contact-bg:       linear-gradient(135deg, #02040a 0%, #040208 50%, #0a0118 100%);
+    --footer-bg:        #020205;
     --card-bg:          #0f0f12;
     --card-border:      #27272a;
     --text:             #fafafa;
