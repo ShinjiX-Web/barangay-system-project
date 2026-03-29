@@ -72,6 +72,10 @@
             background: #eafaf1;
             border: 2px solid #27ae60;
         }
+        .status-box.rejected {
+            background: #fdf3f3;
+            border: 2px solid #e74c3c;
+        }
         .status-box.invalid {
             background: #fdf3f3;
             border: 2px solid #e74c3c;
@@ -84,17 +88,19 @@
             font-size: 3rem;
             margin-bottom: 10px;
         }
-        .status-box.verified .status-icon { color: #27ae60; }
-        .status-box.invalid  .status-icon { color: #e74c3c; }
-        .status-box.loading  .status-icon { color: #1a4a8a; }
+        .status-box.verified  .status-icon { color: #27ae60; }
+        .status-box.rejected  .status-icon { color: #e74c3c; }
+        .status-box.invalid   .status-icon { color: #e74c3c; }
+        .status-box.loading   .status-icon { color: #1a4a8a; }
         .status-title {
             font-size: 1.25rem;
             font-weight: 800;
             margin: 0 0 4px;
         }
-        .status-box.verified .status-title { color: #1e8449; }
-        .status-box.invalid  .status-title { color: #c0392b; }
-        .status-box.loading  .status-title { color: #1a4a8a; }
+        .status-box.verified  .status-title { color: #1e8449; }
+        .status-box.rejected  .status-title { color: #c0392b; }
+        .status-box.invalid   .status-title { color: #c0392b; }
+        .status-box.loading   .status-title { color: #1a4a8a; }
         .status-sub {
             font-size: 0.85rem;
             color: #666;
@@ -224,12 +230,22 @@
         }
 
         function showVerified(cert, id) {
+            const isRejected = cert.status === 'rejected';
             const box = document.getElementById('statusBox');
-            box.className = 'status-box verified';
-            box.innerHTML = `
-                <div class="status-icon"><i class="fas fa-check-circle"></i></div>
-                <p class="status-title">✔ Verified – Authentic Document</p>
-                <p class="status-sub">This certificate was officially issued by Barangay 14.</p>`;
+
+            if (isRejected) {
+                box.className = 'status-box rejected';
+                box.innerHTML = `
+                    <div class="status-icon"><i class="fas fa-times-circle"></i></div>
+                    <p class="status-title">✔ Verified – Rejected Document</p>
+                    <p class="status-sub">This document exists in our records but has been <strong style="color:#c0392b;">rejected</strong>.<br>Please contact the barangay office for any concern.</p>`;
+            } else {
+                box.className = 'status-box verified';
+                box.innerHTML = `
+                    <div class="status-icon"><i class="fas fa-check-circle"></i></div>
+                    <p class="status-title">✔ Verified – Authentic Document</p>
+                    <p class="status-sub">This certificate was officially issued by Barangay 14.</p>`;
+            }
 
             const rows = [
                 ['Document Type',  typeLabels[cert.certificateType] || cert.certificateType || '—'],

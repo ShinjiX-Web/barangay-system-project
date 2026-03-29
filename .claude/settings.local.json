@@ -1,0 +1,10 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(for f:*)",
+      "Bash(do)",
+      "Bash(sed -i \"s|window.logout = async \\(\\) => { await signOut\\(auth\\); window.location.href = ''index.html''; };|window.logout = async \\(\\) => {\\\\n    const result = await Swal.fire\\({ icon: ''question'', title: ''Sign Out?'', text: ''Are you sure you want to sign out?'', showCancelButton: true, confirmButtonColor: ''#4e73df'', cancelButtonColor: ''#858796'', confirmButtonText: ''Yes, sign out'', cancelButtonText: ''Cancel'' }\\);\\\\n    if \\(!result.isConfirmed\\) return;\\\\n    await signOut\\(auth\\);\\\\n    await Swal.fire\\({ icon: ''success'', title: ''Signed Out'', text: ''You have been successfully signed out.'', timer: 2000, showConfirmButton: false }\\);\\\\n    window.location.href = ''index.html'';\\\\n};|\" \"$f\")",
+      "Bash(done)"
+    ]
+  }
+}
