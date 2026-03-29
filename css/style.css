@@ -306,12 +306,13 @@ nav {
 }
 
 /* Hero buttons */
+/* Hero CTA buttons — sit on a dark hero bg in both modes */
 .btn-primary {
     display: inline-flex;
     align-items: center;
     gap: 0.375rem;
     padding: 0.5625rem 1.25rem;
-    background: #fafafa;
+    background: #ffffff;
     color: #09090b;
     border: none;
     border-radius: 0.375rem;
@@ -320,10 +321,20 @@ nav {
     font-weight: 600;
     text-decoration: none;
     cursor: pointer;
-    transition: background 0.15s, transform 0.1s;
+    transition: background 0.2s, color 0.2s, transform 0.1s;
     letter-spacing: -0.01em;
 }
 .btn-primary:hover { background: #e4e4e7; transform: translateY(-1px); }
+
+/* Light mode: hero is medium-dark, so white btn works.
+   Dark mode: hero is near-black, shift btn to indigo to stand out */
+[data-bs-theme="dark"] .hero .btn-primary {
+    background: #6366f1;
+    color: #ffffff;
+}
+[data-bs-theme="dark"] .hero .btn-primary:hover {
+    background: #4f46e5;
+}
 
 .btn-outline {
     display: inline-flex;
@@ -332,7 +343,7 @@ nav {
     padding: 0.5625rem 1.25rem;
     background: transparent;
     color: rgba(255, 255, 255, 0.85);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 0.375rem;
     font-family: 'Inter', sans-serif;
     font-size: 0.875rem;
@@ -341,8 +352,8 @@ nav {
     transition: background 0.15s, border-color 0.15s, color 0.15s;
 }
 .btn-outline:hover {
-    border-color: rgba(255,255,255,0.45);
-    background: rgba(255,255,255,0.07);
+    border-color: rgba(255,255,255,0.65);
+    background: rgba(255,255,255,0.1);
     color: #fff;
 }
 
