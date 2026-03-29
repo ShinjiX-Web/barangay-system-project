@@ -56,8 +56,27 @@
 }
 
 /* ── Global font & base ─────────────────────────────────────────── */
-html, body, * {
+/* Apply Inter to text elements only — do NOT use * { } which breaks FontAwesome icons */
+body,
+p, span, a, label, small, strong, em, b,
+h1, h2, h3, h4, h5, h6,
+div, section, article, aside, header, footer, main, nav,
+td, th, li, dt, dd,
+input, select, textarea, button,
+.card, .card-body, .card-header, .card-title, .card-text,
+.nav-item, .nav-link, .navbar, .sidebar,
+.table, .form-control, .form-label, .btn,
+.dropdown-item, .modal, .alert, .badge, .pagination {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+/* Preserve FontAwesome icon font — never override .fa, .fas, .far, .fab, .fal icons */
+.fa, .fas, .far, .fab, .fal, .fad,
+[class^="fa-"], [class*=" fa-"],
+i.fas, i.far, i.fab, i.fal, i.fa {
+    font-family: "Font Awesome 5 Free", "Font Awesome 6 Free",
+                 "Font Awesome 5 Brands", "Font Awesome 6 Brands",
+                 "FontAwesome" !important;
 }
 
 body {
