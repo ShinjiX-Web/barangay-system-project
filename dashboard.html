@@ -399,7 +399,7 @@
             const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
             if (!result.isConfirmed) return;
             window._loggingOut = true;
-    await signOut(auth);
+        await signOut(auth);
             await Swal.fire({ icon: 'success', title: 'Signed Out', text: 'You have been successfully signed out.', timer: 2000, showConfirmButton: false });
             window.location.href = 'index.html';
         };

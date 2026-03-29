@@ -4,59 +4,351 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Login - Brand</title>
+    <title>Login - Barangay 14</title>
     <link rel="icon" type="image/png" href="assets/img/Seal_of_Angeles_City.png">
-    <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i&amp;display=swap">
     <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
-    <link rel="stylesheet" href="css/dark-theme.css">
+    <style>
+        /* ── Theme tokens ───────────────────────────────────────────── */
+        :root {
+            --pg-bg:            #f4f4f5;
+            --card-bg:          #ffffff;
+            --card-border:      #e4e4e7;
+            --text:             #09090b;
+            --text-muted:       #71717a;
+            --placeholder:      #a1a1aa;
+            --input-bg:         #ffffff;
+            --input-border:     #e4e4e7;
+            --input-focus:      #71717a;
+            --btn-bg:           #09090b;
+            --btn-text:         #fafafa;
+            --btn-hover:        #18181b;
+            --divider-color:    #e4e4e7;
+            --link-color:       #09090b;
+            --link-muted:       #71717a;
+            --toggle-border:    #e4e4e7;
+            --toggle-color:     #71717a;
+            --toggle-hover-bg:  #f4f4f5;
+            --spinner-border:   #09090b;
+        }
+
+        [data-bs-theme="dark"] {
+            --pg-bg:            #09090b;
+            --card-bg:          #09090b;
+            --card-border:      #27272a;
+            --text:             #fafafa;
+            --text-muted:       #a1a1aa;
+            --placeholder:      #52525b;
+            --input-bg:         #09090b;
+            --input-border:     #27272a;
+            --input-focus:      #71717a;
+            --btn-bg:           #fafafa;
+            --btn-text:         #09090b;
+            --btn-hover:        #e4e4e7;
+            --divider-color:    #27272a;
+            --link-color:       #fafafa;
+            --link-muted:       #a1a1aa;
+            --toggle-border:    #27272a;
+            --toggle-color:     #a1a1aa;
+            --toggle-hover-bg:  #18181b;
+            --spinner-border:   #09090b;
+        }
+
+        /* ── Base ───────────────────────────────────────────────────── */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            min-height: 100vh;
+            background-color: var(--pg-bg);
+            color: var(--text);
+            font-family: 'Inter', sans-serif;
+            font-size: 16px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        /* ── Theme toggle ───────────────────────────────────────────── */
+        .theme-toggle {
+            position: fixed;
+            top: 1rem;
+            right: 1rem;
+            z-index: 1050;
+            background: none;
+            border: 1px solid var(--toggle-border);
+            border-radius: 0.375rem;
+            color: var(--toggle-color);
+            width: 2.25rem;
+            height: 2.25rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: border-color 0.15s, color 0.15s, background 0.15s;
+        }
+        .theme-toggle:hover {
+            border-color: var(--input-focus);
+            color: var(--text);
+            background: var(--toggle-hover-bg);
+        }
+
+        /* ── Wrapper & card ─────────────────────────────────────────── */
+        .login-wrapper { width: 100%; max-width: 400px; }
+
+        .branding {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.625rem;
+            margin-bottom: 1.75rem;
+        }
+        .branding img {
+            width: 32px; height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+        .branding-name {
+            font-size: 0.9375rem;
+            font-weight: 700;
+            color: var(--text);
+            letter-spacing: -0.01em;
+        }
+
+        .login-card {
+            background-color: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 0.75rem;
+            padding: 2rem;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+
+        .login-header { margin-bottom: 1.5rem; }
+        .login-header h1 {
+            font-size: 1.375rem;
+            font-weight: 700;
+            color: var(--text);
+            margin-bottom: 0.375rem;
+            letter-spacing: -0.02em;
+        }
+        .login-header p {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        /* ── Form elements ──────────────────────────────────────────── */
+        .form-group { margin-bottom: 1rem; }
+
+        .form-label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text);
+            margin-bottom: 0.375rem;
+        }
+
+        .label-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.375rem;
+        }
+        .label-row .form-label { margin-bottom: 0; }
+
+        .forgot-link {
+            font-size: 0.8125rem;
+            color: var(--text-muted);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: transparent;
+            transition: color 0.15s, text-decoration-color 0.15s;
+        }
+        .forgot-link:hover {
+            color: var(--text);
+            text-decoration-color: var(--text-muted);
+        }
+
+        .shadcn-input {
+            width: 100%;
+            background-color: var(--input-bg);
+            border: 1px solid var(--input-border);
+            border-radius: 0.375rem;
+            color: var(--text);
+            font-size: 0.875rem;
+            font-family: 'Inter', sans-serif;
+            padding: 0.5rem 0.75rem;
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s, background-color 0.2s;
+        }
+        .shadcn-input::placeholder { color: var(--placeholder); }
+        .shadcn-input:focus {
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 2px rgba(113,113,122,0.2);
+        }
+
+        .pw-wrap { position: relative; }
+        .pw-wrap .shadcn-input { padding-right: 2.5rem; }
+
+        .toggle-pw {
+            position: absolute;
+            right: 0.625rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: var(--text-muted);
+            cursor: pointer;
+            padding: 0.25rem;
+            display: flex;
+            align-items: center;
+            transition: color 0.15s;
+        }
+        .toggle-pw:hover { color: var(--text); }
+
+        /* ── Submit button ──────────────────────────────────────────── */
+        .btn-login {
+            width: 100%;
+            background-color: var(--btn-bg);
+            color: var(--btn-text);
+            border: none;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 600;
+            font-family: 'Inter', sans-serif;
+            padding: 0.5625rem 1rem;
+            cursor: pointer;
+            margin-top: 0.5rem;
+            transition: background-color 0.15s, opacity 0.15s;
+        }
+        .btn-login:hover:not(:disabled) { background-color: var(--btn-hover); }
+        .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        /* ── Divider & footer ───────────────────────────────────────── */
+        .divider {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin: 1.25rem 0;
+        }
+        .divider::before, .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background: var(--divider-color);
+            transition: background 0.2s;
+        }
+        .divider span {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .signup-text {
+            text-align: center;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            margin-top: 1.25rem;
+        }
+        .signup-text a {
+            color: var(--link-color);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+            text-decoration-color: var(--divider-color);
+            transition: text-decoration-color 0.15s;
+        }
+        .signup-text a:hover { text-decoration-color: var(--link-color); }
+
+        /* ── Spinner ────────────────────────────────────────────────── */
+        .spinner {
+            display: inline-block;
+            width: 0.875rem;
+            height: 0.875rem;
+            border: 2px solid var(--spinner-border);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 0.6s linear infinite;
+            vertical-align: middle;
+            margin-right: 0.375rem;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+    </style>
 </head>
 
-<body class="main-container">
-    <div class="container d-flex align-items-center min-vh-100">
-        <div class="row justify-content-center w-100">
-            <div class="col-md-9 col-lg-12 col-xl-10">
-                <div class="card shadow-lg my-5 o-hidden border-0">
-                    <div class="card-body p-0">
-                        <div class="row">
-                            <div class="col-lg-6 d-none d-lg-flex">
-                                <div class="flex-grow-1 bg-login-image"></div>
-                            </div>
-                            <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
-                                        <h4 class="text-dark mb-4">Welcome Back!</h4>
-                                    </div>
-                                    <form class="user">
-                                        <div class="mb-3"><input class="form-control form-control-user" type="email" id="exampleInputEmail" aria-describedby="emailHelp" placeholder="Enter Email Address..." name="email"></div>
-                                        <div class="mb-3"><input class="form-control form-control-user" type="password" id="exampleInputPassword" placeholder="Password" name="password"></div>
-                                        <div class="mb-3">
-                                            <div class="custom-checkbox small">
-                                                <div class="form-check"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1">Remember Me</label></div>
-                                            </div>
-                                        </div><button class="mb-3 btn btn-primary d-block w-100 btn-user" type="submit">Login</button>
+<body>
+    <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+        <i class="fas fa-moon fa-sm"></i>
+    </button>
 
-                                    </form>
-                                    <div class="text-center"><a class="small" href="forgot-password.html">Forgot Password?</a></div>
-                                    <div class="text-center"><a class="small" href="register.html">Create an Account!</a></div>
-                                </div>
-                            </div>
-                        </div>
+    <div class="login-wrapper">
+        <div class="branding">
+            <img src="assets/img/Seal_of_Angeles_City.png" alt="Barangay 14 Seal">
+            <span class="branding-name">Barangay 14</span>
+        </div>
+
+        <div class="login-card">
+            <div class="login-header">
+                <h1>Login to your account</h1>
+                <p>Enter your email below to login to your account</p>
+            </div>
+
+            <form class="user" novalidate>
+                <div class="form-group">
+                    <label class="form-label" for="exampleInputEmail">Email</label>
+                    <input class="shadcn-input" type="email" id="exampleInputEmail"
+                           placeholder="m@example.com" name="email" autocomplete="email">
+                </div>
+
+                <div class="form-group">
+                    <div class="label-row">
+                        <label class="form-label" for="exampleInputPassword">Password</label>
+                        <a class="forgot-link" href="forgot-password.html">Forgot your password?</a>
+                    </div>
+                    <div class="pw-wrap">
+                        <input class="shadcn-input" type="password" id="exampleInputPassword"
+                               name="password" autocomplete="current-password">
+                        <button type="button" class="toggle-pw"
+                                onclick="togglePassword('exampleInputPassword', this)" tabindex="-1">
+                            <i class="fas fa-eye fa-sm"></i>
+                        </button>
                     </div>
                 </div>
+
+                <button class="btn-login" type="submit" id="loginBtn">Login</button>
+            </form>
+
+            <div class="divider"><span>or</span></div>
+
+            <div class="signup-text">
+                Don't have an account? <a href="register.html">Sign up</a>
             </div>
         </div>
     </div>
+
     <!-- Firebase SDKs -->
     <script type="module" src="assets/js/firebase-config.js"></script>
     <script type="module" src="assets/js/firebase-db.js"></script>
-    
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
-    <script src="assets/js/bs-init.js"></script>
-    <script src="assets/js/theme.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        function togglePassword(inputId, btn) {
+            const input = document.getElementById(inputId);
+            const icon  = btn.querySelector('i');
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.classList.replace('fa-eye', 'fa-eye-slash');
+            } else {
+                input.type = 'password';
+                icon.classList.replace('fa-eye-slash', 'fa-eye');
+            }
+        }
+    </script>
 
     <script type="module">
         import { loginUser, logActivity } from './assets/js/auth-firebase.js';
@@ -64,16 +356,7 @@
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
         import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
-        function redirectByRole(role) {
-            if (role === 'resident') {
-                window.location.href = 'residents.html';
-            } else {
-                window.location.href = 'dashboard.html';
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', () => {
-            // If already logged in and approved, redirect to dashboard
             onAuthStateChanged(auth, async (user) => {
                 if (user) {
                     const userDoc = await getDoc(doc(db, COLLECTIONS.users, user.uid));
@@ -84,6 +367,8 @@
             });
 
             const form = document.querySelector('form.user');
+            const btn  = document.getElementById('loginBtn');
+
             if (form) {
                 form.addEventListener('submit', async (e) => {
                     e.preventDefault();
@@ -91,14 +376,15 @@
                     const password = document.getElementById('exampleInputPassword').value;
 
                     if (!email || !password) {
-                        Swal.fire('Error', 'Email/password required', 'warning');
+                        Swal.fire('Error', 'Email and password are required.', 'warning');
                         return;
                     }
 
+                    btn.disabled = true;
+                    btn.innerHTML = '<span class="spinner"></span>Logging in…';
+
                     try {
                         const firebaseUser = await loginUser(email, password);
-
-                        // Check approval status in Firestore
                         const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
 
                         if (!userDoc.exists()) {
@@ -132,21 +418,25 @@
                             return;
                         }
 
-                        // Approved — go to dashboard
                         await logActivity('login', 'auth', `User logged in: ${email}`);
-                        window.location.href = 'dashboard.html';
+                        window.location.href = userData.role === 'resident' ? 'residents.html' : 'dashboard.html';
 
                     } catch (error) {
                         let msg = 'Login failed. Please check your credentials.';
-                        if (error.code === 'auth/user-not-found'  ) msg = 'No account found with this email.';
-                        if (error.code === 'auth/wrong-password'  ) msg = 'Incorrect password.';
+                        if (error.code === 'auth/user-not-found'    ) msg = 'No account found with this email.';
+                        if (error.code === 'auth/wrong-password'    ) msg = 'Incorrect password.';
                         if (error.code === 'auth/invalid-credential') msg = 'Invalid email or password.';
                         Swal.fire('Login Failed', msg, 'error');
+                    } finally {
+                        btn.disabled = false;
+                        btn.textContent = 'Login';
                     }
                 });
             }
         });
     </script>
+
+    <!-- Load last so toggleTheme() is available before DOMContentLoaded -->
     <script src="assets/js/theme-toggle.js"></script>
 </body>
 
