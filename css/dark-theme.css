@@ -562,10 +562,6 @@ body,
             transition: background-color 0.2s ease, color 0.2s ease;
         }
 
-        #swal2-title {
-            color: #545454 !important;
-        }
-
         /* Dark mode overrides for SB Admin custom elements */
         [data-bs-theme="dark"] .topbar,
         [data-bs-theme="dark"] .sticky-footer,
