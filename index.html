@@ -1,26 +1,36 @@
 <!DOCTYPE html>
-<html lang="en">
+<html data-bs-theme="light" lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>BarangayServe — Resident Records & Document Request System</title>
+  <title>BarangayServe — Resident Records &amp; Document Request System</title>
+  <link rel="icon" type="image/png" href="assets/img/Seal_of_Angeles_City.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
   <link rel="stylesheet" href="css/style.css">
+  <!-- Load theme-toggle early to prevent flash -->
+  <script src="assets/js/theme-toggle.js"></script>
 </head>
 <body>
 
-<!-- NAV -->
+<!-- NAVIGATION -->
 <nav>
   <a href="index.html" class="nav-logo">
-    <div class="seal"><img src="/assets/img/Seal_of_Angeles_City.png" alt="Barangay 14 Seal" style="width: 34px; height: 34px; object-fit: contain;"></div>
+    <div class="seal"><img src="assets/img/Seal_of_Angeles_City.png" alt="Barangay Seal"></div>
     <span>Barangay<em>Serve</em></span>
   </a>
   <ul class="nav-links">
     <li><a href="#about">About</a></li>
     <li><a href="#features">Features</a></li>
     <li><a href="#contact">Contact</a></li>
-    <li><a href="login.html" class="btn-nav">Staff Login</a></li>
+    <li class="nav-btn-item"><a href="login.html" class="btn-nav">Staff Login</a></li>
+    <li>
+      <button class="nav-theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
+        <i class="fas fa-moon fa-sm"></i>
+      </button>
+    </li>
   </ul>
 </nav>
 
@@ -35,7 +45,7 @@
         process document requests, and deliver community services — all in one place.
       </p>
       <div class="hero-cta">
-        <a href="login.html" class="btn-primary">Staff Login →</a>
+        <a href="login.html" class="btn-primary">Staff Login <i class="fas fa-arrow-right fa-xs"></i></a>
         <a href="#features" class="btn-outline">Explore Features</a>
       </div>
     </div>
@@ -54,7 +64,7 @@
           <div class="stat-icon">👥</div>
           <div class="stat-info">
             <div class="stat-label">Resident Records</div>
-            <div class="stat-val">Profiles, Households & History</div>
+            <div class="stat-val">Profiles, Households &amp; History</div>
           </div>
           <span class="stat-badge">Active</span>
         </div>
@@ -69,8 +79,8 @@
         <div class="stat-item">
           <div class="stat-icon">📊</div>
           <div class="stat-info">
-            <div class="stat-label">Reports & Analytics</div>
-            <div class="stat-val">Population & Service Reports</div>
+            <div class="stat-label">Reports &amp; Analytics</div>
+            <div class="stat-val">Population &amp; Service Reports</div>
           </div>
           <span class="stat-badge">Active</span>
         </div>
@@ -146,7 +156,7 @@
     </div>
     <div class="feat-card reveal">
       <div class="feat-icon">📊</div>
-      <h3>Reports & Statistics</h3>
+      <h3>Reports &amp; Statistics</h3>
       <p>Generate population reports, document statistics, and other insights needed for barangay planning.</p>
     </div>
     <div class="feat-card reveal">
@@ -161,9 +171,9 @@
 <section class="contact" id="contact">
   <div class="contact-inner">
     <div class="reveal">
-      <div class="section-label" style="color:var(--gold-lt)">Get in Touch</div>
+      <div class="section-label">Get in Touch</div>
       <h2 class="section-title">Barangay Hall Contact Information</h2>
-      <p style="color:rgba(255,255,255,.55);font-size:.9rem;margin-bottom:2rem;line-height:1.7;">
+      <p style="color:rgba(255,255,255,.5);font-size:.875rem;margin-bottom:2rem;line-height:1.75;">
         For system access, technical concerns, or general inquiries, please reach the barangay hall during office hours.
       </p>
       <div class="contact-detail">
@@ -218,11 +228,11 @@
 <!-- FOOTER -->
 <footer>
   <p>© 2025 BarangayServe. All rights reserved.</p>
-  <a href="login.html">Staff Login →</a>
+  <a href="login.html">Staff Login <i class="fas fa-arrow-right fa-xs"></i></a>
 </footer>
 
 <script>
-  // scroll reveal
+  // Scroll reveal
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => {
       if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); }
@@ -230,12 +240,12 @@
   }, { threshold: 0.12 });
   document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-  // form submit (demo)
+  // Contact form (demo)
   function handleSubmit(e) {
     e.preventDefault();
     const btn = e.target.querySelector('.btn-send');
-    btn.textContent = '✓ Message Sent!';
-    btn.style.background = '#34C759';
+    btn.textContent = 'Message Sent!';
+    btn.style.background = '#22c55e';
     btn.style.color = '#fff';
     setTimeout(() => {
       btn.textContent = 'Send Message';

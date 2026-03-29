@@ -1,0 +1,661 @@
+/* ══════════════════════════════════════════════════════════════════
+   app-theme.css — Shared ShadCN-style overrides for internal pages
+   Overrides Bootstrap 5 + SB Admin 2 to match the Inter design system
+   Link AFTER bootstrap.min.css and dark-theme.css in each internal page
+   ══════════════════════════════════════════════════════════════════ */
+
+/* ── Google Fonts: Inter ────────────────────────────────────────── */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+/* ── CSS Variables (light mode) ─────────────────────────────────── */
+:root {
+    --app-pg-gradient:   linear-gradient(135deg, #dbeafe 0%, #f1f5f9 50%, #ede9fe 100%);
+    --app-card-bg:       #ffffff;
+    --app-card-border:   #e4e4e7;
+    --app-text:          #09090b;
+    --app-text-muted:    #71717a;
+    --app-input-bg:      #ffffff;
+    --app-input-border:  #e4e4e7;
+    --app-input-focus:   #71717a;
+    --app-btn-bg:        #09090b;
+    --app-btn-text:      #fafafa;
+    --app-btn-hover:     #18181b;
+    --app-surface:       #f4f4f5;
+    --app-topbar-bg:     #ffffff;
+    --app-topbar-border: #e4e4e7;
+    --app-sidebar-bg:    linear-gradient(180deg, #18181b 0%, #09090b 100%);
+    --app-sidebar-text:  rgba(255, 255, 255, 0.7);
+    --app-sidebar-hover: rgba(255, 255, 255, 0.08);
+    --app-sidebar-active-text: #ffffff;
+    --app-sidebar-brand-bg: rgba(255,255,255,0.05);
+    --app-sidebar-divider: rgba(255,255,255,0.08);
+}
+
+/* ── CSS Variables (dark mode) ──────────────────────────────────── */
+[data-bs-theme="dark"] {
+    --app-pg-gradient:   linear-gradient(135deg, #0f172a 0%, #09090b 50%, #1e0a2e 100%);
+    --app-card-bg:       #0f0f12;
+    --app-card-border:   #27272a;
+    --app-text:          #fafafa;
+    --app-text-muted:    #a1a1aa;
+    --app-input-bg:      #09090b;
+    --app-input-border:  #27272a;
+    --app-input-focus:   #71717a;
+    --app-btn-bg:        #fafafa;
+    --app-btn-text:      #09090b;
+    --app-btn-hover:     #e4e4e7;
+    --app-surface:       #18181b;
+    --app-topbar-bg:     #0f0f12;
+    --app-topbar-border: #27272a;
+    --app-sidebar-bg:    linear-gradient(180deg, #0a0a0c 0%, #060608 100%);
+    --app-sidebar-text:  rgba(255, 255, 255, 0.6);
+    --app-sidebar-hover: rgba(255, 255, 255, 0.06);
+    --app-sidebar-active-text: #ffffff;
+    --app-sidebar-brand-bg: rgba(255,255,255,0.03);
+    --app-sidebar-divider: rgba(255,255,255,0.06);
+}
+
+/* ── Global font & base ─────────────────────────────────────────── */
+html, body, * {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+}
+
+body {
+    background: var(--app-pg-gradient) !important;
+    background-attachment: fixed !important;
+    color: var(--app-text) !important;
+    transition: background 0.3s, color 0.2s;
+}
+
+/* ── Page background wrapper ────────────────────────────────────── */
+#content-wrapper {
+    background: transparent !important;
+}
+
+#content {
+    background: transparent !important;
+}
+
+/* ── SIDEBAR ────────────────────────────────────────────────────── */
+.sidebar,
+nav.sidebar,
+.sidebar.sidebar-dark {
+    background: var(--app-sidebar-bg) !important;
+    border-right: 1px solid rgba(255,255,255,0.06) !important;
+    box-shadow: 2px 0 8px rgba(0,0,0,0.15) !important;
+}
+
+/* Sidebar brand */
+.sidebar .sidebar-brand,
+.sidebar a.navbar-brand {
+    background: var(--app-sidebar-brand-bg) !important;
+    border-bottom: 1px solid var(--app-sidebar-divider) !important;
+    padding: 1rem 1.25rem !important;
+    height: auto !important;
+    min-height: 4rem !important;
+}
+
+.sidebar .sidebar-brand-text,
+.sidebar .sidebar-brand-text p,
+.sidebar .sidebar-brand-text small {
+    color: #ffffff !important;
+    font-family: 'Inter', sans-serif !important;
+}
+
+.sidebar .sidebar-brand-text p {
+    font-weight: 700 !important;
+    letter-spacing: -0.01em !important;
+}
+
+/* Sidebar divider */
+.sidebar .sidebar-divider,
+.sidebar hr {
+    border-color: var(--app-sidebar-divider) !important;
+}
+
+/* Sidebar nav items */
+.sidebar .nav-item .nav-link,
+.sidebar .navbar-nav .nav-item .nav-link {
+    color: var(--app-sidebar-text) !important;
+    font-size: 0.8125rem !important;
+    font-weight: 500 !important;
+    padding: 0.625rem 1.25rem !important;
+    border-radius: 0.375rem !important;
+    margin: 0.125rem 0.5rem !important;
+    transition: background 0.15s, color 0.15s !important;
+    letter-spacing: 0 !important;
+    text-transform: none !important;
+}
+
+.sidebar .nav-item .nav-link:hover {
+    background: var(--app-sidebar-hover) !important;
+    color: var(--app-sidebar-active-text) !important;
+}
+
+.sidebar .nav-item .nav-link.active {
+    background: rgba(99, 102, 241, 0.2) !important;
+    color: #ffffff !important;
+    font-weight: 600 !important;
+}
+
+.sidebar .nav-item .nav-link.active i {
+    color: #818cf8 !important;
+}
+
+.sidebar .nav-item .nav-link i {
+    color: var(--app-sidebar-text) !important;
+    width: 1.25rem !important;
+    margin-right: 0.5rem !important;
+    font-size: 0.875rem !important;
+    transition: color 0.15s !important;
+}
+
+.sidebar .nav-item .nav-link:hover i {
+    color: #a5b4fc !important;
+}
+
+/* Sidebar toggle button */
+.sidebar .text-center button,
+#sidebarToggle {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid rgba(255,255,255,0.1) !important;
+    color: rgba(255,255,255,0.5) !important;
+    width: 2rem !important;
+    height: 2rem !important;
+    border-radius: 50% !important;
+    transition: background 0.15s !important;
+}
+
+#sidebarToggle:hover {
+    background: rgba(255,255,255,0.12) !important;
+}
+
+/* ── TOPBAR ─────────────────────────────────────────────────────── */
+.topbar,
+nav.topbar,
+.navbar.topbar {
+    background: var(--app-topbar-bg) !important;
+    border-bottom: 1px solid var(--app-topbar-border) !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06) !important;
+    height: 60px !important;
+}
+
+/* Topbar text & icons */
+.topbar .nav-link,
+.topbar .dropdown-toggle {
+    color: var(--app-text-muted) !important;
+}
+
+.topbar .nav-link:hover {
+    color: var(--app-text) !important;
+}
+
+/* Username text in topbar */
+.topbar #userName,
+.topbar .text-gray-600 {
+    color: var(--app-text-muted) !important;
+}
+
+/* Topbar search */
+.topbar .navbar-search .form-control {
+    background: var(--app-surface) !important;
+    border: 1px solid var(--app-input-border) !important;
+    color: var(--app-text) !important;
+    font-size: 0.875rem !important;
+    border-radius: 0.375rem 0 0 0.375rem !important;
+}
+
+.topbar .navbar-search .form-control::placeholder {
+    color: var(--app-text-muted) !important;
+}
+
+.topbar .navbar-search .btn-primary {
+    background: var(--app-btn-bg) !important;
+    border-color: var(--app-btn-bg) !important;
+    border-radius: 0 0.375rem 0.375rem 0 !important;
+}
+
+/* Topbar divider */
+.topbar-divider {
+    border-left: 1px solid var(--app-topbar-border) !important;
+}
+
+/* Topbar profile image */
+.topbar .img-profile {
+    width: 2rem !important;
+    height: 2rem !important;
+    object-fit: cover !important;
+    border: 1px solid var(--app-card-border) !important;
+}
+
+/* Theme toggle button in topbar */
+#themeToggleBtn {
+    color: var(--app-text-muted) !important;
+    background: none !important;
+    border: 1px solid var(--app-card-border) !important;
+    border-radius: 0.375rem !important;
+    width: 2.125rem !important;
+    height: 2.125rem !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 0 !important;
+    transition: border-color 0.15s, color 0.15s, background 0.15s !important;
+}
+
+#themeToggleBtn:hover {
+    color: var(--app-text) !important;
+    border-color: var(--app-input-focus) !important;
+    background: var(--app-surface) !important;
+}
+
+/* ── DROPDOWN MENUS ─────────────────────────────────────────────── */
+.dropdown-menu {
+    background: var(--app-card-bg) !important;
+    border: 1px solid var(--app-card-border) !important;
+    border-radius: 0.5rem !important;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.1) !important;
+    padding: 0.375rem !important;
+}
+
+.dropdown-item {
+    color: var(--app-text) !important;
+    font-size: 0.875rem !important;
+    border-radius: 0.25rem !important;
+    padding: 0.5rem 0.75rem !important;
+    transition: background 0.12s !important;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: var(--app-surface) !important;
+    color: var(--app-text) !important;
+}
+
+.dropdown-item i {
+    color: var(--app-text-muted) !important;
+    width: 1rem !important;
+}
+
+.dropdown-divider {
+    border-color: var(--app-card-border) !important;
+    margin: 0.25rem 0 !important;
+}
+
+/* ── CARDS ──────────────────────────────────────────────────────── */
+.card {
+    background: var(--app-card-bg) !important;
+    border: 1px solid var(--app-card-border) !important;
+    border-radius: 0.75rem !important;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.04) !important;
+    transition: background 0.2s, border-color 0.2s !important;
+}
+
+.card-header {
+    background: transparent !important;
+    border-bottom: 1px solid var(--app-card-border) !important;
+    padding: 1rem 1.25rem !important;
+    font-weight: 600 !important;
+    color: var(--app-text) !important;
+    font-size: 0.9375rem !important;
+}
+
+.card-body {
+    color: var(--app-text) !important;
+}
+
+/* Stat cards (border-left accent) */
+.card.border-left-primary  { border-left: 4px solid #6366f1 !important; }
+.card.border-left-success  { border-left: 4px solid #22c55e !important; }
+.card.border-left-info     { border-left: 4px solid #38bdf8 !important; }
+.card.border-left-warning  { border-left: 4px solid #f59e0b !important; }
+.card.border-left-danger   { border-left: 4px solid #ef4444 !important; }
+
+/* Remove old SB Admin 2 shadow override */
+.card.shadow {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07) !important;
+}
+
+/* ── BUTTONS ────────────────────────────────────────────────────── */
+.btn {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    border-radius: 0.375rem !important;
+    font-size: 0.875rem !important;
+    transition: background 0.15s, border-color 0.15s, opacity 0.15s !important;
+}
+
+.btn-primary {
+    background: var(--app-btn-bg) !important;
+    color: var(--app-btn-text) !important;
+    border-color: var(--app-btn-bg) !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--app-btn-hover) !important;
+    border-color: var(--app-btn-hover) !important;
+    color: var(--app-btn-text) !important;
+}
+
+.btn-secondary {
+    background: var(--app-surface) !important;
+    color: var(--app-text) !important;
+    border-color: var(--app-card-border) !important;
+}
+
+.btn-secondary:hover {
+    background: var(--app-card-border) !important;
+}
+
+.btn-success {
+    background: #16a34a !important;
+    border-color: #16a34a !important;
+    color: #ffffff !important;
+}
+
+.btn-success:hover {
+    background: #15803d !important;
+    border-color: #15803d !important;
+}
+
+.btn-danger {
+    background: #dc2626 !important;
+    border-color: #dc2626 !important;
+    color: #ffffff !important;
+}
+
+.btn-danger:hover {
+    background: #b91c1c !important;
+    border-color: #b91c1c !important;
+}
+
+.btn-warning {
+    background: #d97706 !important;
+    border-color: #d97706 !important;
+    color: #ffffff !important;
+}
+
+.btn-info {
+    background: #0284c7 !important;
+    border-color: #0284c7 !important;
+    color: #ffffff !important;
+}
+
+.btn-outline-secondary {
+    color: var(--app-text) !important;
+    border-color: var(--app-card-border) !important;
+    background: transparent !important;
+}
+
+.btn-outline-secondary:hover {
+    background: var(--app-surface) !important;
+    color: var(--app-text) !important;
+}
+
+.btn-link {
+    color: var(--app-text-muted) !important;
+}
+
+.btn-link:hover {
+    color: var(--app-text) !important;
+}
+
+/* ── FORM CONTROLS ──────────────────────────────────────────────── */
+.form-control,
+.form-select {
+    background: var(--app-input-bg) !important;
+    border: 1px solid var(--app-input-border) !important;
+    border-radius: 0.375rem !important;
+    color: var(--app-text) !important;
+    font-size: 0.875rem !important;
+    font-family: 'Inter', sans-serif !important;
+    transition: border-color 0.15s, box-shadow 0.15s, background 0.2s !important;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background: var(--app-input-bg) !important;
+    border-color: var(--app-input-focus) !important;
+    box-shadow: 0 0 0 2px rgba(113,113,122,0.2) !important;
+    color: var(--app-text) !important;
+}
+
+.form-control::placeholder {
+    color: var(--app-text-muted) !important;
+    opacity: 0.7 !important;
+}
+
+.form-label {
+    font-size: 0.875rem !important;
+    font-weight: 500 !important;
+    color: var(--app-text) !important;
+    margin-bottom: 0.375rem !important;
+}
+
+.input-group-text {
+    background: var(--app-surface) !important;
+    border-color: var(--app-input-border) !important;
+    color: var(--app-text-muted) !important;
+    font-size: 0.875rem !important;
+}
+
+/* ── TABLES ─────────────────────────────────────────────────────── */
+.table {
+    color: var(--app-text) !important;
+    font-size: 0.875rem !important;
+}
+
+.table thead th {
+    background: var(--app-surface) !important;
+    color: var(--app-text-muted) !important;
+    font-size: 0.75rem !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    border-bottom: 1px solid var(--app-card-border) !important;
+    padding: 0.75rem 1rem !important;
+}
+
+.table tbody td {
+    border-color: var(--app-card-border) !important;
+    vertical-align: middle !important;
+    padding: 0.75rem 1rem !important;
+    color: var(--app-text) !important;
+}
+
+.table-hover tbody tr:hover {
+    background: var(--app-surface) !important;
+}
+
+.table-striped tbody tr:nth-child(odd) {
+    background: rgba(0,0,0,0.02) !important;
+}
+
+[data-bs-theme="dark"] .table-striped tbody tr:nth-child(odd) {
+    background: rgba(255,255,255,0.02) !important;
+}
+
+/* ── MODALS ─────────────────────────────────────────────────────── */
+.modal-content {
+    background: var(--app-card-bg) !important;
+    border: 1px solid var(--app-card-border) !important;
+    border-radius: 0.75rem !important;
+    color: var(--app-text) !important;
+}
+
+.modal-header {
+    border-bottom: 1px solid var(--app-card-border) !important;
+    padding: 1.25rem 1.5rem !important;
+}
+
+.modal-header .modal-title {
+    font-size: 1rem !important;
+    font-weight: 600 !important;
+    color: var(--app-text) !important;
+}
+
+.modal-body {
+    padding: 1.25rem 1.5rem !important;
+}
+
+.modal-footer {
+    border-top: 1px solid var(--app-card-border) !important;
+    padding: 1rem 1.5rem !important;
+}
+
+.btn-close {
+    filter: var(--app-text) === '#fafafa' ? invert(1) : none;
+}
+
+[data-bs-theme="dark"] .btn-close {
+    filter: invert(1) grayscale(1) !important;
+}
+
+/* ── BADGES ─────────────────────────────────────────────────────── */
+.badge {
+    font-family: 'Inter', sans-serif !important;
+    font-weight: 600 !important;
+    font-size: 0.7rem !important;
+    border-radius: 100px !important;
+    padding: 0.25em 0.6em !important;
+    letter-spacing: 0.02em !important;
+}
+
+.badge.bg-primary,
+.badge.text-bg-primary { background: rgba(99,102,241,0.15) !important; color: #6366f1 !important; }
+
+.badge.bg-success,
+.badge.text-bg-success { background: rgba(34,197,94,0.15) !important; color: #16a34a !important; }
+
+.badge.bg-danger,
+.badge.text-bg-danger { background: rgba(239,68,68,0.15) !important; color: #dc2626 !important; }
+
+.badge.bg-warning,
+.badge.text-bg-warning { background: rgba(245,158,11,0.15) !important; color: #d97706 !important; }
+
+.badge.bg-info,
+.badge.text-bg-info { background: rgba(56,189,248,0.15) !important; color: #0284c7 !important; }
+
+.badge.bg-secondary,
+.badge.text-bg-secondary { background: var(--app-surface) !important; color: var(--app-text-muted) !important; }
+
+/* ── ALERTS ─────────────────────────────────────────────────────── */
+.alert {
+    border-radius: 0.5rem !important;
+    border: 1px solid !important;
+    font-size: 0.875rem !important;
+}
+
+/* ── TEXT UTILITIES ─────────────────────────────────────────────── */
+.text-dark,
+h1, h2, h3, h4, h5, h6 {
+    color: var(--app-text) !important;
+}
+
+.text-muted,
+.text-gray-600 {
+    color: var(--app-text-muted) !important;
+}
+
+.text-gray-800,
+.text-gray-900 {
+    color: var(--app-text) !important;
+}
+
+/* ── HEADING STATS (dashboard stat cards) ───────────────────────── */
+.card .text-xs { font-size: 0.7rem !important; }
+
+.card .h5, .card h5 {
+    font-size: 1.375rem !important;
+    font-weight: 700 !important;
+    letter-spacing: -0.02em !important;
+}
+
+/* ── PAGINATION ─────────────────────────────────────────────────── */
+.page-link {
+    background: var(--app-card-bg) !important;
+    border-color: var(--app-card-border) !important;
+    color: var(--app-text) !important;
+    font-size: 0.875rem !important;
+}
+
+.page-link:hover {
+    background: var(--app-surface) !important;
+    border-color: var(--app-card-border) !important;
+    color: var(--app-text) !important;
+}
+
+.page-item.active .page-link {
+    background: var(--app-btn-bg) !important;
+    border-color: var(--app-btn-bg) !important;
+    color: var(--app-btn-text) !important;
+}
+
+.page-item.disabled .page-link {
+    background: var(--app-card-bg) !important;
+    color: var(--app-text-muted) !important;
+}
+
+/* ── SELECT2 / CUSTOM SELECTS ───────────────────────────────────── */
+.select2-container--default .select2-selection--single,
+.select2-container--default .select2-selection--multiple {
+    background: var(--app-input-bg) !important;
+    border: 1px solid var(--app-input-border) !important;
+    border-radius: 0.375rem !important;
+}
+
+/* ── SCROLLBAR (webkit) ─────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--app-card-border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--app-text-muted); }
+
+/* ── DARK MODE SPECIFIC OVERRIDES ───────────────────────────────── */
+[data-bs-theme="dark"] .bg-white,
+[data-bs-theme="dark"] .bg-light {
+    background: var(--app-card-bg) !important;
+}
+
+[data-bs-theme="dark"] .border,
+[data-bs-theme="dark"] .border-bottom,
+[data-bs-theme="dark"] .border-top {
+    border-color: var(--app-card-border) !important;
+}
+
+[data-bs-theme="dark"] hr {
+    border-color: var(--app-card-border) !important;
+    opacity: 1 !important;
+}
+
+[data-bs-theme="dark"] .shadow,
+[data-bs-theme="dark"] .shadow-sm {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.4) !important;
+}
+
+[data-bs-theme="dark"] .modal-backdrop {
+    background: rgba(0,0,0,0.7) !important;
+}
+
+/* ── SWEETALERT2 DARK OVERRIDES ─────────────────────────────────── */
+[data-bs-theme="dark"] .swal2-popup {
+    background: var(--app-card-bg) !important;
+    color: var(--app-text) !important;
+    border: 1px solid var(--app-card-border) !important;
+}
+
+[data-bs-theme="dark"] .swal2-title,
+[data-bs-theme="dark"] .swal2-html-container {
+    color: var(--app-text) !important;
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .sidebar {
+        box-shadow: 4px 0 16px rgba(0,0,0,0.25) !important;
+    }
+
+    .topbar {
+        height: 56px !important;
+    }
+}
