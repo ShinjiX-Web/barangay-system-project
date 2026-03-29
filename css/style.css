@@ -26,14 +26,14 @@
     --nav-border:       #e4e4e7;
     --nav-text:         #09090b;
     --nav-text-muted:   #71717a;
-    --hero-bg:          linear-gradient(135deg, #0f172a 0%, #09090b 50%, #1e0a2e 100%);
+    --hero-bg:          linear-gradient(135deg, #1e3a5f 0%, #1a1a4e 50%, #2d1b69 100%);
     --section-label:    #6366f1;
     --badge-bg:         rgba(99, 102, 241, 0.12);
     --badge-text:       #6366f1;
     --feat-icon-bg:     #f4f4f5;
     --about-visual-bg:  #18181b;
-    --contact-bg:       linear-gradient(135deg, #0f172a 0%, #09090b 50%, #1e0a2e 100%);
-    --footer-bg:        #09090b;
+    --contact-bg:       linear-gradient(135deg, #1e3a5f 0%, #1a1a4e 50%, #2d1b69 100%);
+    --footer-bg:        #0f172a;
     --footer-text:      rgba(255,255,255,0.35);
     --footer-link:      #a1a1aa;
     --stat-badge-bg:    rgba(34, 197, 94, 0.15);
@@ -216,6 +216,7 @@ nav {
     justify-content: center;
     padding: 7rem 6vw 5rem;
     position: relative;
+    transition: background 0.3s;
     overflow: hidden;
 }
 
@@ -460,6 +461,7 @@ nav {
     padding: 1rem 1.125rem;
     border-right: 3px solid var(--meta-item-border);
     transition: background 0.2s;
+    box-shadow: 0px 7px 13px -7px #000000, 5px 3px 10px 0px rgba(0,0,0,0);
 }
 
 .meta-item strong {
@@ -559,11 +561,13 @@ nav {
 }
 
 .feat-card {
+    cursor: pointer;
     background: var(--card-bg);
     border: 1px solid var(--card-border);
     border-radius: 0.75rem;
     padding: 1.75rem;
     transition: transform 0.2s, box-shadow 0.2s, border-color 0.2s, background 0.2s;
+    box-shadow: 0px 7px 13px -7px #000000, 5px 3px 10px 0px rgba(0,0,0,0);
 }
 
 .feat-card:hover {
@@ -611,6 +615,7 @@ nav {
     background: var(--contact-bg);
     position: relative;
     overflow: hidden;
+    transition: background 0.3s;
 }
 
 .contact::before {
