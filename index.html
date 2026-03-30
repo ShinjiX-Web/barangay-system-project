@@ -13,8 +13,9 @@
   <!-- Preload critical FontAwesome woff2 so it's fetched early -->
   <link rel="preload" href="assets/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
 
-  <!-- Inter from Google Fonts (display=swap already set) -->
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <!-- Inter from Google Fonts: load non-render-blocking -->
+  <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+  <noscript><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap"></noscript>
 
   <!-- FontAwesome: load non-render-blocking via print media trick -->
   <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css" media="print" onload="this.media='all'">
@@ -38,7 +39,7 @@
 <!-- NAVIGATION -->
 <nav>
   <a href="/" class="nav-logo">
-    <div class="seal"><img src="assets/img/Seal_of_Angeles_City.png" alt="Barangay Seal"></div>
+    <div class="seal"><picture><source srcset="assets/img/Seal_of_Angeles_City.webp" type="image/webp"><img src="assets/img/Seal_of_Angeles_City.png" alt="Barangay Seal" width="40" height="40"></picture></div>
     <span>Barangay<em>Serve</em></span>
   </a>
   <ul class="nav-links">

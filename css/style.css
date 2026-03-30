@@ -139,7 +139,7 @@ nav {
     transition: color 0.2s;
 }
 
-.nav-logo span em {
+.nav-logo span em{
     font-style: normal;
     color: var(--section-label);
 }
