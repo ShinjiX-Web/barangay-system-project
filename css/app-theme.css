@@ -324,11 +324,11 @@ nav.topbar,
 }
 
 /* Stat cards (border-left accent) */
-.card.border-left-primary  { border-left: 4px solid #6366f1 !important; }
-.card.border-left-success  { border-left: 4px solid #22c55e !important; }
-.card.border-left-info     { border-left: 4px solid #38bdf8 !important; }
-.card.border-left-warning  { border-left: 4px solid #f59e0b !important; }
-.card.border-left-danger   { border-left: 4px solid #ef4444 !important; }
+.card.border-left-primary  { border-left: 2px solid #6366f1 !important; }
+.card.border-left-success  { border-left: 2px solid #22c55e !important; }
+.card.border-left-info     { border-left: 2px solid #38bdf8 !important; }
+.card.border-left-warning  { border-left: 2px solid #f59e0b !important; }
+.card.border-left-danger   { border-left: 2px solid #ef4444 !important; }
 
 /* Remove old SB Admin 2 shadow override */
 .card.shadow {
