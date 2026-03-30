@@ -5,13 +5,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>BarangayServe — Resident Records &amp; Document Request System</title>
   <link rel="icon" type="image/png" href="assets/img/Seal_of_Angeles_City.png">
+
+  <!-- Preconnect to font origins -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <!-- Preload critical FontAwesome woff2 so it's fetched early -->
+  <link rel="preload" href="assets/fonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin>
+
+  <!-- Inter from Google Fonts (display=swap already set) -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css">
+
+  <!-- FontAwesome: load non-render-blocking via print media trick -->
+  <link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css" media="print" onload="this.media='all'">
+  <noscript><link rel="stylesheet" href="assets/fonts/fontawesome-all.min.css"></noscript>
+
+  <!-- Override FontAwesome font-display to swap (was auto = blocking) -->
+  <style>
+    @font-face { font-family: 'Font Awesome 5 Free';   font-display: swap; }
+    @font-face { font-family: 'Font Awesome 5 Brands'; font-display: swap; }
+  </style>
+
   <link rel="stylesheet" href="css/style.css">
-  <!-- Load theme-toggle early to prevent flash -->
-  <script src="assets/js/theme-toggle.js"></script>
+
+  <!-- Inline theme-toggle to prevent FOUC without extra network request -->
+  <script>
+    (function(){var K='brgy14-theme',h=document.documentElement,s=localStorage.getItem(K)||'light';h.setAttribute('data-bs-theme',s);function a(t){h.setAttribute('data-bs-theme',t);localStorage.setItem(K,t);document.querySelectorAll('#themeToggleBtn').forEach(function(b){b.innerHTML=t==='dark'?'<i class="fas fa-sun fa-fw"></i>':'<i class="fas fa-moon fa-fw"></i>';b.title=t==='dark'?'Switch to Light Mode':'Switch to Dark Mode';});}window.toggleTheme=function(){var c=h.getAttribute('data-bs-theme')||'light';a(c==='dark'?'light':'dark');};document.addEventListener('DOMContentLoaded',function(){a(h.getAttribute('data-bs-theme')||'light');});})();
+  </script>
 </head>
 <body>
 
