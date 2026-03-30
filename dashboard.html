@@ -12,6 +12,31 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/dark-theme.css">
     <link rel="stylesheet" href="css/app-theme.css">
+    <style>
+        .skeleton-box {
+            background: #dee2e6;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .skeleton-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.65) 50%, transparent 100%);
+            animation: skeleton-shimmer 1.4s infinite;
+        }
+        @keyframes skeleton-shimmer {
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        [data-bs-theme="dark"] .skeleton-box {
+            background: #2d3139;
+        }
+        [data-bs-theme="dark"] .skeleton-box::after {
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 50%, transparent 100%);
+        }
+    </style>
 </head>
 
 <body id="page-top">
@@ -58,7 +83,7 @@
                                 </button>
                             </li>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small"></span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="me-2 text-gray-600 small" style="display:none;"></span><span id="topbarNameSkeleton" class="skeleton-box me-2" style="display:inline-block;height:12px;width:80px;vertical-align:middle;border-radius:4px;"></span><div id="topbarAvatarSkeleton" class="skeleton-box border rounded-circle" style="display:inline-block;width:32px;height:32px;vertical-align:middle;"></div><img id="topbarAvatar" class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg" style="display:none;"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="/profile.html"><i class="fas fa-user me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Profile</a><a class="dropdown-item" id="topbarSettingsLink" href="/system-settings.html"><i class="fas fa-cogs me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Settings</a><a class="dropdown-item" id="topbarActivityLink" href="/activity-log.html"><i class="fas fa-list me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Activity log</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
@@ -72,13 +97,100 @@
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
                         <h3 class="text-dark mb-0" id="dashHeading">Dashboard</h3>
                         <div id="dashHeaderActions">
-                            <a class="btn btn-success btn-sm me-2" href="residents.html" data-staff-only><i class="fas fa-user-plus fa-sm text-white-50"></i>&nbsp;New Resident</a>
-                            <a class="btn btn-primary btn-sm" href="certificates.html"><i class="fas fa-certificate fa-sm text-white-50"></i>&nbsp;New Certificate</a>
+                            <a class="btn btn-success btn-sm me-2" href="residents.html" data-staff-only style="display:none;"><i class="fas fa-user-plus fa-sm text-white-50"></i>&nbsp;New Resident</a>
+                            <a class="btn btn-primary btn-sm" href="certificates.html"><i class="fas fa-certificate fa-sm"></i>&nbsp;New Certificate</a>
+                        </div>
+                    </div>
+
+                    <!-- ═══ SKELETON LOADER (shown until role is confirmed) ═══ -->
+                    <div id="dashSkeleton">
+                        <div class="row">
+                            <div class="col-md-6 col-xl-3 mb-4">
+                                <div class="card shadow py-2">
+                                    <div class="card-body">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <div class="skeleton-box mb-2" style="height:10px;width:65%;"></div>
+                                                <div class="skeleton-box" style="height:22px;width:40%;"></div>
+                                            </div>
+                                            <div class="col-auto"><div class="skeleton-box" style="height:34px;width:34px;border-radius:50%;"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-3 mb-4">
+                                <div class="card shadow py-2">
+                                    <div class="card-body">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <div class="skeleton-box mb-2" style="height:10px;width:65%;"></div>
+                                                <div class="skeleton-box" style="height:22px;width:40%;"></div>
+                                            </div>
+                                            <div class="col-auto"><div class="skeleton-box" style="height:34px;width:34px;border-radius:50%;"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-3 mb-4">
+                                <div class="card shadow py-2">
+                                    <div class="card-body">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <div class="skeleton-box mb-2" style="height:10px;width:65%;"></div>
+                                                <div class="skeleton-box" style="height:22px;width:40%;"></div>
+                                            </div>
+                                            <div class="col-auto"><div class="skeleton-box" style="height:34px;width:34px;border-radius:50%;"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6 col-xl-3 mb-4">
+                                <div class="card shadow py-2">
+                                    <div class="card-body">
+                                        <div class="row g-0 align-items-center">
+                                            <div class="col me-2">
+                                                <div class="skeleton-box mb-2" style="height:10px;width:65%;"></div>
+                                                <div class="skeleton-box" style="height:22px;width:40%;"></div>
+                                            </div>
+                                            <div class="col-auto"><div class="skeleton-box" style="height:34px;width:34px;border-radius:50%;"></div></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-lg-8">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <div class="skeleton-box" style="height:14px;width:200px;"></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="skeleton-box mb-3" style="height:12px;width:100%;"></div>
+                                        <div class="skeleton-box mb-3" style="height:12px;width:92%;"></div>
+                                        <div class="skeleton-box mb-3" style="height:12px;width:96%;"></div>
+                                        <div class="skeleton-box mb-3" style="height:12px;width:88%;"></div>
+                                        <div class="skeleton-box mb-3" style="height:12px;width:94%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-4">
+                                <div class="card shadow mb-4">
+                                    <div class="card-header py-3">
+                                        <div class="skeleton-box" style="height:14px;width:110px;"></div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="skeleton-box mb-2" style="height:31px;width:100%;border-radius:6px;"></div>
+                                        <div class="skeleton-box mb-2" style="height:31px;width:100%;border-radius:6px;"></div>
+                                        <div class="skeleton-box mb-2" style="height:31px;width:100%;border-radius:6px;"></div>
+                                        <div class="skeleton-box" style="height:31px;width:100%;border-radius:6px;"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <!-- ═══ STAFF DASHBOARD WIDGETS (hidden for residents) ═══ -->
-                    <div id="staffDashWidgets">
+                    <div id="staffDashWidgets" style="display:none;">
                         <div class="row">
                             <div class="col-md-6 col-xl-3 mb-4">
                                 <div class="card shadow py-2 border-left-primary">
@@ -294,7 +406,7 @@
                                     <div class="card-body">
                                         <div class="d-grid gap-2">
                                             <a href="certificates.html" class="btn btn-primary btn-sm">
-                                                <i class="fas fa-certificate"></i> Request a Certificate
+                                                <i class="fas fa-certificate fa-sm"></i> Request a Certificate
                                             </a>
                                             <a href="certificates.html" class="btn btn-info btn-sm">
                                                 <i class="fas fa-list-alt"></i> View My Certificates
@@ -375,8 +487,17 @@
                             });
                         }
                     }
+                    // Reveal topbar avatar and name, hide their skeletons
+                    document.getElementById('topbarAvatarSkeleton').style.display = 'none';
+                    document.getElementById('topbarNameSkeleton').style.display = 'none';
+                    document.getElementById('topbarAvatar').style.display = '';
+                    const un = document.getElementById('userName');
+                    if (un && un.textContent.trim()) un.style.display = 'inline';
                 } catch (e) {
                     console.warn('Could not load user profile:', e.message);
+                    // Still reveal avatar on error so the topbar isn't stuck as skeleton
+                    document.getElementById('topbarAvatarSkeleton').style.display = 'none';
+                    document.getElementById('topbarAvatar').style.display = '';
                 }
 
                 // Load dashboard stats now that auth token is active
@@ -503,7 +624,7 @@
 
                 if (isResidentRole(role)) {
                     // Switch to resident dashboard view
-                    document.getElementById('staffDashWidgets').style.display  = 'none';
+                    document.getElementById('dashSkeleton').style.display = 'none';
                     document.getElementById('residentDashWidgets').style.display = 'block';
                     document.getElementById('dashHeading').textContent = 'My Dashboard';
 
@@ -551,6 +672,11 @@
                     } catch (e) {
                         console.error('Resident certs load failed:', e.message);
                     }
+                } else {
+                    // Show staff-only elements after role is confirmed
+                    document.getElementById('dashSkeleton').style.display = 'none';
+                    document.getElementById('staffDashWidgets').style.display = '';
+                    document.querySelectorAll('[data-staff-only]').forEach(el => el.style.display = '');
                 }
             } catch(e) { console.warn(e.message); }
         });

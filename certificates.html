@@ -12,6 +12,31 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/dark-theme.css">
     <link rel="stylesheet" href="css/app-theme.css">
+    <style>
+        .skeleton-box {
+            background: #dee2e6;
+            border-radius: 4px;
+            position: relative;
+            overflow: hidden;
+        }
+        .skeleton-box::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.65) 50%, transparent 100%);
+            animation: skeleton-shimmer 1.4s infinite;
+        }
+        @keyframes skeleton-shimmer {
+            0%   { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+        [data-bs-theme="dark"] .skeleton-box {
+            background: #2d3139;
+        }
+        [data-bs-theme="dark"] .skeleton-box::after {
+            background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.07) 50%, transparent 100%);
+        }
+    </style>
     <script src="https://cdn.jsdelivr.net/npm/qrcodejs@1.0.0/qrcode.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.8.2/jspdf.plugin.autotable.min.js"></script>
@@ -51,7 +76,7 @@
                                 </button>
                             </li>
                             <li class="nav-item dropdown no-arrow">
-                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="d-none d-lg-inline me-2 text-gray-600 small"></span><img class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg"></a>
+                                <div class="nav-item dropdown no-arrow"><a class="dropdown-toggle nav-link" data-bs-toggle="dropdown" aria-expanded="false" href="#"><span id="userName" class="me-2 text-gray-600 small" style="display:none;"></span><span id="topbarNameSkeleton" class="skeleton-box me-2" style="display:inline-block;height:12px;width:80px;vertical-align:middle;border-radius:4px;"></span><div id="topbarAvatarSkeleton" class="skeleton-box border rounded-circle" style="display:inline-block;width:32px;height:32px;vertical-align:middle;"></div><img id="topbarAvatar" class="border rounded-circle img-profile user-profile-img" src="assets/img/avatars/avatar1.jpeg" style="display:none;"></a>
                                     <div class="dropdown-menu shadow dropdown-menu-end animated--grow-in"><a class="dropdown-item" href="profile.html"><i class="fas fa-user me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Profile</a>
                                         <div class="dropdown-divider"></div><a class="dropdown-item" href="#" onclick="logout(); return false;"><i class="fas fa-sign-out-alt me-2 fa-sm fa-fw text-gray-400"></i>&nbsp;Logout</a>
                                     </div>
@@ -314,7 +339,18 @@ window.logout = async () => {
                             img.src = d.profilePhoto || 'assets/img/avatars/avatar1.jpeg';
                         });
                     }
-                } catch(e) { console.warn(e.message); }
+                    // Reveal topbar avatar and name, hide their skeletons
+                    document.getElementById('topbarAvatarSkeleton').style.display = 'none';
+                    document.getElementById('topbarNameSkeleton').style.display = 'none';
+                    document.getElementById('topbarAvatar').style.display = '';
+                    const un = document.getElementById('userName');
+                    if (un && un.textContent.trim()) un.style.display = 'inline';
+                } catch(e) {
+                    console.warn(e.message);
+                    // Still reveal avatar on error so the topbar isn't stuck as skeleton
+                    document.getElementById('topbarAvatarSkeleton').style.display = 'none';
+                    document.getElementById('topbarAvatar').style.display = '';
+                }
 
                 await loadCertificates();
                 await updateStats();
