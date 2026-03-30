@@ -321,9 +321,10 @@ function hasRole(requiredRole) {
     if (!user) return false;
     
     const roleHierarchy = {
-        'admin': 3,
-        'secretary': 2,
-        'staff': 1
+        'admin': 4,
+        'secretary': 3,
+        'staff': 2,
+        'resident': 1
     };
     
     const userLevel = roleHierarchy[user.role] || 0;

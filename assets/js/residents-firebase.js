@@ -61,51 +61,63 @@ function compressImageToBase64(file, maxSize = 200, quality = 0.7) {
 // ─── Load & render ────────────────────────────────────────────────────────────
 async function loadResidents() {
   const tbody = document.getElementById('residentTableBody');
-  tbody.innerHTML = '<tr><td colspan="7" class="text-center"><span class="spinner-border spinner-border-sm me-2"></span>Loading residents...</td></tr>';
+  tbody.innerHTML = '<tr><td colspan="7" class="text-center"><span class="spinner-border spinner-border-sm me-2"></span>Loading...</td></tr>';
+
+  // If logged-in user is a resident, only show their own record
+  const linkedId = window._linkedResidentId;
+  const isResident = window._userRole === 'resident';
 
   try {
     allResidents = [];
 
-    // 1. Load from dedicated residents collection
-    const residentsSnap = await getDocs(query(collection(db, COLLECTIONS.residents), orderBy('lastName')));
-    residentsSnap.forEach(d => allResidents.push({ id: d.id, ...d.data() }));
+    if (isResident && linkedId) {
+      // Resident: load only their linked record
+      const snap = await getDoc(doc(db, COLLECTIONS.residents, linkedId));
+      if (snap.exists()) {
+        allResidents.push({ id: snap.id, ...snap.data() });
+      }
+    } else {
+      // Staff/admin: load full list
+      // 1. Load from dedicated residents collection
+      const residentsSnap = await getDocs(query(collection(db, COLLECTIONS.residents), orderBy('lastName')));
+      residentsSnap.forEach(d => allResidents.push({ id: d.id, ...d.data() }));
 
-    // 2. Also load approved users with role 'resident' from the users collection
-    const usersSnap = await getDocs(query(
-      collection(db, COLLECTIONS.users),
-      where('role', '==', 'resident'),
-      where('status', '==', 'approved')
-    ));
-    usersSnap.forEach(d => {
-      const data = d.data();
-      allResidents.push({
-        id: 'user_' + d.id,
-        firstName:     data.firstName     || '',
-        middleName:    data.middleName     || '',
-        lastName:      data.lastName      || '',
-        suffix:        data.suffix        || '',
-        gender:        data.gender        || '',
-        age:           data.age           || '',
-        civilStatus:   data.civilStatus   || '',
-        address:       data.address       || '',
-        contactNumber: data.contactNumber || '',
-        email:         data.email         || '',
-        // profilePhoto is the field name in the users collection
-        photoURL:      data.profilePhoto  || data.photoURL || '',
+      // 2. Also load approved users with role 'resident' from the users collection
+      const usersSnap = await getDocs(query(
+        collection(db, COLLECTIONS.users),
+        where('role', '==', 'resident'),
+        where('status', '==', 'approved')
+      ));
+      usersSnap.forEach(d => {
+        const data = d.data();
+        allResidents.push({
+          id: 'user_' + d.id,
+          firstName:     data.firstName     || '',
+          middleName:    data.middleName     || '',
+          lastName:      data.lastName      || '',
+          suffix:        data.suffix        || '',
+          gender:        data.gender        || '',
+          age:           data.age           || '',
+          civilStatus:   data.civilStatus   || '',
+          address:       data.address       || '',
+          contactNumber: data.contactNumber || '',
+          email:         data.email         || '',
+          photoURL:      data.profilePhoto  || data.photoURL || '',
+        });
       });
-    });
 
-    // Sort combined list by lastName
-    allResidents.sort((a, b) => (a.lastName || '').localeCompare(b.lastName || ''));
+      // Sort combined list by lastName
+      allResidents.sort((a, b) => (a.lastName || '').localeCompare(b.lastName || ''));
+    }
 
-    renderResidents(allResidents);
+    renderResidents(allResidents, isResident);
   } catch (err) {
     console.error('Error loading residents:', err);
     tbody.innerHTML = `<tr><td colspan="7" class="text-center text-danger">Error: ${err.message}</td></tr>`;
   }
 }
 
-function renderResidents(residents) {
+function renderResidents(residents, residentViewOnly = false) {
   const tbody   = document.getElementById('residentTableBody');
   const counter = document.getElementById('residentCount');
 
@@ -136,7 +148,7 @@ function renderResidents(residents) {
         <td>${r.contactNumber || '—'}</td>
         <td>
           <button class="btn btn-sm btn-warning me-1" onclick="editResident('${r.id}')"><i class="fas fa-edit"></i></button>
-          <button class="btn btn-sm btn-danger" onclick="deleteResident('${r.id}')"><i class="fas fa-trash"></i></button>
+          ${residentViewOnly ? '' : `<button class="btn btn-sm btn-danger" onclick="deleteResident('${r.id}')"><i class="fas fa-trash"></i></button>`}
         </td>
       </tr>`;
   }).join('');
