@@ -30,12 +30,17 @@
     --section-label:    #6366f1;
     --badge-bg:         rgba(99, 102, 241, 0.12);
     --badge-text:       #6366f1;
-    --feat-icon-bg:     #f4f4f5;
-    --about-visual-bg:  #18181b;
+    --feat-icon-bg:          #f4f4f5;
+    --about-visual-bg:       #eef2ff;
+    --about-visual-border:   #c7d2fe;
+    --about-visual-title:    #6366f1;
+    --about-visual-text:     #374151;
+    --doc-check-bg:          rgba(99, 102, 241, 0.12);
+    --doc-check-border:      rgba(99, 102, 241, 0.35);
     --contact-bg:       linear-gradient(135deg, #1e3a5f 0%, #1a1a4e 50%, #2d1b69 100%);
     --footer-bg:        #0f172a;
-    --footer-text:      rgba(255,255,255,0.35);
-    --footer-link:      #a1a1aa;
+    --footer-text:      rgba(255,255,255,0.72);
+    --footer-link:      #d4d4d8;
     --stat-badge-bg:    rgba(34, 197, 94, 0.15);
     --stat-badge-text:  #16a34a;
     --meta-item-bg:     #f4f4f5;
@@ -67,8 +72,13 @@
     --section-label:    #818cf8;
     --badge-bg:         rgba(129, 140, 248, 0.15);
     --badge-text:       #818cf8;
-    --feat-icon-bg:     #18181b;
-    --about-visual-bg:  #0f0f12;
+    --feat-icon-bg:          #18181b;
+    --about-visual-bg:       #0f0f12;
+    --about-visual-border:   #27272a;
+    --about-visual-title:    #a5b4fc;
+    --about-visual-text:     rgba(255, 255, 255, 0.75);
+    --doc-check-bg:          rgba(99, 102, 241, 0.2);
+    --doc-check-border:      rgba(99, 102, 241, 0.4);
     --meta-item-bg:     #18181b;
     --meta-item-border: #818cf8;
     --stat-badge-bg:    rgba(34, 197, 94, 0.15);
@@ -501,15 +511,12 @@ nav {
 /* About visual card */
 .about-visual {
     background: var(--about-visual-bg);
-    border: 1px solid var(--card-border);
+    border: 1px solid var(--about-visual-border);
     border-radius: 0.75rem;
     padding: 2rem;
     position: relative;
     overflow: hidden;
-}
-
-[data-bs-theme="dark"] .about-visual {
-    border-color: #27272a;
+    transition: background 0.3s, border-color 0.3s;
 }
 
 .about-visual::before {
@@ -527,8 +534,9 @@ nav {
     font-weight: 600;
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    color: #a5b4fc;
+    color: var(--about-visual-title);
     margin-bottom: 1.25rem;
+    transition: color 0.3s;
 }
 
 .doc-list { list-style: none; display: flex; flex-direction: column; gap: 0.625rem; }
@@ -537,16 +545,17 @@ nav {
     display: flex;
     align-items: center;
     gap: 0.75rem;
-    color: rgba(255, 255, 255, 0.75);
+    color: var(--about-visual-text);
     font-size: 0.875rem;
+    transition: color 0.3s;
 }
 
 .doc-list li::before {
     content: '';
     width: 18px; height: 18px;
     border-radius: 50%;
-    background: rgba(99, 102, 241, 0.2);
-    border: 1px solid rgba(99, 102, 241, 0.4);
+    background: var(--doc-check-bg);
+    border: 1px solid var(--doc-check-border);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -554,6 +563,7 @@ nav {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath d='M2 5l2.5 2.5L8 3' stroke='%23818cf8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
     background-repeat: no-repeat;
     background-position: center;
+    transition: background 0.3s, border-color 0.3s;
 }
 
 /* ── FEATURES SECTION ───────────────────────────────────────────── */
