@@ -34,7 +34,11 @@ export function applyRoleRestrictions(role, linkedResidentId = null) {
   window._userRole            = role;
   window._linkedResidentId    = linkedResidentId;
 
-  if (!isResidentRole(role)) return; // Staff/admin: no restrictions
+  if (!isResidentRole(role)) {
+    // Staff/admin: reveal the Staff sidebar item (hidden by default in HTML)
+    _showEl('staffSidebarItem');
+    return;
+  }
 
   // ── Sidebar: hide Staff, Activity Log, System Settings ──────────────
   _hideEl('staffSidebarItem');
@@ -54,4 +58,9 @@ export function applyRoleRestrictions(role, linkedResidentId = null) {
 function _hideEl(id) {
   const el = document.getElementById(id);
   if (el) el.style.display = 'none';
+}
+
+function _showEl(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = '';
 }

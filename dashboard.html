@@ -49,7 +49,7 @@
                 <hr class="my-0 sidebar-divider">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link active" href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" id="staffSidebarItem"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
+                    <li class="nav-item" id="staffSidebarItem" style="display:none;"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
@@ -95,7 +95,10 @@
                 <div class="container-fluid">
                     <!-- Page header — staff sees "New Resident" button; residents don't -->
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0" id="dashHeading">Dashboard</h3>
+                        <div>
+                            <h3 class="text-dark mb-0" id="dashHeading" style="display:none;">Dashboard</h3>
+                            <span id="dashHeadingSkeleton" class="skeleton-box" style="display:inline-block;height:28px;width:150px;border-radius:6px;"></span>
+                        </div>
                         <div id="dashHeaderActions">
                             <a class="btn btn-success btn-sm me-2" href="residents.html" data-staff-only style="display:none;"><i class="fas fa-user-plus fa-sm text-white-50"></i>&nbsp;New Resident</a>
                             <a class="btn btn-primary btn-sm" href="certificates.html"><i class="fas fa-certificate fa-sm"></i>&nbsp;New Certificate</a>
@@ -621,6 +624,10 @@
 
                 // Apply role restrictions (hides staff sidebar items for residents)
                 applyRoleRestrictions(role, userData.linkedResidentId || null);
+
+                // Reveal page heading
+                document.getElementById('dashHeadingSkeleton').style.display = 'none';
+                document.getElementById('dashHeading').style.display = '';
 
                 if (isResidentRole(role)) {
                     // Switch to resident dashboard view

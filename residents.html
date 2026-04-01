@@ -49,7 +49,7 @@
                 <hr class="my-0 sidebar-divider">
                 <ul class="navbar-nav text-light" id="accordionSidebar">
                     <li class="nav-item"><a class="nav-link" href="dashboard.html"><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
-                    <li class="nav-item" id="staffSidebarItem"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
+                    <li class="nav-item" id="staffSidebarItem" style="display:none;"><a class="nav-link" href="table.html"><i class="fas fa-users"></i><span>Staff</span></a></li>
                     <li class="nav-item"><a class="nav-link active" href="residents.html"><i class="fas fa-user-friends"></i><span>Residents</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="certificates.html"><i class="fas fa-certificate"></i><span>Certificates</span></a></li>
                     <li class="nav-item"><a class="nav-link" href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a></li>
@@ -84,8 +84,14 @@
                 </nav>
                 <div class="container-fluid">
                     <div class="d-sm-flex justify-content-between align-items-center mb-4">
-                        <h3 class="text-dark mb-0" id="residentsHeading">Resident Management</h3>
-                        <button class="btn btn-primary btn-sm" id="addResidentBtn" onclick="showResidentForm()" data-staff-only><i class="fas fa-plus fa-sm text-white-50"></i>&nbsp;Register New Resident</button>
+                        <div>
+                            <h3 class="text-dark mb-0" id="residentsHeading" style="display:none;">Resident Management</h3>
+                            <span id="residentsHeadingSkeleton" class="skeleton-box" style="display:inline-block;height:28px;width:200px;border-radius:6px;"></span>
+                        </div>
+                        <div>
+                            <button class="btn btn-primary btn-sm" id="addResidentBtn" onclick="showResidentForm()" data-staff-only style="display:none;"><i class="fas fa-plus fa-sm text-white-50"></i>&nbsp;Register New Resident</button>
+                            <span id="addResidentBtnSkeleton" class="skeleton-box" data-staff-only style="display:inline-block;height:31px;width:175px;border-radius:6px;"></span>
+                        </div>
                     </div>
                     
                     <!-- Resident List -->
@@ -313,15 +319,24 @@ window.logout = async () => {
 
                 applyRoleRestrictions(role, userData.linkedResidentId || null);
 
+                // Reveal page heading
+                document.getElementById('residentsHeadingSkeleton').style.display = 'none';
+                document.getElementById('residentsHeading').style.display = '';
+
                 if (isResidentRole(role)) {
-                    // Change heading and hide add button
+                    // Change heading (button + skeleton already removed by applyRoleRestrictions)
                     document.getElementById('residentsHeading').textContent = 'My Resident Profile';
-                    document.getElementById('addResidentBtn')?.remove();
                     // Hide search/filter row — resident only sees their own record
                     const searchRow = document.getElementById('searchResident')?.closest('.row');
                     if (searchRow) searchRow.style.display = 'none';
                     // Store linked ID so loadResidentsFirebase can filter
                     window._linkedResidentId = userData.linkedResidentId || null;
+                } else {
+                    // Staff: reveal add button, hide its skeleton
+                    const btnSkel = document.getElementById('addResidentBtnSkeleton');
+                    if (btnSkel) btnSkel.style.display = 'none';
+                    const btn = document.getElementById('addResidentBtn');
+                    if (btn) btn.style.display = '';
                 }
             } catch(e) { console.warn(e.message); }
         });
