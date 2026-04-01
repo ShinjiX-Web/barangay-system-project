@@ -190,6 +190,11 @@
                                         <option value="residency">Residency Certificate</option>
                                         <option value="indigency">Indigency Certificate</option>
                                         <option value="job_seeker">Job Seeker Certificate</option>
+                                        <option value="business">Business Clearance</option>
+                                        <option value="blotter_id">Barangay ID / Blotter Records</option>
+                                        <option value="solo_parent">Solo Parent Certificate</option>
+                                        <option value="good_moral">Good Moral Certificate</option>
+                                        <option value="other">Other Official Certifications</option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
@@ -230,6 +235,11 @@
                                             <option value="residency">Certificate of Residency</option>
                                             <option value="indigency">Certificate of Indigency</option>
                                             <option value="job_seeker">First-time Job Seeker</option>
+                                            <option value="business">Business Clearance</option>
+                                            <option value="blotter_id">Barangay ID / Blotter Records</option>
+                                            <option value="solo_parent">Solo Parent Certificate</option>
+                                            <option value="good_moral">Good Moral Certificate</option>
+                                            <option value="other">Other Official Certifications</option>
                                         </select>
                                     </div>
                                 </div>
@@ -401,7 +411,7 @@ window.logout = async () => {
             const start    = (currentCertPage - 1) * CERT_PAGE_SIZE;
             const pageCerts = filteredCerts.slice(start, start + CERT_PAGE_SIZE);
 
-            const typeLabels  = { clearance:'Barangay Clearance', residency:'Certificate of Residency', indigency:'Certificate of Indigency', job_seeker:'First-time Job Seeker' };
+            const typeLabels  = { clearance:'Barangay Clearance', residency:'Certificate of Residency', indigency:'Certificate of Indigency', job_seeker:'First-time Job Seeker', business:'Business Clearance', blotter_id:'Barangay ID / Blotter Records', solo_parent:'Solo Parent Certificate', good_moral:'Good Moral Certificate', other:'Other Official Certifications' };
             const statusClass = { pending:'primary', processing:'warning', completed:'success', rejected:'danger' };
 
             container.innerHTML = pageCerts.map(c => {
@@ -684,7 +694,7 @@ window.logout = async () => {
         // the content. This is immune to dark-mode CSS overrides and always prints
         // correctly — unlike CSS background-image which gets stripped or filtered.
         function buildCertHTML(cert) {
-            const typeLabels = { clearance:'Barangay Clearance', residency:'Certificate of Residency', indigency:'Certificate of Indigency', job_seeker:'First-time Job Seeker' };
+            const typeLabels = { clearance:'Barangay Clearance', residency:'Certificate of Residency', indigency:'Certificate of Indigency', job_seeker:'First-time Job Seeker', business:'Business Clearance', blotter_id:'Barangay ID / Blotter Records', solo_parent:'Solo Parent Certificate', good_moral:'Good Moral Certificate', other:'Other Official Certifications' };
             const certType = typeLabels[cert.certificateType] || cert.certificateType || '—';
             const date = cert.requestDate?.toDate
                 ? cert.requestDate.toDate().toLocaleDateString('en-US', {year:'numeric', month:'long', day:'numeric'})

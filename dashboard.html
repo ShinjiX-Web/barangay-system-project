@@ -525,10 +525,15 @@
                     );
 
                     const typeLabels = {
-                        clearance:  'Brgy Clearance',
-                        residency:  'Residency',
-                        indigency:  'Indigency',
-                        job_seeker: 'Job Seeker'
+                        clearance:   'Brgy Clearance',
+                        residency:   'Residency',
+                        indigency:   'Indigency',
+                        job_seeker:  'Job Seeker',
+                        business:    'Business Clearance',
+                        blotter_id:  'Brgy ID / Blotter',
+                        solo_parent: 'Solo Parent',
+                        good_moral:  'Good Moral',
+                        other:       'Other Certifications'
                     };
                     const statusBadge = {
                         pending:    'badge bg-warning text-dark',
@@ -656,7 +661,7 @@
                         document.getElementById('resProcessingRequests').textContent = all.filter(c => c.status === 'processing').length;
 
                         // Recent certs table
-                        const typeLabels = { clearance:'Brgy Clearance', residency:'Residency', indigency:'Indigency', job_seeker:'Job Seeker', good_moral:'Good Moral', business:'Business Clearance' };
+                        const typeLabels = { clearance:'Brgy Clearance', residency:'Residency', indigency:'Indigency', job_seeker:'Job Seeker', business:'Business Clearance', blotter_id:'Brgy ID / Blotter', solo_parent:'Solo Parent', good_moral:'Good Moral', other:'Other Certifications' };
                         const statusBadge = { pending:'badge bg-warning text-dark', processing:'badge bg-primary', completed:'badge bg-success', rejected:'badge bg-danger' };
 
                         if (all.length === 0) {
