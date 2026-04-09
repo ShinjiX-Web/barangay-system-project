@@ -490,7 +490,6 @@ nav {
     background: var(--meta-item-bg);
     border-radius: 0.5rem;
     padding: 1rem 1.125rem;
-    border-right: 3px solid var(--meta-item-border);
     transition: background 0.2s;
     box-shadow: 0px 7px 13px -7px #000000, 5px 3px 10px 0px rgba(0,0,0,0);
 }

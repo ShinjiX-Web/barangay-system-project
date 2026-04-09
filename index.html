@@ -66,6 +66,23 @@
     @media(max-width:720px){.nav-links li:not(:last-child):not(.nav-btn-item){display:none}}
     @media(max-width:580px){.hero-cta{flex-direction:column;align-items:flex-start}}
     @media(max-width:480px){nav,.hero{padding-left:20px;padding-right:20px}.hero{padding-top:6rem;padding-bottom:3rem}.hero-grid{gap:2rem}.hero-content{overflow:hidden}.hero-eyebrow{max-width:100%;white-space:normal}.hero-card{max-width:100%}}
+.btn-ihv{position:relative;overflow:hidden}
+    .btn-ihv:hover{transform:none!important}
+    .bih-wrap{display:flex;align-items:center;justify-content:center;gap:.375rem}
+    .bih-dot{width:8px;height:8px;border-radius:50%;background:#6366f1;flex-shrink:0;transition:transform 0.3s ease}
+    [data-bs-theme="dark"] .hero .btn-ihv .bih-dot{background:rgba(255,255,255,0.25)}
+    .btn-ihv:hover .bih-dot{transform:scale(120)}
+    .bih-label{transition:transform 0.3s ease,opacity 0.3s ease}
+    .btn-ihv:hover .bih-label{transform:translateX(3rem);opacity:0}
+    .bih-reveal{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;gap:.375rem;transform:translateX(3rem);opacity:0;transition:transform 0.3s ease,opacity 0.3s ease;color:#fff;z-index:1;font-weight:600;font-size:.875rem;letter-spacing:-.01em}
+    [data-bs-theme="dark"] .hero .btn-ihv .bih-reveal{color:#09090b}
+    .btn-ihv:hover .bih-reveal{transform:translateX(0);opacity:1}
+    .stat-list{position:relative;overflow:hidden;gap:0}
+    .stat-list::after{content:'';position:absolute;bottom:0;left:0;right:0;height:64px;background:linear-gradient(to top,rgba(18,8,42,.88),transparent);pointer-events:none;z-index:1}
+    .stat-item{margin-bottom:.625rem}
+    @keyframes statIn{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:translateY(0)}}
+    .stat-item-anim{animation:statIn 0.36s ease-out both}
+    .stat-item-exit{overflow:hidden;transition:opacity 0.28s ease,max-height 0.3s ease,margin-bottom 0.3s ease,padding-top 0.3s ease,padding-bottom 0.3s ease}
   </style>
 
   <!-- Full stylesheet async (below-fold: about, features, contact, footer) -->
@@ -110,7 +127,13 @@
         process document requests, and deliver community services — all in one place.
       </p>
       <div class="hero-cta">
-        <a href="login.html" class="btn-primary">Login <svg class="ico" aria-hidden="true" viewBox="0 0 448 512"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg></a>
+        <a href="login.html" class="btn-primary btn-ihv">
+          <span class="bih-wrap">
+            <span class="bih-dot"></span>
+            <span class="bih-label">Login</span>
+          </span>
+          <span class="bih-reveal">Login <svg class="ico" aria-hidden="true" viewBox="0 0 448 512"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg></span>
+        </a>
         <a href="#features" class="btn-outline">Explore Features</a>
       </div>
     </div>
@@ -321,5 +344,58 @@
     }, 3000);
   }
 </script>
+
+<script>
+// Animated list — hero card
+(function(){
+  var items=[
+    {icon:'📋',label:'Document Requests',val:'Barangay Clearance, Certificates',badge:'Active'},
+    {icon:'👥',label:'Resident Records',val:'Profiles, Households & History',badge:'Active'},
+    {icon:'🔐',label:'Access Control',val:'Role-Based Staff Access',badge:'Secure'},
+    {icon:'📊',label:'Reports & Analytics',val:'Population & Service Reports',badge:'Active'},
+    {icon:'🏠',label:'Household Mapping',val:'Community Structure & Data',badge:'Active'},
+    {icon:'📝',label:'Blotter Records',val:'Incident Logs & Case Tracking',badge:'Active'},
+  ];
+  var list=document.querySelector('.stat-list');
+  if(!list)return;
+  var MAX=4,idx=0;
+  list.innerHTML='';
+
+  function make(d){
+    var el=document.createElement('div');
+    el.className='stat-item stat-item-anim';
+    el.innerHTML=
+      '<div class="stat-icon">'+d.icon+'</div>'+
+      '<div class="stat-info">'+
+        '<div class="stat-label">'+d.label+'</div>'+
+        '<div class="stat-val">'+d.val+'</div>'+
+      '</div>'+
+      '<span class="stat-badge">'+d.badge+'</span>';
+    return el;
+  }
+
+  function push(){
+    var el=make(items[idx%items.length]);
+    idx++;
+    list.insertBefore(el,list.firstChild);
+    var overflow=list.children[MAX];
+    if(overflow){
+      overflow.style.maxHeight=overflow.offsetHeight+'px';
+      overflow.classList.add('stat-item-exit');
+      void overflow.offsetHeight;
+      overflow.style.opacity='0';
+      overflow.style.maxHeight='0';
+      overflow.style.marginBottom='0';
+      overflow.style.paddingTop='0';
+      overflow.style.paddingBottom='0';
+      setTimeout((function(o){return function(){if(o.parentNode)o.parentNode.removeChild(o);};})(overflow),320);
+    }
+  }
+
+  for(var i=0;i<MAX;i++)(function(i){setTimeout(push,900+i*520);})(i);
+  setTimeout(function(){setInterval(push,1600);},900+MAX*520+300);
+})();
+</script>
+
 </body>
 </html>
