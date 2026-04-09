@@ -767,6 +767,7 @@ footer {
 }
 
 footer p { color: var(--footer-text); font-size: 0.8125rem; }
+.footer-br { display: none; }
 footer a { color: var(--footer-link); text-decoration: none; font-size: 0.8125rem; transition: color 0.15s; }
 footer a:hover { color: #fafafa; }
 
@@ -822,6 +823,14 @@ footer a:hover { color: #fafafa; }
         padding-right: 20px;
     }
 
+    footer {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .footer-br { display: block; }
+
     .hero { padding-top: 6rem; padding-bottom: 3rem; }
 
     .hero-grid { gap: 2rem; }
@@ -833,4 +842,65 @@ footer a:hover { color: #fafafa; }
     .hero-card { max-width: 100%; }
 
     .contact-inner { gap: 2rem; }
+}
+
+/* ── MARQUEE — features-grid ──────────────────────────────────────── */
+@keyframes marquee {
+    from { transform: translateX(0); }
+    to   { transform: translateX(calc(-100% - 1.25rem)); }
+}
+
+.features-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+    max-width: none;
+    margin-left: -6vw;
+    margin-right: -6vw;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+    mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+
+.marquee-row {
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+}
+
+.marquee-track {
+    display: flex;
+    flex-direction: row;
+    gap: 1.25rem;
+    flex-shrink: 0;
+    animation: marquee 60s linear infinite;
+}
+
+.marquee-row-rev .marquee-track {
+    animation-direction: reverse;
+}
+
+.features-grid:hover .marquee-track {
+    animation-play-state: paused;
+}
+
+.marquee-track .feat-card {
+    width: 300px;
+    flex-shrink: 0;
+}
+
+@media (max-width: 900px) {
+    .features-grid { grid-template-columns: unset; }
+}
+
+@media (max-width: 580px) {
+    .features-grid { grid-template-columns: unset; }
+    .marquee-track .feat-card { width: 260px; }
+}
+
+@media (max-width: 480px) {
+    .features-grid {
+        margin-left: -20px;
+        margin-right: -20px;
+    }
 }

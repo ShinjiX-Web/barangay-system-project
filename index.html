@@ -64,7 +64,7 @@
     @keyframes fadeLeft{from{opacity:0;transform:translateX(20px)}to{opacity:1;transform:translateX(0)}}
     @media(max-width:1024px){.hero-grid{grid-template-columns:1fr}.hero-card{max-width:480px}}
     @media(max-width:720px){.nav-links li:not(:last-child):not(.nav-btn-item){display:none}}
-    @media(max-width:580px){.hero-cta{flex-direction:column;align-items:flex-start}}
+    @media(max-width:580px){.hero-cta{flex-direction:column;align-items:flex-start}.hero-cta a{width:100%;justify-content:center}}
     @media(max-width:480px){nav,.hero{padding-left:20px;padding-right:20px}.hero{padding-top:6rem;padding-bottom:3rem}.hero-grid{gap:2rem}.hero-content{overflow:hidden}.hero-eyebrow{max-width:100%;white-space:normal}.hero-card{max-width:100%}}
 .btn-ihv{position:relative;overflow:hidden}
     .btn-ihv:hover{transform:none!important}
@@ -219,38 +219,74 @@
 <section class="features" id="features">
   <div class="features-header reveal">
     <div class="section-label">System Features</div>
-    <h2 class="section-title">Everything Officials Need in One Place</h2>
+    <h2 class="section-title">Everything Officials Need in<br>One Place</h2>
   </div>
   <div class="features-grid">
-    <div class="feat-card reveal">
-      <div class="feat-icon">👤</div>
-      <h3>Resident Management</h3>
-      <p>Maintain complete and up-to-date resident profiles including personal information, household details, and history.</p>
+    <!-- Row 1: scrolls left -->
+    <div class="marquee-row">
+      <div class="marquee-track">
+        <div class="feat-card"><div class="feat-icon">👤</div><h3>Resident Management</h3><p>Maintain complete and up-to-date resident profiles including personal information, household details, and history.</p></div>
+        <div class="feat-card"><div class="feat-icon">📄</div><h3>Document Requests</h3><p>Receive, track, and process certificate and clearance requests efficiently with a clear workflow for staff.</p></div>
+        <div class="feat-card"><div class="feat-icon">🖨️</div><h3>Certificate Generation</h3><p>Automatically generate print-ready official documents using pre-approved barangay templates.</p></div>
+        <div class="feat-card"><div class="feat-icon">🔐</div><h3>Secure Role Access</h3><p>Role-based login ensures only authorized barangay staff can access sensitive resident data and records.</p></div>
+        <div class="feat-card"><div class="feat-icon">📊</div><h3>Reports &amp; Statistics</h3><p>Generate population reports, document statistics, and other insights needed for barangay planning.</p></div>
+        <div class="feat-card"><div class="feat-icon">🗂️</div><h3>Records Archive</h3><p>Searchable archive of all past records, requests, and issued documents for easy retrieval and audit.</p></div>
+        <div class="feat-card"><div class="feat-icon">📜</div><h3>Barangay Clearance</h3><p>Official clearance document issued to residents in good standing for legal and employment purposes.</p></div>
+        <div class="feat-card"><div class="feat-icon">🏠</div><h3>Certificate of Residency</h3><p>Proof of residence within the barangay for government transactions and requirements.</p></div>
+        <div class="feat-card"><div class="feat-icon">🤲</div><h3>Certificate of Indigency</h3><p>Issued to qualified low-income residents for access to government assistance and benefits.</p></div>
+        <div class="feat-card"><div class="feat-icon">💼</div><h3>Business Clearance</h3><p>Required clearance for businesses operating within the barangay jurisdiction.</p></div>
+        <div class="feat-card"><div class="feat-icon">🪪</div><h3>Barangay ID / Blotter</h3><p>Official identification and incident blotter records for residents and cases.</p></div>
+        <div class="feat-card"><div class="feat-icon">👨‍👩‍👧</div><h3>Solo Parent Certificate</h3><p>Certification for solo parents to access government benefits and privileges under the law.</p></div>
+        <div class="feat-card"><div class="feat-icon">🎖️</div><h3>Good Moral Certificate</h3><p>Character certification attesting to the good standing and moral conduct of the resident.</p></div>
+      </div>
+      <div class="marquee-track" aria-hidden="true">
+        <div class="feat-card"><div class="feat-icon">👤</div><h3>Resident Management</h3><p>Maintain complete and up-to-date resident profiles including personal information, household details, and history.</p></div>
+        <div class="feat-card"><div class="feat-icon">📄</div><h3>Document Requests</h3><p>Receive, track, and process certificate and clearance requests efficiently with a clear workflow for staff.</p></div>
+        <div class="feat-card"><div class="feat-icon">🖨️</div><h3>Certificate Generation</h3><p>Automatically generate print-ready official documents using pre-approved barangay templates.</p></div>
+        <div class="feat-card"><div class="feat-icon">🔐</div><h3>Secure Role Access</h3><p>Role-based login ensures only authorized barangay staff can access sensitive resident data and records.</p></div>
+        <div class="feat-card"><div class="feat-icon">📊</div><h3>Reports &amp; Statistics</h3><p>Generate population reports, document statistics, and other insights needed for barangay planning.</p></div>
+        <div class="feat-card"><div class="feat-icon">🗂️</div><h3>Records Archive</h3><p>Searchable archive of all past records, requests, and issued documents for easy retrieval and audit.</p></div>
+        <div class="feat-card"><div class="feat-icon">📜</div><h3>Barangay Clearance</h3><p>Official clearance document issued to residents in good standing for legal and employment purposes.</p></div>
+        <div class="feat-card"><div class="feat-icon">🏠</div><h3>Certificate of Residency</h3><p>Proof of residence within the barangay for government transactions and requirements.</p></div>
+        <div class="feat-card"><div class="feat-icon">🤲</div><h3>Certificate of Indigency</h3><p>Issued to qualified low-income residents for access to government assistance and benefits.</p></div>
+        <div class="feat-card"><div class="feat-icon">💼</div><h3>Business Clearance</h3><p>Required clearance for businesses operating within the barangay jurisdiction.</p></div>
+        <div class="feat-card"><div class="feat-icon">🪪</div><h3>Barangay ID / Blotter</h3><p>Official identification and incident blotter records for residents and cases.</p></div>
+        <div class="feat-card"><div class="feat-icon">👨‍👩‍👧</div><h3>Solo Parent Certificate</h3><p>Certification for solo parents to access government benefits and privileges under the law.</p></div>
+        <div class="feat-card"><div class="feat-icon">🎖️</div><h3>Good Moral Certificate</h3><p>Character certification attesting to the good standing and moral conduct of the resident.</p></div>
+      </div>
     </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">📄</div>
-      <h3>Document Requests</h3>
-      <p>Receive, track, and process certificate and clearance requests efficiently with a clear workflow for staff.</p>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">🖨️</div>
-      <h3>Certificate Generation</h3>
-      <p>Automatically generate print-ready official documents using pre-approved barangay templates.</p>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">🔐</div>
-      <h3>Secure Role Access</h3>
-      <p>Role-based login ensures only authorized barangay staff can access sensitive resident data and records.</p>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">📊</div>
-      <h3>Reports &amp; Statistics</h3>
-      <p>Generate population reports, document statistics, and other insights needed for barangay planning.</p>
-    </div>
-    <div class="feat-card reveal">
-      <div class="feat-icon">🗂️</div>
-      <h3>Records Archive</h3>
-      <p>Searchable archive of all past records, requests, and issued documents for easy retrieval and audit.</p>
+    <!-- Row 2: scrolls right (reverse order) -->
+    <div class="marquee-row marquee-row-rev">
+      <div class="marquee-track">
+        <div class="feat-card"><div class="feat-icon">🔐</div><h3>Secure Role Access</h3><p>Role-based login ensures only authorized barangay staff can access sensitive resident data and records.</p></div>
+        <div class="feat-card"><div class="feat-icon">📊</div><h3>Reports &amp; Statistics</h3><p>Generate population reports, document statistics, and other insights needed for barangay planning.</p></div>
+        <div class="feat-card"><div class="feat-icon">🗂️</div><h3>Records Archive</h3><p>Searchable archive of all past records, requests, and issued documents for easy retrieval and audit.</p></div>
+        <div class="feat-card"><div class="feat-icon">👤</div><h3>Resident Management</h3><p>Maintain complete and up-to-date resident profiles including personal information, household details, and history.</p></div>
+        <div class="feat-card"><div class="feat-icon">📄</div><h3>Document Requests</h3><p>Receive, track, and process certificate and clearance requests efficiently with a clear workflow for staff.</p></div>
+        <div class="feat-card"><div class="feat-icon">🖨️</div><h3>Certificate Generation</h3><p>Automatically generate print-ready official documents using pre-approved barangay templates.</p></div>
+        <div class="feat-card"><div class="feat-icon">🎖️</div><h3>Good Moral Certificate</h3><p>Character certification attesting to the good standing and moral conduct of the resident.</p></div>
+        <div class="feat-card"><div class="feat-icon">👨‍👩‍👧</div><h3>Solo Parent Certificate</h3><p>Certification for solo parents to access government benefits and privileges under the law.</p></div>
+        <div class="feat-card"><div class="feat-icon">🪪</div><h3>Barangay ID / Blotter</h3><p>Official identification and incident blotter records for residents and cases.</p></div>
+        <div class="feat-card"><div class="feat-icon">💼</div><h3>Business Clearance</h3><p>Required clearance for businesses operating within the barangay jurisdiction.</p></div>
+        <div class="feat-card"><div class="feat-icon">🤲</div><h3>Certificate of Indigency</h3><p>Issued to qualified low-income residents for access to government assistance and benefits.</p></div>
+        <div class="feat-card"><div class="feat-icon">🏠</div><h3>Certificate of Residency</h3><p>Proof of residence within the barangay for government transactions and requirements.</p></div>
+        <div class="feat-card"><div class="feat-icon">📜</div><h3>Barangay Clearance</h3><p>Official clearance document issued to residents in good standing for legal and employment purposes.</p></div>
+      </div>
+      <div class="marquee-track" aria-hidden="true">
+        <div class="feat-card"><div class="feat-icon">🔐</div><h3>Secure Role Access</h3><p>Role-based login ensures only authorized barangay staff can access sensitive resident data and records.</p></div>
+        <div class="feat-card"><div class="feat-icon">📊</div><h3>Reports &amp; Statistics</h3><p>Generate population reports, document statistics, and other insights needed for barangay planning.</p></div>
+        <div class="feat-card"><div class="feat-icon">🗂️</div><h3>Records Archive</h3><p>Searchable archive of all past records, requests, and issued documents for easy retrieval and audit.</p></div>
+        <div class="feat-card"><div class="feat-icon">👤</div><h3>Resident Management</h3><p>Maintain complete and up-to-date resident profiles including personal information, household details, and history.</p></div>
+        <div class="feat-card"><div class="feat-icon">📄</div><h3>Document Requests</h3><p>Receive, track, and process certificate and clearance requests efficiently with a clear workflow for staff.</p></div>
+        <div class="feat-card"><div class="feat-icon">🖨️</div><h3>Certificate Generation</h3><p>Automatically generate print-ready official documents using pre-approved barangay templates.</p></div>
+        <div class="feat-card"><div class="feat-icon">🎖️</div><h3>Good Moral Certificate</h3><p>Character certification attesting to the good standing and moral conduct of the resident.</p></div>
+        <div class="feat-card"><div class="feat-icon">👨‍👩‍👧</div><h3>Solo Parent Certificate</h3><p>Certification for solo parents to access government benefits and privileges under the law.</p></div>
+        <div class="feat-card"><div class="feat-icon">🪪</div><h3>Barangay ID / Blotter</h3><p>Official identification and incident blotter records for residents and cases.</p></div>
+        <div class="feat-card"><div class="feat-icon">💼</div><h3>Business Clearance</h3><p>Required clearance for businesses operating within the barangay jurisdiction.</p></div>
+        <div class="feat-card"><div class="feat-icon">🤲</div><h3>Certificate of Indigency</h3><p>Issued to qualified low-income residents for access to government assistance and benefits.</p></div>
+        <div class="feat-card"><div class="feat-icon">🏠</div><h3>Certificate of Residency</h3><p>Proof of residence within the barangay for government transactions and requirements.</p></div>
+        <div class="feat-card"><div class="feat-icon">📜</div><h3>Barangay Clearance</h3><p>Official clearance document issued to residents in good standing for legal and employment purposes.</p></div>
+      </div>
     </div>
   </div>
 </section>
@@ -316,7 +352,7 @@
 
 <!-- FOOTER -->
 <footer>
-  <p>© 2026 BarangayServe. All rights reserved. Created By <a href="https://www.linkedin.com/in/npanares/" target="_blank"><strong>Nate</strong></a> with ❤️</p>
+  <p>© 2026 BarangayServe. All rights reserved.<br class="footer-br"> Created By <a href="https://www.linkedin.com/in/npanares/" target="_blank"><strong>Nate</strong></a> with ❤️</p>
   <a href="login.html">Login <svg class="ico" aria-hidden="true" viewBox="0 0 448 512"><path d="M190.5 66.9l22.2-22.2c9.4-9.4 24.6-9.4 33.9 0L441 239c9.4 9.4 9.4 24.6 0 33.9L246.6 467.3c-9.4 9.4-24.6 9.4-33.9 0l-22.2-22.2c-9.5-9.5-9.3-25 .4-34.3L311.4 296H24c-13.3 0-24-10.7-24-24v-32c0-13.3 10.7-24 24-24h287.4L190.9 101.2c-9.8-9.3-10-24.8-.4-34.3z"/></svg></a>
 </footer>
 
