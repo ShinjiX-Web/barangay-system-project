@@ -846,7 +846,7 @@ footer a:hover { color: #fafafa; }
 
     .footer-br { display: block; }
 
-    .hero { padding-top: 6rem; padding-bottom: 3rem; }
+    .hero { margin: 0; padding-top: 6rem; padding-bottom: 3rem; }
 
     .hero-grid { gap: 2rem; }
 
