@@ -558,7 +558,7 @@ nav.topbar,
 }
 
 .btn-close {
-    filter: var(--app-text) === '#fafafa' ? invert(1) : none;
+    filter: none;
 }
 
 [data-bs-theme="dark"] .btn-close {
