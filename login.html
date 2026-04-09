@@ -75,6 +75,52 @@
             align-items: center;
             justify-content: center;
             padding: 1.5rem;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        .login-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            align-items: center;
+            width: 100%;
+            max-width: 1000px;
+            gap: 2rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        .cloud-side {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #icon-cloud-canvas {
+            cursor: grab;
+            border-radius: 0.5rem;
+        }
+
+        #icon-cloud-canvas:active { cursor: grabbing; }
+
+        @media (max-width: 768px) {
+            .login-layout { grid-template-columns: 1fr; }
+            .cloud-side { display: none; }
+        }
+
+        .striped-pattern {
+            pointer-events: none;
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            color: rgba(99, 102, 241, 0.35);
+            stroke-width: 0.5;
+        }
+
+        [data-bs-theme="dark"] .striped-pattern {
+            color: rgba(165, 180, 252, 0.2);
         }
 
         /* ── Theme toggle ───────────────────────────────────────────── */
@@ -102,7 +148,12 @@
         }
 
         /* ── Wrapper & card ─────────────────────────────────────────── */
-        .login-wrapper { width: 100%; max-width: 400px; }
+        .login-wrapper { 
+            width: 100%; 
+            position: relative; 
+            z-index: 1; 
+            max-width: 400px;
+        }
 
         .branding {
             display: flex;
@@ -332,10 +383,25 @@
 </head>
 
 <body>
+<!-- Striped background pattern -->
+<svg class="striped-pattern" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <pattern id="stripe-bg" width="10" height="10" patternUnits="userSpaceOnUse">
+      <line x1="0" y1="10" x2="10" y2="0" stroke="currentColor"/>
+      <line x1="-10" y1="10" x2="0" y2="0" stroke="currentColor"/>
+      <line x1="10" y1="10" x2="20" y2="0" stroke="currentColor"/>
+    </pattern>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#stripe-bg)"/>
+</svg>
     <button class="theme-toggle" id="themeToggleBtn" onclick="toggleTheme()" title="Switch to Dark Mode">
         <i class="fas fa-moon fa-sm"></i>
     </button>
 
+    <div class="login-layout">
+    <div class="cloud-side">
+        <canvas id="icon-cloud-canvas" width="500" height="500" aria-label="Icon Cloud" role="img"></canvas>
+    </div>
     <div class="login-wrapper">
         <div class="branding">
             <picture><source srcset="assets/img/Seal_of_Angeles_City.webp" type="image/webp"><img src="assets/img/Seal_of_Angeles_City.png" alt="Barangay 14 Seal" width="64" height="64"></picture>
@@ -385,6 +451,7 @@
             <i class="fas fa-arrow-left"></i> Back to Homepage
         </a>
     </div>
+    </div> <!-- /.login-layout -->
 
     <!-- Firebase SDKs -->
     <script type="module" src="assets/js/firebase-config.js"></script>
@@ -494,6 +561,117 @@
 
     <!-- Load last so toggleTheme() is available before DOMContentLoaded -->
     <script src="assets/js/theme-toggle.js"></script>
+
+    <script>
+    (function(){
+        var canvas = document.getElementById('icon-cloud-canvas');
+        if(!canvas) return;
+        var ctx = canvas.getContext('2d');
+
+        // Tech icons as image URLs from simple-icons CDN
+        var iconSlugs = [
+            'firebase','googlecloud','typescript','javascript','react',
+            'html5','css3','nodedotjs','mongodb','postgresql',
+            'git','github','figma','tailwindcss','bootstrap',
+            'php','mysql','linux','docker','vite'
+        ];
+
+        var images = [], loaded = 0;
+        iconSlugs.forEach(function(slug, i){
+            var img = new Image();
+            img.crossOrigin = 'anonymous';
+            // Use a colored badge from shields.io — reliable, no CORS
+            img.src = 'https://cdn.simpleicons.org/' + slug;
+            img.onload = function(){ loaded++; };
+            img.onerror = function(){ loaded++; }; // skip broken
+            images[i] = img;
+        });
+
+        // Fibonacci sphere positions
+        var NUM = iconSlugs.length;
+        var positions = [];
+        var offset = 2 / NUM, inc = Math.PI * (3 - Math.sqrt(5));
+        for(var i=0;i<NUM;i++){
+            var y = i*offset - 1 + offset/2;
+            var r = Math.sqrt(1 - y*y);
+            var phi = i*inc;
+            positions.push({ x: Math.cos(phi)*r*160, y: y*160, z: Math.sin(phi)*r*160 });
+        }
+
+        var rot = { x: 0.3, y: 0 };
+        var mouse = { x: 200, y: 200 };
+        var drag = false, lastMouse = { x:0, y:0 };
+
+        canvas.addEventListener('mousedown', function(e){
+            drag=true; lastMouse={x:e.clientX,y:e.clientY};
+        });
+        canvas.addEventListener('mousemove', function(e){
+            var r=canvas.getBoundingClientRect();
+            mouse={x:e.clientX-r.left, y:e.clientY-r.top};
+            if(drag){
+                rot.y += (e.clientX-lastMouse.x)*0.003;
+                rot.x += (e.clientY-lastMouse.y)*0.003;
+                lastMouse={x:e.clientX,y:e.clientY};
+            }
+        });
+        canvas.addEventListener('mouseup',  function(){ drag=false; });
+        canvas.addEventListener('mouseleave',function(){ drag=false; });
+
+        function easeOutCubic(t){ return 1-Math.pow(1-t,3); }
+
+        function draw(){
+            requestAnimationFrame(draw);
+            ctx.clearRect(0,0,500,500);
+
+            // Auto-rotate when not dragging
+            if(!drag){
+                var cx=250,cy=250;
+                var dx=mouse.x-cx, dy=mouse.y-cy;
+                var dist=Math.sqrt(dx*dx+dy*dy)||1;
+                var spd=0.0008+(dist/354)*0.002;
+                rot.y += (dx/500)*spd*10;
+                rot.x += (dy/500)*spd*10;
+            }
+
+            var cosX=Math.cos(rot.x), sinX=Math.sin(rot.x);
+            var cosY=Math.cos(rot.y), sinY=Math.sin(rot.y);
+
+            // Compute projected positions and sort back-to-front
+            var projected = positions.map(function(p,i){
+                var rx = p.x*cosY - p.z*sinY;
+                var rz = p.x*sinY + p.z*cosY;
+                var ry = p.y*cosX + rz*sinX;
+                rz     = rz*cosX - p.y*sinX;
+                return { sx:250+rx, sy:250+ry, rz:rz, i:i };
+            });
+            projected.sort(function(a,b){ return a.rz-b.rz; });
+
+            projected.forEach(function(p){
+                var scale   = (p.rz+260)/360;
+                var opacity = Math.max(0.2, Math.min(1,(p.rz+200)/260));
+                var sz = 42*scale;
+                var img = images[p.i];
+                ctx.save();
+                ctx.globalAlpha = opacity;
+                if(img && img.complete && img.naturalWidth){
+                    // Draw circular clipped icon
+                    ctx.beginPath();
+                    ctx.arc(p.sx, p.sy, sz/2, 0, Math.PI*2);
+                    ctx.clip();
+                    ctx.drawImage(img, p.sx-sz/2, p.sy-sz/2, sz, sz);
+                } else {
+                    // Fallback dot
+                    ctx.beginPath();
+                    ctx.arc(p.sx, p.sy, sz/2, 0, Math.PI*2);
+                    ctx.fillStyle='rgba(129,140,248,'+(opacity)+')';
+                    ctx.fill();
+                }
+                ctx.restore();
+            });
+        }
+        draw();
+    })();
+    </script>
 </body>
 
 </html>
