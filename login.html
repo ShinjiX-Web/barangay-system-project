@@ -134,6 +134,35 @@
             border-radius: 0.75rem;
             padding: 2rem;
             transition: background-color 0.2s, border-color 0.2s;
+            position: relative;
+        }
+
+        @keyframes border-beam {
+            from { offset-distance: 0%; }
+            to   { offset-distance: 100%; }
+        }
+
+        .border-beam-wrap {
+            pointer-events: none;
+            position: absolute;
+            inset: 0;
+            border-radius: inherit;
+            border: 1px solid transparent;
+            -webkit-mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+            mask-image: linear-gradient(#000 0 0), linear-gradient(#000 0 0);
+            -webkit-mask-clip: padding-box, border-box;
+            mask-clip: padding-box, border-box;
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+        }
+
+        .border-beam {
+            position: absolute;
+            width: 80px;
+            aspect-ratio: 1 / 1;
+            background: linear-gradient(to left, transparent, #9c40ff, #ffaa40);
+            offset-path: rect(0 auto auto 0 round 0.75rem);
+            animation: border-beam 6s linear infinite;
         }
 
         .login-header { margin-bottom: 1.5rem; }
@@ -314,6 +343,7 @@
         </div>
 
         <div class="login-card">
+            <div class="border-beam-wrap"><div class="border-beam"></div></div>
             <div class="login-header">
                 <h1>Login to your account</h1>
                 <p>Enter your email below to login to your account</p>
