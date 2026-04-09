@@ -573,7 +573,7 @@ window.logout = async () => {
                     + '<h2>Barangay 14 &mdash; Certificate Records</h2>'
                     + '<p>Generated: ' + new Date().toLocaleString() + '</p>'
                     + '<table><thead>' + headerRow + '</thead><tbody>' + bodyRows + '</tbody></table>'
-                    + '</body></html>';
+                    + '</' + 'body></' + 'html>';
 
                 triggerDownload(new Blob(['\ufeff' + html], { type: 'application/msword' }), `certificates_${now}.doc`);
             }

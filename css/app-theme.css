@@ -104,6 +104,10 @@ nav.sidebar,
     box-shadow: 2px 0 8px rgba(0,0,0,0.15) !important;
 }
 
+.sidebar > .container-fluid {
+    align-items: stretch !important;
+}
+
 /* Sidebar brand */
 .sidebar .sidebar-brand,
 .sidebar a.navbar-brand {
@@ -133,6 +137,11 @@ nav.sidebar,
 }
 
 /* Sidebar nav items */
+.sidebar .navbar-nav {
+    width: 100%;
+    overflow-x: hidden;
+}
+
 .sidebar .nav-item .nav-link,
 .sidebar .navbar-nav .nav-item .nav-link {
     color: var(--app-sidebar-text) !important;
