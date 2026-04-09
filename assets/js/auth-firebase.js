@@ -86,6 +86,8 @@ export async function loginUser(email, password) {
 // Logout
 export async function logoutUser() {
   try {
+    await logActivity('logout', 'Auth', `User logged out: ${auth.currentUser?.email || ''}`);
+    localStorage.removeItem('brgy14_role');
     await signOut(auth);
   } catch (error) {
     console.error('Logout error:', error);

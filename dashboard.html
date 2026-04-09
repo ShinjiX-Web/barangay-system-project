@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/dark-theme.css">
     <link rel="stylesheet" href="css/app-theme.css">
+    <script>(function(){var r=localStorage.getItem('brgy14_role');if(r)document.documentElement.setAttribute('data-role',r);})();</script>
     <style>
         .skeleton-box {
             background: #dee2e6;
@@ -621,13 +622,7 @@
                 const userData = snap.data();
                 const role = userData.role || 'staff';
 
-                // Show admin sidebar for admin/secretary
-                if (['admin', 'secretary'].includes(role)) {
-                    const el = document.getElementById('adminSidebarItems');
-                    if (el) el.style.display = 'block';
-                }
-
-                // Apply role restrictions (hides staff sidebar items for residents)
+                // Apply role restrictions (shows/hides sidebar items based on role)
                 applyRoleRestrictions(role, userData.linkedResidentId || null);
 
                 // Reveal page heading

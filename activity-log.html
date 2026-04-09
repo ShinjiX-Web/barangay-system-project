@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="css/dark-theme.css">
     <link rel="stylesheet" href="css/app-theme.css">
+    <script>(function(){var r=localStorage.getItem('brgy14_role');if(r)document.documentElement.setAttribute('data-role',r);})();</script>
     <style>
         .skeleton-box {
             background: #dee2e6;
@@ -179,8 +180,9 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script type="module">
     import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
-    import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+    import { onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
     import { collection, getDocs, getDoc, doc, addDoc, deleteDoc, query, orderBy, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+    import { logoutUser } from './assets/js/auth-firebase.js';
 
     let allLogs = [];
     let filteredLogs = [];
@@ -191,7 +193,7 @@ window.logout = async () => {
     const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
     if (!result.isConfirmed) return;
     window._loggingOut = true;
-    await signOut(auth);
+    await logoutUser();
     await Swal.fire({ icon: 'success', title: 'Signed Out', text: 'You have been successfully signed out.', timer: 2000, showConfirmButton: false });
     window.location.href = '/';
 };
@@ -278,7 +280,7 @@ window.logout = async () => {
                 : '—';
             const badge = actionBadge[log.action] || 'badge bg-secondary';
             return `<tr>
-                <td class="small text-muted">${ts}</td>
+                <td class="small text-muted" style="white-space:nowrap">${ts}</td>
                 <td class="small">${log.userName || log.userEmail || '—'}</td>
                 <td><span class="${badge}">${(log.action || '—').toUpperCase()}</span></td>
                 <td class="small text-capitalize">${log.module || '—'}</td>

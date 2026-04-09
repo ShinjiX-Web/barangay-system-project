@@ -13,6 +13,11 @@ export const ROLE = {
   RESIDENT:  'resident',
 };
 
+function _hideEl(id) {
+  const el = document.getElementById(id);
+  if (el) el.style.display = 'none';
+}
+
 /** Returns true if the given role is a staff-level role (not a resident). */
 export function isStaffRole(role) {
   return [ROLE.ADMIN, ROLE.SECRETARY, ROLE.STAFF].includes(role);
@@ -30,21 +35,23 @@ export function isResidentRole(role) {
  * @param {string|null} linkedResidentId - Firestore resident doc ID linked to this account
  */
 export function applyRoleRestrictions(role, linkedResidentId = null) {
+  // Cache role so the next page load can apply it synchronously
+  localStorage.setItem('brgy14_role', role);
+
+  // Update data-role on <html> — CSS rules in app-theme.css handle sidebar
+  // visibility instantly with no inline style mutations (no repaint if role unchanged).
+  document.documentElement.setAttribute('data-role', role);
+
   // Expose globally so inline scripts can read it
   window._userRole            = role;
   window._linkedResidentId    = linkedResidentId;
 
   if (!isResidentRole(role)) {
-    // Staff/admin: reveal the Staff sidebar item (hidden by default in HTML)
-    _showEl('staffSidebarItem');
+    // Sidebar items are shown via CSS data-role rules — nothing to do here.
     return;
   }
 
-  // ── Sidebar: hide Staff, Activity Log, System Settings ──────────────
-  _hideEl('staffSidebarItem');
-  _hideEl('adminSidebarItems'); // already hidden for non-admin, but ensure it
-
-  // ── Top-bar dropdown links ───────────────────────────────────────────
+  // ── Resident: hide staff-only top-bar links ──────────────────────────
   _hideEl('topbarActivityLink');
   _hideEl('topbarSettingsLink');
 
@@ -53,14 +60,4 @@ export function applyRoleRestrictions(role, linkedResidentId = null) {
 
   // ── Hide "Register New Resident" / "New Resident" action buttons ─────
   document.querySelectorAll('[data-staff-only]').forEach(el => el.remove());
-}
-
-function _hideEl(id) {
-  const el = document.getElementById(id);
-  if (el) el.style.display = 'none';
-}
-
-function _showEl(id) {
-  const el = document.getElementById(id);
-  if (el) el.style.display = '';
 }

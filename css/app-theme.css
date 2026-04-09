@@ -324,11 +324,11 @@ nav.topbar,
 }
 
 /* Stat cards (border-left accent) */
-.card.border-left-primary  { border-left: 2px solid #6366f1 !important; }
+/* .card.border-left-primary  { border-left: 2px solid #6366f1 !important; }
 .card.border-left-success  { border-left: 2px solid #22c55e !important; }
 .card.border-left-info     { border-left: 2px solid #38bdf8 !important; }
 .card.border-left-warning  { border-left: 2px solid #f59e0b !important; }
-.card.border-left-danger   { border-left: 2px solid #ef4444 !important; }
+.card.border-left-danger   { border-left: 2px solid #ef4444 !important; } */
 
 /* Remove old SB Admin 2 shadow override */
 .card.shadow {
@@ -667,6 +667,16 @@ h1, h2, h3, h4, h5, h6 {
 [data-bs-theme="dark"] .swal2-html-container {
     color: var(--app-text) !important;
 }
+
+/* ── ROLE-BASED SIDEBAR (applied before module scripts run) ─────── */
+/* The <head> inline script sets data-role on <html> from localStorage
+   so these rules take effect on the very first paint, preventing flash. */
+html[data-role="admin"] #adminSidebarItems,
+html[data-role="secretary"] #adminSidebarItems { display: block !important; }
+
+html[data-role="admin"] #staffSidebarItem,
+html[data-role="secretary"] #staffSidebarItem,
+html[data-role="staff"] #staffSidebarItem      { display: list-item !important; }
 
 /* ── RESPONSIVE ─────────────────────────────────────────────────── */
 @media (max-width: 768px) {
