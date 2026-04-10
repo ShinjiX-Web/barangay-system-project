@@ -3,14 +3,20 @@
 
   var sidebar = document.querySelector('.sidebar');
   var sidebarToggles = document.querySelectorAll('#sidebarToggle, #sidebarToggleTop');
-  
+
   if (sidebar) {
-    
+
     var collapseEl = sidebar.querySelector('.collapse');
     var collapseElementList = [].slice.call(document.querySelectorAll('.sidebar .collapse'))
     var sidebarCollapseList = collapseElementList.map(function (collapseEl) {
       return new bootstrap.Collapse(collapseEl, { toggle: false });
     });
+
+    // Restore persisted sidebar state instantly (before first paint)
+    if (localStorage.getItem('sidebarToggled') === 'true') {
+      document.body.classList.add('sidebar-toggled');
+      sidebar.classList.add('toggled');
+    }
 
     for (var toggle of sidebarToggles) {
 
@@ -18,6 +24,15 @@
       toggle.addEventListener('click', function(e) {
         document.body.classList.toggle('sidebar-toggled');
         sidebar.classList.toggle('toggled');
+
+        // Persist the new state and sync the data attribute used by CSS pre-paint
+        var isToggled = sidebar.classList.contains('toggled');
+        localStorage.setItem('sidebarToggled', isToggled);
+        if (isToggled) {
+          document.documentElement.setAttribute('data-sidebar-toggled', 'true');
+        } else {
+          document.documentElement.removeAttribute('data-sidebar-toggled');
+        }
 
         if (sidebar.classList.contains('toggled')) {
           for (var bsCollapse of sidebarCollapseList) {
