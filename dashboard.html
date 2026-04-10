@@ -444,11 +444,20 @@
                     const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
                     if (userDoc.exists()) {
                         const userData = userDoc.data();
-                        const userNameElement = document.getElementById('userName');
-                        if (userNameElement) {
-                            userNameElement.textContent = `${userData.firstName || ''} ${userData.lastName || ''}`.trim()
-                                || firebaseUser.email;
+                        let displayName = `${userData.firstName || ''} ${userData.lastName || ''}`.trim() || firebaseUser.email;
+                        // For residents, use the linked resident record as the source of truth for the name
+                        if (userData.role === 'resident' && userData.linkedResidentId) {
+                            try {
+                                const resSnap = await getDoc(doc(db, COLLECTIONS.residents, userData.linkedResidentId));
+                                if (resSnap.exists()) {
+                                    const resData = resSnap.data();
+                                    const resName = `${resData.firstName || ''} ${resData.lastName || ''}`.trim();
+                                    if (resName) displayName = resName;
+                                }
+                            } catch (e) { /* keep user doc name as fallback */ }
                         }
+                        const userNameElement = document.getElementById('userName');
+                        if (userNameElement) userNameElement.textContent = displayName;
                         // Update topbar avatar with saved profile photo
                         if (userData.profilePhoto) {
                             document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => {

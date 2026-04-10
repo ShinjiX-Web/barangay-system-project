@@ -1,11 +1,11 @@
 // residents-firebase.js
 // Resident management — photos stored as compressed base64 in Firestore (no Storage needed)
 
-import { db, COLLECTIONS } from './firebase-config.js';
+import { auth, db, COLLECTIONS } from './firebase-config.js';
 import { logActivity } from './auth-firebase.js';
 import {
   collection, doc, addDoc, getDoc, getDocs,
-  updateDoc, deleteDoc, query, where, orderBy, serverTimestamp
+  updateDoc, deleteDoc, query, where, orderBy, limit, serverTimestamp
 } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
 // ─── State ────────────────────────────────────────────────────────────────────
@@ -58,6 +58,40 @@ function compressImageToBase64(file, maxSize = 200, quality = 0.7) {
   });
 }
 
+// ─── Sync photo to linked user account ───────────────────────────────────────
+// After saving/updating a photo on a RESIDENTS collection record, this ensures
+// the linked user's profilePhoto is also updated so the topbar avatar stays current.
+async function syncPhotoToLinkedUser(residentId, photoURL) {
+  let linkedUserId = null;
+
+  if (window._userRole === 'resident' && auth.currentUser) {
+    // Resident editing their own record — linked user is the current user
+    linkedUserId = auth.currentUser.uid;
+  } else {
+    // Staff editing a resident — find the user account linked to this resident record
+    try {
+      const snap = await getDocs(query(
+        collection(db, COLLECTIONS.users),
+        where('linkedResidentId', '==', residentId),
+        limit(1)
+      ));
+      if (!snap.empty) linkedUserId = snap.docs[0].id;
+    } catch (e) { /* no linked user, skip */ }
+  }
+
+  if (!linkedUserId) return;
+
+  await updateDoc(doc(db, COLLECTIONS.users, linkedUserId), {
+    profilePhoto: photoURL,
+    updatedAt: serverTimestamp()
+  });
+
+  // If it's the current user's photo, update all avatar images on the page immediately
+  if (auth.currentUser && linkedUserId === auth.currentUser.uid) {
+    document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => img.src = photoURL);
+  }
+}
+
 // ─── Load & render ────────────────────────────────────────────────────────────
 async function loadResidents() {
   const tbody = document.getElementById('residentTableBody');
@@ -71,18 +105,35 @@ async function loadResidents() {
     allResidents = [];
 
     if (isResident && linkedId) {
-      // Resident: load only their linked record
+      // Resident: load only their linked record from the residents collection
       const snap = await getDoc(doc(db, COLLECTIONS.residents, linkedId));
       if (snap.exists()) {
-        allResidents.push({ id: snap.id, ...snap.data() });
+        const resData = snap.data();
+        // Use the user's profilePhoto as the authoritative photo source for user-linked residents
+        if (auth.currentUser) {
+          try {
+            const userSnap = await getDoc(doc(db, COLLECTIONS.users, auth.currentUser.uid));
+            if (userSnap.exists()) {
+              const userPhoto = userSnap.data().profilePhoto;
+              if (userPhoto) resData.photoURL = userPhoto;
+            }
+          } catch (e) { /* keep resident record photo as fallback */ }
+        }
+        allResidents.push({ id: snap.id, ...resData });
       }
     } else {
       // Staff/admin: load full list
-      // 1. Load from dedicated residents collection
+      // 1. Load from dedicated residents collection; track IDs to avoid duplicates
+      const loadedResidentIds = new Set();
       const residentsSnap = await getDocs(query(collection(db, COLLECTIONS.residents), orderBy('lastName')));
-      residentsSnap.forEach(d => allResidents.push({ id: d.id, ...d.data() }));
+      residentsSnap.forEach(d => {
+        allResidents.push({ id: d.id, ...d.data() });
+        loadedResidentIds.add(d.id);
+      });
 
-      // 2. Also load approved users with role 'resident' from the users collection
+      // 2. Also load approved users with role 'resident' from the users collection.
+      //    If a user's linkedResidentId already exists in allResidents, skip adding a
+      //    duplicate entry but sync their profilePhoto onto the existing record instead.
       const usersSnap = await getDocs(query(
         collection(db, COLLECTIONS.users),
         where('role', '==', 'resident'),
@@ -90,6 +141,12 @@ async function loadResidents() {
       ));
       usersSnap.forEach(d => {
         const data = d.data();
+        if (data.linkedResidentId && loadedResidentIds.has(data.linkedResidentId)) {
+          // Resident record already in list — sync user's profilePhoto onto it
+          const existing = allResidents.find(r => r.id === data.linkedResidentId);
+          if (existing && data.profilePhoto) existing.photoURL = data.profilePhoto;
+          return; // skip duplicate entry
+        }
         allResidents.push({
           id: 'user_' + d.id,
           firstName:     data.firstName     || '',
@@ -180,6 +237,13 @@ async function updateResidentPhoto(id, input) {
       : { photoURL,               updatedAt: serverTimestamp() };
 
     await updateDoc(doc(db, colName, realId), updateData);
+
+    // Sync new photo to the linked user account so topbar avatar & profile stay consistent
+    if (!isUser) {
+      await syncPhotoToLinkedUser(realId, photoURL);
+    } else if (auth.currentUser && realId === auth.currentUser.uid) {
+      document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => img.src = photoURL);
+    }
 
     // Update in-memory cache and the image element immediately
     const resident = allResidents.find(r => r.id === id);
@@ -289,7 +353,11 @@ async function saveResident(event) {
     // Compress photo to base64 — no Firebase Storage / no CORS needed
     if (photoFile) {
       Swal.fire({ title: 'Processing photo...', allowOutsideClick: false, didOpen: () => Swal.showLoading() });
-      residentData.photoURL = await compressImageToBase64(photoFile);
+      const [base64] = await Promise.all([
+        compressImageToBase64(photoFile),
+        new Promise(resolve => setTimeout(resolve, 2000))
+      ]);
+      residentData.photoURL = base64;
       Swal.close();
     }
 
@@ -306,13 +374,24 @@ async function saveResident(event) {
       }
 
       await updateDoc(doc(db, colName, realId), dataToSave);
+
+      // Sync new photo to the linked user account so topbar avatar & profile stay consistent
+      if (residentData.photoURL) {
+        if (!isUser) {
+          await syncPhotoToLinkedUser(realId, residentData.photoURL);
+        } else if (auth.currentUser && realId === auth.currentUser.uid) {
+          // user_* record: update topbar avatars immediately for the current user
+          document.querySelectorAll('.user-profile-img, .img-profile').forEach(img => img.src = residentData.photoURL);
+        }
+      }
+
       await logActivity('update', 'residents', `Updated resident: ${residentData.firstName} ${residentData.lastName}`);
-      Swal.fire({ icon: 'success', title: 'Updated!', text: 'Resident updated successfully.', timer: 2000, showConfirmButton: false });
+      await Swal.fire({ icon: 'success', title: 'Updated!', text: 'Resident updated successfully.', timer: 2000, showConfirmButton: false });
     } else {
       residentData.createdAt = serverTimestamp();
       await addDoc(collection(db, COLLECTIONS.residents), residentData);
       await logActivity('create', 'residents', `Registered new resident: ${residentData.firstName} ${residentData.lastName}`);
-      Swal.fire({ icon: 'success', title: 'Saved!', text: 'Resident registered successfully.', timer: 2000, showConfirmButton: false });
+      await Swal.fire({ icon: 'success', title: 'Saved!', text: 'Resident registered successfully.', timer: 2000, showConfirmButton: false });
     }
 
     cancelForm();
@@ -331,6 +410,11 @@ async function editResident(id) {
     const snap     = await getDoc(doc(db, colName, realId));
     if (snap.exists()) {
       const data = snap.data();
+      // Prefer the already-resolved photoURL from allResidents (which has profilePhoto synced in),
+      // so the preview always shows the same photo as the resident list row.
+      const cached = allResidents.find(r => r.id === id);
+      const resolvedPhoto = cached?.photoURL
+        || (isUser ? (data.profilePhoto || data.photoURL || '') : (data.photoURL || ''));
       showResidentForm({
         id,
         firstName:     data.firstName     || '',
@@ -344,8 +428,7 @@ async function editResident(id) {
         address:       data.address       || '',
         contactNumber: data.contactNumber || '',
         email:         data.email         || '',
-        // For users, photo is stored as profilePhoto; for residents, as photoURL
-        photoURL:      isUser ? (data.profilePhoto || data.photoURL || '') : (data.photoURL || ''),
+        photoURL:      resolvedPhoto,
       });
     } else {
       Swal.fire({ icon: 'error', title: 'Not Found', text: 'Resident record not found.' });

@@ -242,6 +242,7 @@
         import { getDoc, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
         let currentUserId = null;
+        let _linkedResidentId = null;
 
 window.logout = async () => {
     const result = await Swal.fire({ icon: 'question', title: 'Sign Out?', text: 'Are you sure you want to sign out?', showCancelButton: true, confirmButtonColor: '#4e73df', cancelButtonColor: '#858796', confirmButtonText: 'Yes, sign out', cancelButtonText: 'Cancel' });
@@ -322,18 +323,30 @@ window.logout = async () => {
                     if (userDoc.exists()) {
                         const data = userDoc.data();
 
+                        // For residents, use the linked resident record as the source of truth for the name
+                        let residentData = null;
+                        _linkedResidentId = (data.role === 'resident' && data.linkedResidentId) ? data.linkedResidentId : null;
+                        if (_linkedResidentId) {
+                            try {
+                                const resSnap = await getDoc(doc(db, COLLECTIONS.residents, _linkedResidentId));
+                                if (resSnap.exists()) residentData = resSnap.data();
+                            } catch (e) { /* keep user doc as fallback */ }
+                        }
+                        const sourceData = residentData || data;
+
                         // Topbar name
+                        const displayName = `${sourceData.firstName || ''} ${sourceData.lastName || ''}`.trim() || firebaseUser.email;
                         const el = document.getElementById('userName');
-                        if (el) el.textContent = `${data.firstName || ''} ${data.lastName || ''}`.trim() || firebaseUser.email;
+                        if (el) el.textContent = displayName;
 
                         // Profile photo — visible only once real src is set (no flash)
                         setProfilePhoto(data.profilePhoto);
 
-                        // Pre-fill User Settings form
-                        document.getElementById('username').value   = data.username  || '';
-                        document.getElementById('email').value      = data.email     || firebaseUser.email;
-                        document.getElementById('first_name').value = data.firstName || '';
-                        document.getElementById('last_name').value  = data.lastName  || '';
+                        // Pre-fill User Settings form — use resident record for residents
+                        document.getElementById('username').value   = data.username       || '';
+                        document.getElementById('email').value      = data.email          || firebaseUser.email;
+                        document.getElementById('first_name').value = sourceData.firstName || '';
+                        document.getElementById('last_name').value  = sourceData.lastName  || '';
                     }
                     // Reveal topbar avatar and name, hide their skeletons
                     document.getElementById('topbarAvatarSkeleton').style.display = 'none';
@@ -369,6 +382,13 @@ window.logout = async () => {
                                 firstName, lastName,
                                 updatedAt: serverTimestamp()
                             });
+                            // If resident, also sync name to the linked resident record
+                            if (_linkedResidentId) {
+                                await updateDoc(doc(db, COLLECTIONS.residents, _linkedResidentId), {
+                                    firstName, lastName,
+                                    updatedAt: serverTimestamp()
+                                });
+                            }
                             // Update topbar name immediately
                             const el = document.getElementById('userName');
                             if (el) el.textContent = `${firstName} ${lastName}`.trim();

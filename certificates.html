@@ -344,8 +344,20 @@ window.logout = async () => {
                     const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
                     if (userDoc.exists()) {
                         const d = userDoc.data();
+                        let displayName = `${d.firstName || ''} ${d.lastName || ''}`.trim() || firebaseUser.email;
+                        // For residents, use the linked resident record as the source of truth for the name
+                        if (d.role === 'resident' && d.linkedResidentId) {
+                            try {
+                                const resSnap = await getDoc(doc(db, COLLECTIONS.residents, d.linkedResidentId));
+                                if (resSnap.exists()) {
+                                    const resData = resSnap.data();
+                                    const resName = `${resData.firstName || ''} ${resData.lastName || ''}`.trim();
+                                    if (resName) displayName = resName;
+                                }
+                            } catch (e) { /* keep user doc name as fallback */ }
+                        }
                         const el = document.getElementById('userName');
-                        if (el) el.textContent = `${d.firstName || ''} ${d.lastName || ''}`.trim() || firebaseUser.email;
+                        if (el) el.textContent = displayName;
                         document.querySelectorAll('.user-profile-img').forEach(img => {
                             img.src = d.profilePhoto || 'assets/img/avatars/avatar1.jpeg';
                         });
