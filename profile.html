@@ -96,30 +96,58 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <!-- Account Overview -->
+                            <div class="card shadow mb-3">
+                                <div class="card-header py-3">
+                                    <h6 class="text-primary m-0 fw-bold"><i class="fas fa-id-badge me-2"></i>Account Overview</h6>
+                                </div>
+                                <div class="card-body p-0">
+                                    <ul class="list-group list-group-flush">
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="text-muted small">Role</span>
+                                            <span id="profileRole" class="badge bg-primary rounded-pill">—</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="text-muted small">Status</span>
+                                            <span id="profileStatus" class="badge rounded-pill">—</span>
+                                        </li>
+                                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                                            <span class="text-muted small">Member Since</span>
+                                            <span id="profileMemberSince" class="small fw-semibold">—</span>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <!-- Certificate Summary -->
                             <div class="card shadow mb-4">
                                 <div class="card-header py-3">
-                                    <h6 class="text-primary m-0 fw-bold">Projects</h6>
+                                    <h6 class="text-primary m-0 fw-bold"><i class="fas fa-certificate me-2"></i>Certificate Summary</h6>
                                 </div>
                                 <div class="card-body">
-                                    <h4 class="small fw-bold">Server migration<span class="float-end">20%</span></h4>
-                                    <div class="progress mb-3 progress-sm">
-                                        <div class="progress-bar bg-danger" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100" style="width: 20%;"><span class="visually-hidden">20%</span></div>
+                                    <div class="row text-center g-2">
+                                        <div class="col-4">
+                                            <div class="cert-stat cert-stat-total">
+                                                <div id="certTotal" class="cert-num">—</div>
+                                                <div class="cert-label">Total</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="cert-stat cert-stat-pending">
+                                                <div id="certPending" class="cert-num">—</div>
+                                                <div class="cert-label">Pending</div>
+                                            </div>
+                                        </div>
+                                        <div class="col-4">
+                                            <div class="cert-stat cert-stat-done">
+                                                <div id="certCompleted" class="cert-num">—</div>
+                                                <div class="cert-label">Completed</div>
+                                            </div>
+                                        </div>
                                     </div>
-                                    <h4 class="small fw-bold">Sales tracking<span class="float-end">40%</span></h4>
-                                    <div class="progress mb-3 progress-sm">
-                                        <div class="progress-bar bg-warning" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%;"><span class="visually-hidden">40%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Customer Database<span class="float-end">60%</span></h4>
-                                    <div class="progress mb-3 progress-sm">
-                                        <div class="progress-bar bg-primary" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" style="width: 60%;"><span class="visually-hidden">60%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Payout Details<span class="float-end">80%</span></h4>
-                                    <div class="progress mb-3 progress-sm">
-                                        <div class="progress-bar bg-info" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" style="width: 80%;"><span class="visually-hidden">80%</span></div>
-                                    </div>
-                                    <h4 class="small fw-bold">Account setup<span class="float-end">Complete!</span></h4>
-                                    <div class="progress mb-3 progress-sm">
-                                        <div class="progress-bar bg-success" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;"><span class="visually-hidden">100%</span></div>
+                                    <div class="mt-3">
+                                        <a href="certificates.html" class="btn btn-outline-primary btn-sm w-100"><i class="fas fa-arrow-right me-1"></i>View Certificates</a>
                                     </div>
                                 </div>
                             </div>
@@ -206,24 +234,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card shadow mb-5">
-                        <div class="card-header py-3">
-                            <p class="text-primary m-0 fw-bold">Forum Settings</p>
-                        </div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-md-6">
-                                    <form>
-                                        <div class="mb-3"><label class="form-label" for="signature"><strong>Signature</strong><br></label><textarea class="form-control" id="signature" rows="4" name="signature"></textarea></div>
-                                        <div class="mb-3">
-                                            <div class="form-check form-switch"><input class="form-check-input" type="checkbox" id="formCheck-1"><label class="form-check-label" for="formCheck-1"><strong>Notify me about new replies</strong></label></div>
-                                        </div>
-                                        <div class="mb-3"><button class="btn btn-primary btn-sm" type="submit">Save Settings</button></div>
-                                    </form>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
             </div>
             <footer class="bg-white sticky-footer">
@@ -239,7 +249,7 @@
     <script type="module">
         import { auth, db, COLLECTIONS } from './assets/js/firebase-config.js';
         import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
-        import { getDoc, doc, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
+        import { getDoc, getDocs, doc, collection, query, where, updateDoc, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
         let currentUserId = null;
         let _linkedResidentId = null;
@@ -347,6 +357,52 @@ window.logout = async () => {
                         document.getElementById('email').value      = data.email          || firebaseUser.email;
                         document.getElementById('first_name').value = sourceData.firstName || '';
                         document.getElementById('last_name').value  = sourceData.lastName  || '';
+
+                        // ── Account Overview ──────────────────────────────────
+                        const roleEl   = document.getElementById('profileRole');
+                        const statusEl = document.getElementById('profileStatus');
+                        const sinceEl  = document.getElementById('profileMemberSince');
+
+                        const roleLabels = { admin: 'Admin', secretary: 'Secretary', staff: 'Staff', resident: 'Resident' };
+                        const roleColors = { admin: 'bg-danger', secretary: 'bg-warning text-dark', staff: 'bg-primary', resident: 'bg-success' };
+                        const role = data.role || 'staff';
+                        if (roleEl) { roleEl.textContent = roleLabels[role] || role; roleEl.className = `badge rounded-pill ${roleColors[role] || 'bg-secondary'}`; }
+
+                        const status = data.status || 'approved';
+                        if (statusEl) {
+                            statusEl.textContent = status.charAt(0).toUpperCase() + status.slice(1);
+                            statusEl.className = `badge rounded-pill ${status === 'approved' ? 'bg-success' : status === 'pending' ? 'bg-warning text-dark' : 'bg-danger'}`;
+                        }
+
+                        if (sinceEl) {
+                            const since = data.createdAt?.toDate ? data.createdAt.toDate() : (data.createdAt ? new Date(data.createdAt) : null);
+                            sinceEl.textContent = since ? since.toLocaleDateString('en-PH', { year: 'numeric', month: 'short', day: 'numeric' }) : '—';
+                        }
+
+                        // ── Certificate Summary ───────────────────────────────
+                        try {
+                            let certsQuery;
+                            if (role === 'resident' && data.linkedResidentId) {
+                                certsQuery = query(collection(db, COLLECTIONS.certificates), where('residentId', '==', data.linkedResidentId));
+                            } else {
+                                certsQuery = query(collection(db, COLLECTIONS.certificates));
+                            }
+                            const snap = await getDocs(certsQuery);
+                            let total = 0, pending = 0, completed = 0;
+                            snap.forEach(d => {
+                                total++;
+                                const s = d.data().status;
+                                if (s === 'pending' || s === 'processing') pending++;
+                                if (s === 'completed') completed++;
+                            });
+                            document.getElementById('certTotal').textContent     = total;
+                            document.getElementById('certPending').textContent   = pending;
+                            document.getElementById('certCompleted').textContent = completed;
+                        } catch (e) {
+                            document.getElementById('certTotal').textContent     = '—';
+                            document.getElementById('certPending').textContent   = '—';
+                            document.getElementById('certCompleted').textContent = '—';
+                        }
                     }
                     // Reveal topbar avatar and name, hide their skeletons
                     document.getElementById('topbarAvatarSkeleton').style.display = 'none';
