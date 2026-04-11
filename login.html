@@ -10,7 +10,6 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="assets/css/login.css">
-    <script src="https://www.google.com/recaptcha/enterprise.js?render=6LeobLIsAAAAABKy85N-c9xbPffyC5V9gG-ngmxY"></script>
 </head>
 
 <body>
@@ -46,7 +45,7 @@
                 <p>Enter your email below to login to your account</p>
             </div>
 
-            <form class="user" id="login-form" novalidate>
+            <form class="user" novalidate>
                 <div class="form-group">
                     <label class="form-label" for="exampleInputEmail">Email</label>
                     <input class="shadcn-input" type="email" id="exampleInputEmail"
@@ -68,10 +67,7 @@
                     </div>
                 </div>
 
-                <button class="btn-login g-recaptcha" id="loginBtn"
-                    data-sitekey="6LeobLIsAAAAABKy85N-c9xbPffyC5V9gG-ngmxY"
-                    data-callback="onSubmit"
-                    data-action="submit">Login</button>
+                <button class="btn-login" type="submit" id="loginBtn">Login</button>
             </form>
 
             <div class="divider"><span>or</span></div>
@@ -93,17 +89,21 @@
     <script src="assets/bootstrap/js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
-    <script>
-        function onSubmit(token) {
-            document.getElementById("login-form").submit();
-        }
-    </script>
     <script src="assets/js/password-toggle.js"></script>
     <script type="module" src="assets/js/login.js"></script>
 
     <!-- Load last so toggleTheme() is available before DOMContentLoaded -->
     <script src="assets/js/theme-toggle.js"></script>
     <script src="assets/js/icon-cloud.js"></script>
+
+    <script>
+        function onClick(e) {
+            e.preventDefault();
+            grecaptcha.enterprise.ready(async () => {
+            const token = await grecaptcha.enterprise.execute('6LeobLIsAAAAABKy85N-c9xbPffyC5V9gG-ngmxY', {action: 'LOGIN'});
+            });
+        }
+    </script>
 </body>
 
 </html>

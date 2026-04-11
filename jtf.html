@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title></title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+<style>
+  :root {
+    --jtf-black: #000000;
+    --jtf-dark: #0C1e38;
+    --jtf-navy: #16213e;
+    --jtf-yellow: #ffd700;
+    --jtf-yellow-light: #fff9e0;
+    --jtf-blue: #4361ee;
+    --jtf-lightblue: #E3EEFB;
+    --jtf-red: #DC3645;
+    --jtf-blue-light: #eef1ff;
+    --jtf-white: #ffffff;
+    --jtf-gray-50: #f8f9fa;
+    --jtf-gray-100: #f0f1f3;
+    --jtf-gray-200: #e2e4e8;
+    --jtf-gray-400: #9ca3af;
+    --jtf-gray-600: #6b7280;
+    --jtf-gray-700: #4b5563;
+    --jtf-gray-800: #374151;
+    --jtf-gray-900: #1f2937;
+    --jtf-green: #10b981;
+    --jtf-purple: #7c3aed;
+    --radius: 12px;
+    --radius-lg: 20px;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.06);
+
+  /* ── WORDPRESS OVERRIDES ── */
+  /* Hide auto-generated TOC */
+  .toc-container,
+  .lwptoc,
+  .ez-toc-container,
+  .table-of-contents,
+  #toc_container,
+  .wp-block-yoast-seo-table-of-contents,
+  [class*="toc"] {
+    display: none !important;
+  }
+
+  /* Hide WP page title (rendered above the custom HTML block) */
+  .entry-title,
+  .page-title,
+  .wp-block-post-title,
+  h1.entry-title,
+  h1.page-title,
+  .post-title,
+  article > header,
+  .entry-header {
+    display: none !important;
+  }
+
+  /* Full-width breakout from WP content container */
+  .jtf-training-page {
+    width: 100vw !important;
+    max-width: 100vw !important;
+    margin-left: calc(-50vw + 50%) !important;
+    margin-right: calc(-50vw + 50%) !important;
+    overflow-x: hidden;
+  }
+  .jtf-training-page *,
+  .jtf-training-page *::before,
+  .jtf-training-page *::after {
+    box-sizing: border-box;
+  }
+
+  /* Force all sections full-width */
+  .jtf-training-page > section {
+    width: 100% !important;
+    max-width: none !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08);
+    --shadow-lg: 0 8px 32px rgba(0,0,0,0.1);
+    --shadow-xl: 0 16px 48px rgba(0,0,0,0.12);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    color: var(--jtf-dark);
+    line-height: 1.6;
+    background: var(--jtf-white);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: 'Inter', sans-serif;
+    font-weight: 900;
+    line-height: 1.2;
+    color: var(--jtf-black);
+  }
+
+  .container {
+    padding: 0 24px;
+  }
+
+  /* ── BREADCRUMB ── */
+   a.red {
+    color: var(--jtf-white) !important;
+   }
+  .jtf-breadcrumb {
+    font-size: 1rem;
+    color: rgba(255,255,255,0.5);
+    margin-bottom: 24px;
+  }
+  .jtf-breadcrumb a {
+    color: var(--jtf-white);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .jtf-breadcrumb a:hover {
+    color: #ffffff;
+    text-decoration: underline;
+  }
+  .jtf-breadcrumb span {
+    color: var(--jtf-red);
+    font-weight: bolder;
+  }
+
+  /* ── HERO ── */
+  .hero {
+    padding: 80px 0 64px;
+    background: var(--jtf-dark);
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -20%;
+    width: 600px;
+    height: 600px;
+    background: radial-gradient(circle, rgba(245,197,24,0.12) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -30%;
+    left: -10%;
+    width: 500px;
+    height: 500px;
+    background: radial-gradient(circle, rgba(67,97,238,0.1) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+  .hero .container { position: relative; z-index: 1; display: flex; align-items: center; gap: 48px; }
+  .hero-content { flex: 1; min-width: 0; }
+  .hero-image { flex-shrink: 0; width: 420px; }
+  .hero-image img { width: 100%; height: auto; border-radius: 16px; display: block; }
+  @media (max-width: 900px) {
+    .hero .container { flex-direction: column-reverse; }
+    .hero-image { width: 100%; max-width: 480px; }
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(245,197,24,0.15);
+    border: 1px solid rgba(245,197,24,0.3);
+    border-radius: 100px;
+    padding: 6px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--jtf-yellow);
+    margin-bottom: 24px;
+    letter-spacing: 0.02em;
+  }
+  .hero h1 {
+    font-size: clamp(1.8rem, 4.5vw, 3.2rem);
+    font-weight: 800;
+    color: var(--jtf-yellow);
+    max-width: 700px;
+    margin-bottom: 20px;
+  }
+  .hero h1 span.highlight { color: var(--jtf-yellow); }
+  .hero-sub {
+    font-size: clamp(1rem, 2vw, 1rem);
+    color: rgba(255,255,255);
+    max-width: 620px;
+    margin-bottom: 36px;
+    line-height: 1.7;
+  }
+  .hero-ctas {
+    display: flex;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 14px 28px;
+    border-radius: 30px;
+    font-weight: 600;
+    font-size: 15px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-primary,
+  .btn-primary:hover {
+    background: var(--jtf-red);
+    color: var(--jtf-white);
+  }
+  .btn-outline,
+  .btn-outline:hover {
+    background: transparent;
+    color: var(--jtf-white);
+    border: 1.5px solid rgba(255,255,255,0.3);
+  }
+  .btn-dark {
+    background: var(--jtf-dark);
+    color: var(--jtf-white);
+  }
+  .btn-dark:hover {
+    background: var(--jtf-navy);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg);
+  }
+
+  /* ── PROGRESSIVE JOURNEY ── */
+  .journey-section {
+    padding: 80px 0;
+    background: var(--jtf-white);
+  }
+  .section-label {
+    display: inline-block;
+    font-size: 1.13em;
+    font-weight: 300;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--jtf-red);
+    margin-bottom: 12px;
+  }
+  .section-title {
+    font-size: clamp(1.6rem, 3vw, 1.8rem);
+    font-weight: 800;
+    margin-bottom: 20px;
+    max-width: 600px;
+  }
+  .section-title span {
+    color: #0C1E38;
+  }
+  span#Capability_transformation_with_proven_results {
+    color: var(--jtf-red);
+  }
+  .section-desc {
+    font-size: 1.05rem;
+    color: var(--jtf-black);
+    max-width: 700px;
+    line-height: 1.75;
+    margin-bottom: 40px;
+  }
+
+  .pricing-intro {
+    text-align: center;
+    width: 100%;
+  }
+  .pricing-intro .section-title,
+  .pricing-intro .section-desc {
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .sub-container {
+   display: flex; 
+   flex-direction: row-reverse; 
+   gap: 48px;
+  }
+
+  /* ── PATHWAY CARDS ── */
+  .pathways-section {
+    padding: 80px 0;
+    background: var(--jtf-lightblue);
+  }
+  .pathways-section .section-title { text-align: center; margin-left: auto; margin-right: auto; }
+  .pathways-section .section-desc { text-align: center; margin-left: auto; margin-right: auto; }
+  .pathways-section .section-label { display: block; text-align: center; }
+
+  .pathway-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+
+  .pathway-card {
+    background: var(--jtf-white);
+    border-radius: var(--radius-lg);
+    padding: 36px 28px 32px;
+    position: relative;
+    border: 1.5px solid var(--jtf-gray-200);
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+  }
+  .pathway-card:hover {
+    border-color: var(--jtf-dark);
+    box-shadow: var(--shadow-lg);
+    transform: translateY(-4px);
+    cursor: pointer;
+  }
+  .pathway-card.featured {
+    border-color: var(--jtf-dark);
+    box-shadow: var(--shadow-md);
+  }
+  .pathway-card.featured::before {
+    content: 'Most comprehensive';
+    position: absolute;
+    top: -13px;
+    right: 24px;
+    background: var(--jtf-dark);
+    color: white;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 100px;
+    letter-spacing: 0.02em;
+  }
+  @keyframes dot-pulse-green {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(26, 27, 26, 0.6); }
+    50% { box-shadow: 0 0 0 6px rgba(34,197,94,0); }
+  }
+  @keyframes dot-pulse-blue {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(220, 54, 69, 1); }
+    50% { box-shadow: 0 0 0 6px rgba(67,97,238,0); }
+  }
+  @keyframes dot-pulse-purple {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(245, 197, 24, 1); }
+    50% { box-shadow: 0 0 0 6px rgba(139,92,246,0); }
+  }
+  .pathway-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-bottom: 15px;
+  }
+  .pathway-dot.green { background: var(--jtf-dark); animation: dot-pulse-green 1.8s ease-in-out infinite; }
+  .pathway-dot.blue { background: var(--jtf-red); animation: dot-pulse-blue 1.8s ease-in-out infinite; }
+  .pathway-dot.purple { background: var(--jtf-yellow); animation: dot-pulse-purple 1.8s ease-in-out infinite; }
+
+  .pathway-name {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 6px;
+  }
+  .pathway-price {
+    font-size: 2rem;
+    font-weight: 800;
+    color: var(--jtf-dark);
+    margin-bottom: 2px;
+  }
+  .pathway-price span {
+    font-size: 0.9rem;
+    font-weight: 500;
+    color: var(--jtf-gray-600);
+  }
+  .pathway-price-sub {
+    font-size: 0.85rem;
+    color: var(--jtf-gray-400);
+    margin-bottom: 24px;
+  }
+  .pathway-includes-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--jtf-gray-400);
+    margin-bottom: 12px;
+  }
+  .pathway-includes {
+    list-style: none;
+    margin-bottom: 24px;
+    flex-grow: 1;
+  }
+  .pathway-includes li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 0;
+    font-size: 0.92rem;
+    color: var(--jtf-gray-700);
+  }
+  .pathway-includes li .check {
+    width: 20px;
+    height: 20px;
+    border-radius: 6px;
+    background: #e8f5e9;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+  .pathway-includes li .check svg { width: 12px; height: 12px; }
+  .pathway-includes li .tag {
+    margin-left: auto;
+    font-size: 11px;
+    color: var(--jtf-gray-400);
+    font-weight: 500;
+  }
+  .pathway-badge {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: var(--jtf-blue-light);
+    border-radius: 10px;
+    padding: 12px 14px;
+    margin-bottom: 24px;
+  }
+  .pathway-badge-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    overflow: hidden;
+  }
+  .pathway-badge-icon svg { width: 100%; height: 100%; display: block; }
+  .pathway-badge-text {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: var(--jtf-gray-700);
+  }
+  .pathway-badge-text span {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 400;
+    color: var(--jtf-gray-400);
+  }
+
+  .pathway-cta {
+    display: block;
+    width: 100%;
+    text-align: center;
+    padding: 14px;
+    border-radius: 30px;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    transition: all 0.25s ease;
+    cursor: pointer;
+    border: none;
+    color: var(--jtf-white);
+    background: var(--jtf-red);
+  }
+  .pathway-cta:hover {
+    color: var(--jtf-white);
+  }
+  /* ── PRICING OUTER WRAPPER ── */
+  .pricing-outer {
+    width: 100%;
+    padding: 0 300px;
+    box-sizing: border-box;
+  }
+
+  /* ── PRICING TABLE ── */
+  .pricing-section {
+    padding: 80px 0;
+    background: var(--jtf-white) !important;
+  }
+  .pricing-table-wrap {
+    margin-top: 40px;
+    overflow-x: auto;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    -webkit-overflow-scrolling: touch;
+  }
+  .pricing-table {
+    width: 100%;
+    padding: 0;
+    border-collapse: separate;
+    border-spacing: 0;
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    font-size: 0.85rem;
+  }
+  .pricing-table thead th {
+    background: var(--jtf-dark) !important;
+    color: var(--jtf-white) !important;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-weight: 600;
+    padding: 14px 12px;
+    text-align: center;
+    border-bottom: 2px solid var(--jtf-yellow);
+  }
+  .pricing-table thead th:first-child,
+  .pricing-table thead th:nth-child(2) { text-align: left; }
+  .pricing-table tbody tr {
+    transition: background 0.15s ease;
+    background: #ffffff !important;
+  }
+  .pricing-table tbody tr:hover { background: #f8f9fa !important; }
+  .pricing-table tbody td {
+    padding: 12px 12px;
+    text-align: center;
+    border-bottom: 1px solid #e2e4e8 !important;
+    background: transparent !important;
+    color: #374151 !important;
+  }
+  .pricing-table tbody td:first-child,
+  .pricing-table tbody td:nth-child(2) { text-align: left; }
+  .pricing-table tbody td:first-child {
+    font-weight: 600;
+    color: #1f2937 !important;
+  }
+  .pricing-table tbody td:first-child small {
+    display: block;
+    font-weight: 400;
+    color: #9ca3af !important;
+    font-size: 0.82rem;
+  }
+  .pricing-table .free-tag {
+    background: #e8f5e9 !important;
+    color: #15803d !important;
+    padding: 4px 12px;
+    border-radius: 100px;
+    font-weight: 600;
+    font-size: 0.82rem;
+    display: inline-block;
+  }
+  .pricing-table .enterprise-row td {
+    background: #f8f9fa !important;
+    text-align: center;
+    font-weight: 500;
+    padding: 24px;
+    color: #374151 !important;
+  }
+  .pricing-table .enterprise-row td:first-child { text-align: left; }
+
+  .contact-link {
+    color: #4361ee !important;
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.2s;
+  }
+  .contact-link:hover { color: #1a1a2e !important; text-decoration: underline; }
+
+  /* ── RESULTS ── */
+  .results-section {
+    padding: 80px 0;
+    background: linear-gradient(135deg, var(--jtf-dark) 0%, var(--jtf-navy) 100%);
+    color: var(--jtf-white);
+  }
+  .results-section .section-label { color: var(--jtf-yellow); }
+  .results-section .section-title { color: var(--jtf-white); }
+  .results-section .section-desc { color: rgba(255,255,255); }
+
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 24px;
+    margin-top: 48px;
+  }
+  .stat-card {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: var(--radius);
+    padding: 28px 24px;
+    text-align: center;
+    transition: all 0.3s ease;
+  }
+  .stat-card:hover {
+    background: rgba(255,255,255,0.1);
+    transform: translateY(-2px);
+  }
+  .stat-number {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 2.4rem;
+    font-weight: 800;
+    color: var(--jtf-yellow);
+    margin-bottom: 6px;
+  }
+  .stat-label {
+    font-size: 0.88rem;
+    color: rgba(255,255,255);
+    line-height: 1.5;
+  }
+  .results-text {
+    margin-top: 48px;
+    font-size: 1.05rem;
+    color: rgba(255,255,255);
+    max-width: 800px;
+    line-height: 1.8;
+  }
+  .results-ctas {
+    display: flex;
+    gap: 16px;
+    margin-top: 36px;
+    flex-wrap: wrap;
+  }
+
+  /* ── CALCULATOR ── */
+  .calculator-section {
+    padding: 64px 0 80px;
+    background: var(--jtf-lightblue);
+    border-top: 1px solid var(--jtf-gray-100);
+  }
+  .calculator-wrap {
+    max-width: 560px;
+    margin: 0 auto;
+    background: var(--jtf-white);
+    border: 1.5px solid var(--jtf-gray-200);
+    border-radius: var(--radius-lg);
+    padding: 40px 36px 36px;
+    box-shadow: var(--shadow-md);
+  }
+  .calc-title {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    color: var(--jtf-gray-900);
+    margin-bottom: 28px;
+  }
+  .calc-field-label {
+    font-size: 0.88rem;
+    font-weight: 600;
+    color: var(--jtf-gray-700);
+    margin-bottom: 8px;
+  }
+  .calc-slider-row {
+    margin-bottom: 28px;
+  }
+  .calc-slider-value {
+    text-align: center;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--jtf-gray-900);
+    background: var(--jtf-gray-50);
+    border: 1px solid var(--jtf-gray-200);
+    border-radius: 10px;
+    padding: 12px;
+    margin-bottom: 10px;
+  }
+  .calc-slider {
+    width: 100%;
+    -webkit-appearance: none;
+    appearance: none;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--jtf-gray-200);
+    outline: none;
+    cursor: pointer;
+  }
+  .calc-slider::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--jtf-dark);
+    border: 3px solid var(--jtf-white);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+    transition: transform 0.15s ease;
+  }
+  .calc-slider::-webkit-slider-thumb:hover { transform: scale(1.15); }
+  .calc-slider::-moz-range-thumb {
+    width: 22px;
+    height: 22px;
+    border-radius: 50%;
+    background: var(--jtf-dark);
+    border: 3px solid var(--jtf-white);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    cursor: pointer;
+  }
+
+  .calc-toggle-group {
+    display: flex;
+    gap: 0;
+    margin-bottom: 32px;
+    border-radius: 10px;
+    overflow: hidden;
+    border: 1.5px solid var(--jtf-gray-200);
+  }
+  .calc-toggle {
+    flex: 1;
+    padding: 12px 16px;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    background: var(--jtf-white);
+    color: var(--jtf-dark);
+    border: none;
+    transition: all 0.2s ease;
+  }
+  .calc-toggle:not(:last-child) { border-right: 1.5px solid var(--jtf-gray-200); }
+  .calc-toggle.active {
+    background: var(--jtf-dark);
+    color: var(--jtf-white);
+  }
+  .calc-toggle:hover:not(.active) { background: var(--jtf-gray-50); }
+
+  .calc-results {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 12px;
+  }
+  .calc-result-card {
+    background: var(--jtf-gray-50);
+    border: 1px solid var(--jtf-gray-100);
+    border-radius: 12px;
+    padding: 18px 14px;
+  }
+  .calc-result-label {
+    font-size: 0.72rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--jtf-gray-400);
+    margin-bottom: 6px;
+  }
+  .calc-result-value {
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--jtf-gray-900);
+  }
+  .calc-result-card.savings {
+    border-color: rgba(16,185,129,0.25);
+    background: #f0fdf8;
+  }
+  .calc-result-card.savings .calc-result-value { color: var(--jtf-green); }
+  .calc-result-card.savings .calc-result-sub {
+    font-size: 0.75rem;
+    color: var(--jtf-green);
+    font-weight: 500;
+    margin-top: 2px;
+  }
+  .calc-enterprise-note {
+    margin-top: 20px;
+    padding: 16px;
+    background: var(--jtf-yellow-light);
+    border-radius: 10px;
+    text-align: center;
+    font-size: 0.88rem;
+    color: var(--jtf-gray-700);
+    display: none;
+  }
+  .calc-enterprise-note a {
+    color: var(--jtf-dark);
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .calc-enterprise-note a:hover { text-decoration: underline; }
+
+  /* ── FOOTER CTA ── */
+  .footer-cta-section {
+    padding: 0;
+    background: var(--jtf-white);
+  }
+  .footer-cta-inner {
+    max-width: 1140px;
+    margin: 0 auto;
+    padding: 64px 24px;
+    text-align: center;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .pathway-grid { grid-template-columns: 1fr; max-width: 420px; margin-left: auto; margin-right: auto; }
+    .stats-grid { grid-template-columns: repeat(2, 1fr); }
+
+    /* Journey section — image on top */
+    .sub-container { flex-direction: column-reverse; }
+    .sub-container > div img { width: 100%; height: auto; }
+
+    /* Pricing section — table first, calculator below */
+    .pricing-outer { padding: 0 20px; }
+    .pricing-layout { flex-direction: column; }
+    .pricing-layout > div { width: 100% !important; flex: none !important; }
+    .calc-results { grid-template-columns: 1fr 1fr; }
+    .calc-result-card:last-child { grid-column: 1 / -1; }
+  }
+  @media (max-width: 600px) {
+    .hero { padding: 56px 0 48px; }
+    .stats-grid { grid-template-columns: 1fr 1fr; gap: 16px; }
+    .hero-ctas { flex-direction: column; }
+    .hero-ctas .btn { width: 100%; justify-content: center; }
+
+    /* Pricing table */
+    .pricing-section { padding: 48px 0; }
+    .pricing-table-wrap { margin-top: 24px; border-radius: 12px; }
+    .pricing-table { font-size: 0.78rem; min-width: 520px; }
+    .pricing-table thead th,
+    .pricing-table tbody td { padding: 12px 10px; }
+    .pricing-table thead th small { font-size: 0.7rem; }
+
+    /* Calculator */
+    .calculator-section { padding: 40px 0 56px; }
+    .calculator-wrap { padding: 28px 20px 24px; }
+    .calc-results { grid-template-columns: 1fr 1fr; gap: 10px; }
+    .calc-result-card:last-child { grid-column: 1 / -1; }
+    .calc-result-value { font-size: 1.15rem; }
+    .calc-toggle { font-size: 0.8rem; padding: 10px 8px; }
+  }
+</style>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<div class="jtf-training-page">
+
+<!-- ═══════════ HERO ═══════════ -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-content">
+      <nav class="jtf-breadcrumb" aria-label="Breadcrumb">
+        <a href="/">Home</a> » <a class="red" href="/training/">Training</a> » <span>Marketo Engage Training Courses</span>
+      </nav>
+      <div class="hero-badge">
+        <svg width="14" height="14" fill="none" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z" fill="currentColor"/></svg>
+        Marketo Engage Training
+      </div>
+      <h1>Build high-performance Marketo Engage teams</h1>
+      <p class="hero-sub">Bridge capability gaps and drive measurable revenue impact with our structured learning pathways</p>
+      <div class="hero-ctas">
+        <a href="#basics-signup" class="btn btn-primary">
+          Start free today
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </a>
+        <a href="#choose-pathway" class="btn btn-outline">View paid pathways</a>
+      </div>
+    </div>
+    <div class="hero-image">
+      <img src="https://www.jtfmarketing.co/wp-content/uploads/2025/07/About-Us-Hero.png" alt="JTF Marketing Team" />
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PROGRESSIVE JOURNEY ═══════════ -->
+<section class="journey-section">
+  <div class="container">
+    <div class="sub-container">
+      <div style="flex:1; min-width:0;">
+        <span class="section-label">Structured Learning</span>
+        <h2 class="section-title">A progressive journey to technical mastery</h2>
+        <p class="section-desc">
+          We don't offer disconnected modules. Our training pathways are designed as a cumulative journey from foundation to advanced mastery. Every team member begins with free onboarding through our Basics course, ensuring a consistent standard across your entire department. From there, learners move into the Professional and Practitioner pathways, which are specifically aligned with Adobe certification requirements.
+        </p>
+        <p class="section-desc" style="margin-top: -16px;">
+          This structured approach means your team isn't just learning features; they are building a verified skill stack that integrates directly with our revenue growth methodology, turning technical proficiency into a strategic business asset.
+        </p>
+        <p class="section-desc" style="margin-top: -16px;">
+            Relying on informal knowledge sharing often leads to inconsistent results and technical debt. To turn your platform investment into a growth engine, you need a structured approach. Our <strong style="color: var(--jtf-red);">Marketo Engage Training</strong> removes the friction of external dependency, giving your team the expertise to execute complex strategies with confidence and precision while delivering a professionalized operations model.
+        </p>
+      </div>
+      <div style="flex:1; min-width:0;">
+        <img src="https://www.jtfmarketing.co/wp-content/uploads/2026/03/Unlocking-the-Adobe-Admin-Console-3.png" alt="Progressive Journey" style="width:100%; height:100%; object-fit:cover; border-radius:12px;" />
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ CHOOSE YOUR PATHWAY ═══════════ -->
+<section class="pathways-section" id="choose-pathway">
+  <div class="container">
+    <span class="section-label">Learning Pathways</span>
+    <h2 class="section-title">Choose your learning pathway</h2>
+    <p class="section-desc">Our pathways bundle essential training to ensure no knowledge gaps remain. Each course uses practical, consultancy-informed scenarios rather than academic theory.</p>
+
+    <div class="pathway-grid">
+
+      <!-- BASICS -->
+      <div class="pathway-card">
+        <div class="pathway-dot green"></div>
+        <div class="pathway-name">Marketo Basics</div>
+        <div class="pathway-price">FREE</div>
+        <div class="pathway-price-sub">Zero-cost foundation</div>
+        <div class="pathway-includes-label">What's included</div>
+        <ul class="pathway-includes">
+          <li>
+            <span class="check"><svg fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Basics course
+            <span class="tag">Foundation</span>
+          </li>
+          <li>
+            <span class="check"><svg fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            UI, terminology &amp; core mechanics
+          </li>
+        </ul>
+        <div class="pathway-badge">
+          <div class="pathway-badge-icon">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="48px" height="48px"><path fill="#fb8c00" d="m42,37c0,2.76-2.24,5-5,5H11c-2.76,0-5-2.24-5-5V11c0-2.76,2.24-5,5-5h26c2.76,0,5,2.24,5,5v26Z"/><path fill="#fff" d="m33.77,27.04c-.71-.5-1.68-.32-2.18.39-2.14,2.96-5.22,5.57-9.58,5.57s-4.62-7.88-2-13c1.61-3.14,3.87-5.73,5.84-5.72,1.39,0,2.18,1.26,1.8,2.6-.46,1.63-.51,2.72-.51,2.81-.04.96.71,1.77,1.68,1.8.02,0,.04.01.07.01.93,0,1.7-.74,1.74-1.68,0-.03.18-3.31,2.78-6.77.63-.84.39-2.07-.57-2.59-.77-.42-1.75-.14-2.27.56-.15.2-.29.39-.42.59-.14.2-.4.27-.62.17-7.7-3.47-12.07,3.86-13.51,7.23-3,7-3,18,5.62,18,7.22,0,10.63-4.75,12.6-7.79.46-.71.27-1.66-.42-2.14-.01,0-.02-.02-.03-.02Z"/></svg>          </div>
+          <div class="pathway-badge-text">
+            Credly Basics Badge
+            <span>Shareable on LinkedIn on completion</span>
+          </div>
+        </div>
+        <a href="#basics-signup" class="pathway-cta free">Start free onboarding</a>
+      </div>
+
+      <!-- PROFESSIONAL -->
+      <div class="pathway-card">
+        <div class="pathway-dot blue"></div>
+        <div class="pathway-name">Professional Pathway</div>
+        <div class="pathway-price">£950 <span>/ person / year</span></div>
+        <div class="pathway-price-sub">Approx. £79 per month</div>
+        <div class="pathway-includes-label">What's included</div>
+        <ul class="pathway-includes">
+          <li>
+            <span class="check"><svg fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Basics course
+            <span class="tag">Foundation</span>
+          </li>
+          <li>
+            <span class="check"><svg fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Professional course
+            <span class="tag">Core skills</span>
+          </li>
+        </ul>
+        <div class="pathway-badge">
+          <div class="pathway-badge-icon">
+<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="48px" height="48px"><path fill="#fb8c00" d="m42,37c0,2.76-2.24,5-5,5H11c-2.76,0-5-2.24-5-5V11c0-2.76,2.24-5,5-5h26c2.76,0,5,2.24,5,5v26Z"/><path fill="#fff" d="m33.77,27.04c-.71-.5-1.68-.32-2.18.39-2.14,2.96-5.22,5.57-9.58,5.57s-4.62-7.88-2-13c1.61-3.14,3.87-5.73,5.84-5.72,1.39,0,2.18,1.26,1.8,2.6-.46,1.63-.51,2.72-.51,2.81-.04.96.71,1.77,1.68,1.8.02,0,.04.01.07.01.93,0,1.7-.74,1.74-1.68,0-.03.18-3.31,2.78-6.77.63-.84.39-2.07-.57-2.59-.77-.42-1.75-.14-2.27.56-.15.2-.29.39-.42.59-.14.2-.4.27-.62.17-7.7-3.47-12.07,3.86-13.51,7.23-3,7-3,18,5.62,18,7.22,0,10.63-4.75,12.6-7.79.46-.71.27-1.66-.42-2.14-.01,0-.02-.02-.03-.02Z"/></svg>          </div>
+          <div class="pathway-badge-text">
+            Credly Professional Badge
+            <span>Shareable on LinkedIn on completion</span>
+          </div>
+        </div>
+        <a href="/product/adobe-marketo-engage-professional-learning-pathway/" class="pathway-cta paid">Get Professional Pathway</a>
+      </div>
+
+      <!-- PRACTITIONER -->
+      <div class="pathway-card featured">
+        <div class="pathway-dot purple"></div>
+        <div class="pathway-name">Practitioner Pathway</div>
+        <div class="pathway-price">£1,450 <span>/ person / year</span></div>
+        <div class="pathway-price-sub">Approx. £121 per month</div>
+        <div class="pathway-includes-label">What's included</div>
+        <ul class="pathway-includes">
+          <li>
+            <span class="check"><svg fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Basics course
+            <span class="tag">Foundation</span>
+          </li>
+          <li>
+            <span class="check"><svg fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Professional course
+            <span class="tag">Core skills</span>
+          </li>
+          <li>
+            <span class="check"><svg fill="none" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke="#15803d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+            Practitioner course
+            <span class="tag">Advanced mastery</span>
+          </li>
+        </ul>
+        <div class="pathway-badge">
+          <div class="pathway-badge-icon">
+<svg xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 48 48" width="48px" height="48px"><path fill="#fb8c00" d="m42,37c0,2.76-2.24,5-5,5H11c-2.76,0-5-2.24-5-5V11c0-2.76,2.24-5,5-5h26c2.76,0,5,2.24,5,5v26Z"/><path fill="#fff" d="m33.77,27.04c-.71-.5-1.68-.32-2.18.39-2.14,2.96-5.22,5.57-9.58,5.57s-4.62-7.88-2-13c1.61-3.14,3.87-5.73,5.84-5.72,1.39,0,2.18,1.26,1.8,2.6-.46,1.63-.51,2.72-.51,2.81-.04.96.71,1.77,1.68,1.8.02,0,.04.01.07.01.93,0,1.7-.74,1.74-1.68,0-.03.18-3.31,2.78-6.77.63-.84.39-2.07-.57-2.59-.77-.42-1.75-.14-2.27.56-.15.2-.29.39-.42.59-.14.2-.4.27-.62.17-7.7-3.47-12.07,3.86-13.51,7.23-3,7-3,18,5.62,18,7.22,0,10.63-4.75,12.6-7.79.46-.71.27-1.66-.42-2.14-.01,0-.02-.02-.03-.02Z"/></svg>          </div>
+          <div class="pathway-badge-text">
+            Credly Practitioner Badge
+            <span>Shareable on LinkedIn on completion</span>
+          </div>
+        </div>
+        <a href="/product/marketo-engage-business-practitioner-learning-pathway/" class="pathway-cta paid">Get Practitioner Pathway</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ PRICING TABLE + CALCULATOR ═══════════ -->
+<section class="pricing-section">
+  <div class="pricing-outer">
+    <div class="pricing-intro">
+        <span class="section-label">Team Pricing</span>
+        <h2 class="section-title">Transparent pricing for growing teams</h2>
+        <p class="section-desc">Transparency is vital for your planning. We offer automated tier discounts to support team-wide capability building and reduce the long-term cost of external support.</p>
+    </div>
+    <div class="pricing-layout" style="display:flex; align-items:flex-start; gap:32px; margin-top:40px;">
+      <!-- Pricing table -->
+      <div style="flex:1; min-width:0;">
+        <div class="pricing-table-wrap" style="margin-top:0;">
+          <table class="pricing-table">
+            <thead>
+              <tr>
+                <th>Tier</th>
+                <th>Discount</th>
+                <th>Basics</th>
+                <th>Professional Pathway<br><small style="font-weight:400;opacity:0.7;">Per person / per year</small></th>
+                <th>Practitioner Pathway<br><small style="font-weight:400;opacity:0.7;">Per person / per year</small></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Individual<small>1 person</small></td>
+                <td>—</td>
+                <td><span class="free-tag">FREE</span></td>
+                <td>£950</td>
+                <td>£1,450</td>
+              </tr>
+              <tr>
+                <td>Small team<small>2–4 people</small></td>
+                <td>5%</td>
+                <td><span class="free-tag">FREE</span></td>
+                <td>£903</td>
+                <td>£1,378</td>
+              </tr>
+              <tr>
+                <td>Team<small>5–10 people</small></td>
+                <td>10%</td>
+                <td><span class="free-tag">FREE</span></td>
+                <td>£855</td>
+                <td>£1,305</td>
+              </tr>
+              <tr>
+                <td>Growing team<small>11–19 people</small></td>
+                <td>15%</td>
+                <td><span class="free-tag">FREE</span></td>
+                <td>£808</td>
+                <td>£1,233</td>
+              </tr>
+              <tr class="enterprise-row">
+                <td>Enterprise<small>20+ people</small></td>
+                <td colspan="4">
+                  <strong><a href="#" class="contact-link" onclick="openEnterpriseChat(event)">Contact us</a></strong> — We'll send you a tailored proposal within 24 hours
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- Calculator -->
+      <div style="flex:1; min-width:0;">
+        <div class="calculator-wrap" style="max-width:none; margin:0; background:var(--jtf-lightblue);">
+          <div class="calc-title">Calculate your team cost</div>
+
+          <div class="calc-slider-row">
+            <div class="calc-field-label">Team size</div>
+            <div class="calc-slider-value" id="calcTeamDisplay">5</div>
+            <input type="range" class="calc-slider" id="calcSlider" min="1" max="25" value="5">
+          </div>
+
+          <div class="calc-field-label">Pathway</div>
+          <div class="calc-toggle-group">
+            <button class="calc-toggle active" data-pathway="professional" onclick="setPathway(this)">Professional</button>
+            <button class="calc-toggle" data-pathway="practitioner" onclick="setPathway(this)">Practitioner</button>
+          </div>
+
+          <div class="calc-results" id="calcResults">
+            <div class="calc-result-card">
+              <div class="calc-result-label">Per person / year</div>
+              <div class="calc-result-value" id="calcPerPerson">£855</div>
+            </div>
+            <div class="calc-result-card">
+              <div class="calc-result-label">Total annual cost</div>
+              <div class="calc-result-value" id="calcTotal">£4,275</div>
+            </div>
+            <div class="calc-result-card savings">
+              <div class="calc-result-label">You save</div>
+              <div class="calc-result-value" id="calcSavings">£475</div>
+              <div class="calc-result-sub" id="calcDiscount">10% team discount</div>
+            </div>
+          </div>
+
+          <div class="calc-enterprise-note" id="calcEnterprise">
+            For teams of 20+, <a href="#contact">contact us</a> for a tailored proposal within 24 hours.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+(function() {
+  const basePrices = { professional: 950, practitioner: 1450 };
+  let currentPathway = 'professional';
+
+  function getTier(size) {
+    if (size <= 1)  return { discount: 0, label: '' };
+    if (size <= 4)  return { discount: 0.05, label: '5% team discount' };
+    if (size <= 10) return { discount: 0.10, label: '10% team discount' };
+    if (size <= 19) return { discount: 0.15, label: '15% team discount' };
+    return { discount: 0, label: 'enterprise' };
+  }
+
+  function formatGBP(n) {
+    return '£' + n.toLocaleString('en-GB', { minimumFractionDigits: 0, maximumFractionDigits: 0 });
+  }
+
+  function calculate() {
+    var slider = document.getElementById('calcSlider');
+    var size = parseInt(slider.value);
+    document.getElementById('calcTeamDisplay').textContent = size;
+
+    var tier = getTier(size);
+    var base = basePrices[currentPathway];
+    var results = document.getElementById('calcResults');
+    var enterprise = document.getElementById('calcEnterprise');
+
+    if (tier.label === 'enterprise') {
+      results.style.display = 'none';
+      enterprise.style.display = 'block';
+      return;
+    }
+
+    results.style.display = 'grid';
+    enterprise.style.display = 'none';
+
+    var perPerson = Math.round(base * (1 - tier.discount));
+    var total = perPerson * size;
+    var savings = (base * size) - total;
+
+    document.getElementById('calcPerPerson').textContent = formatGBP(perPerson);
+    document.getElementById('calcTotal').textContent = formatGBP(total);
+    document.getElementById('calcSavings').textContent = formatGBP(savings);
+    document.getElementById('calcDiscount').textContent = tier.discount > 0 ? tier.label : 'No discount for 1 person';
+
+    var savingsCard = document.querySelector('.calc-result-card.savings');
+    if (savings === 0) {
+      savingsCard.style.display = 'none';
+    } else {
+      savingsCard.style.display = 'block';
+    }
+  }
+
+  document.getElementById('calcSlider').addEventListener('input', calculate);
+
+  window.setPathway = function(btn) {
+    document.querySelectorAll('.calc-toggle').forEach(function(b) { b.classList.remove('active'); });
+    btn.classList.add('active');
+    currentPathway = btn.getAttribute('data-pathway');
+    calculate();
+  };
+
+  calculate();
+})();
+</script>
+
+<!-- ═══════════ RESULTS ═══════════ -->
+<section class="results-section">
+  <div class="container">
+    <span class="section-label">Proven Results</span>
+    <h2 class="section-title">Capability transformation with proven results</h2>
+    <p class="section-desc">As an Adobe Silver Partner, our training is delivered by consultants who actively manage complex Marketo environments for global B2B brands.</p>
+
+    <div class="stats-grid">
+      <div class="stat-card">
+        <div class="stat-number">92%</div>
+        <div class="stat-label">Certification pass rate for program completers</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">1,200+</div>
+        <div class="stat-label">Professionals trained</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">60%</div>
+        <div class="stat-label">Reduction in new hire onboarding time</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number">5+ yrs</div>
+        <div class="stat-label">Average client tenure</div>
+      </div>
+    </div>
+
+    <p class="results-text">
+      When your team earns their Credly-verified badges, they bring external credibility and verified authority to your marketing operations.
+    </p>
+
+    <div class="results-ctas">
+      <a href="#choose-pathway" class="btn btn-primary">Become the expert</a>
+      <a href="#basics-signup" class="btn btn-outline">Start free onboarding</a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══════════ FAQ ═══════════ -->
+<section class="faq-section">
+  <div class="container-faq">
+    <span class="section-label">Common Questions</span>
+    <h2 class="section-title">Frequently Asked Questions</h2>
+    <p class="section-desc">Everything you need to know before enrolling your team.</p>
+
+    <div class="faq-list">
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          Do I need any prior Marketo experience to start?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>No experience is required. The Marketo Basics course is designed as a zero-prerequisite foundation covering the UI, core terminology, and platform mechanics. Every learner — regardless of background — begins here to establish a consistent knowledge standard across your team.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          Is the Basics course really free?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Yes, completely. The Marketo Basics course is free for every team member with no time limit or hidden fees. It is the mandatory starting point for both paid pathways, ensuring your entire department shares the same foundational understanding before progressing.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          What is the difference between the Professional and Practitioner pathways?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>The <strong>Professional Pathway</strong> (£950/person/year) bundles the Basics and Professional courses, building core operational skills aligned with Adobe's Business Practitioner Associate certification. The <strong>Practitioner Pathway</strong> (£1,450/person/year) includes everything in Professional plus the advanced Practitioner course, targeting Adobe Expert-level certification and complex strategy execution. Both pathways award a shareable Credly badge on completion.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          How do team discounts work?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Discounts are applied automatically at checkout based on your total seat count — no coupon codes needed. The tiers are: <strong>2–4 people → 5% off</strong>, <strong>5–10 people → 10% off</strong>, and <strong>11–19 people → 15% off</strong>. Teams of 20 or more qualify for a custom enterprise proposal, which we deliver within 24 hours of your enquiry.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          Do the courses prepare learners for Adobe certification?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Yes. Both paid pathways are specifically aligned with Adobe's certification requirements. Our 92% certification pass rate for program completers reflects the practical, consultancy-informed approach — scenarios are drawn from real Marketo environments managed for global B2B brands, not academic theory.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          What is a Credly badge and how does it work?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Credly is the leading digital credentialing platform. On completing any pathway, learners receive a verifiable digital badge they can share directly to LinkedIn, embed in email signatures, or add to their CV. Each badge is publicly verifiable, giving employers and clients confidence in the credential.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          How long does access last?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Paid pathway licenses are annual — access runs for 12 months from the date of purchase per person. This gives learners the flexibility to progress at their own pace while keeping content current with platform updates. The free Basics course has no access expiry.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          Who delivers the training?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>All courses are designed and delivered by JTF Marketing's consultants — an Adobe Silver Partner team with 5+ years of average client tenure. Instructors actively manage Marketo environments for global B2B brands, so every lesson reflects real-world operational experience rather than vendor documentation alone.</p>
+        </div>
+      </div>
+
+      <div class="faq-item">
+        <button class="faq-question" onclick="toggleFaq(this)" aria-expanded="false">
+          Can we purchase seats for the whole department at once?
+          <svg class="faq-icon" width="20" height="20" fill="none" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div class="faq-answer">
+          <p>Yes. You can purchase multiple seats in a single transaction and the volume discount is applied automatically. For teams of 20 or more, contact us directly for a tailored enterprise proposal — we typically respond within 24 hours with custom pricing and onboarding support.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+<style>
+/* ── FAQ SECTION ── */
+
+  .container-faq {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+  }
+    .faq-section {
+      padding: 80px 0;
+      background: var(--jtf-gray-50);
+      border-top: 1px solid var(--jtf-gray-200);
+    }
+    .faq-list {
+      max-width: 1200px;
+      margin: 48px auto 0;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+    .faq-item {
+      background: var(--jtf-white);
+      border: 1.5px solid var(--jtf-gray-200);
+      border-radius: var(--radius);
+      overflow: hidden;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
+    }
+    .faq-item.open {
+      border-color: var(--jtf-red);
+      box-shadow: var(--shadow-sm);
+    }
+    .faq-question {
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 20px 24px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--jtf-gray-dark);
+      text-align: left;
+      line-height: 1.4;
+    }
+    .faq-question:hover { color: var(--jtf-dark); }
+    .faq-icon {
+      flex-shrink: 0;
+      color: var(--jtf-gray-400);
+      transition: transform 0.25s ease, color 0.2s ease;
+    }
+    .faq-item.open .faq-icon {
+      transform: rotate(180deg);
+      color: var(--jtf-red);
+    }
+    .faq-answer {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease, padding 0.25s ease;
+      padding: 0 24px;
+    }
+    .faq-item.open .faq-answer {
+      max-height: 400px;
+      padding: 0 24px 20px;
+    }
+    .faq-answer p {
+      font-size: 0.95rem;
+      color: var(--jtf-gray-700);
+      line-height: 1.75;
+    }
+    @media (max-width: 768px) {
+      .faq-section { padding: 60px 20px; }
+      .faq-list { width: 100%; margin-top: 36px; }
+    }
+    @media (max-width: 600px) {
+      .faq-section { padding: 48px 16px; }
+      .faq-list { width: 100%; margin-top: 24px; }
+      .faq-question { font-size: 0.92rem; padding: 16px 18px; }
+      .faq-answer { padding: 0 18px; }
+      .faq-item.open .faq-answer { padding: 0 18px 16px; }
+    }
+
+  </style>
+  <script>
+  function toggleFaq(btn) {
+    var item = btn.parentElement;
+    var isOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(el) {
+      el.classList.remove('open');
+      el.querySelector('.faq-question').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) {
+      item.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+    }
+  }
+  </script>
+
+  <!-- ── ENTERPRISE CHAT MODAL ── -->
+  <style>
+    #entChatOverlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(12,30,56,0.45);
+      z-index: 9998;
+      backdrop-filter: blur(2px);
+    }
+    #entChatOverlay.open { display: block; }
+
+    #entChatWindow {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      width: 360px;
+      max-width: calc(100vw - 32px);
+      background: #fff;
+      border-radius: 16px;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.22);
+      display: flex;
+      flex-direction: column;
+      z-index: 9999;
+      overflow: hidden;
+      font-family: 'Inter', sans-serif;
+      transform: translateY(24px);
+      opacity: 0;
+      transition: transform 0.28s cubic-bezier(.22,.68,0,1.2), opacity 0.22s ease;
+    }
+    #entChatWindow.open {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
+    .ent-header {
+      background: var(--jtf-red, #DC3645);
+      color: #fff;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .ent-header-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.85rem;
+      flex-shrink: 0;
+    }
+    .ent-header-title { font-weight: 700; font-size: 0.97rem; flex: 1; }
+    .ent-header-close {
+      background: none;
+      border: none;
+      color: #fff;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 6px;
+      font-size: 1.2rem;
+      line-height: 1;
+      opacity: 0.85;
+      transition: opacity 0.15s;
+    }
+    .ent-header-close:hover { opacity: 1; }
+
+    .ent-body {
+      padding: 16px;
+      flex: 1;
+      overflow-y: auto;
+      max-height: 380px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .ent-msg {
+      display: flex;
+      gap: 8px;
+      align-items: flex-end;
+    }
+    .ent-msg.bot .ent-bubble {
+      background: #f0f1f3;
+      color: #1f2937;
+      border-radius: 16px 16px 16px 4px;
+    }
+    .ent-msg.user {
+      flex-direction: row-reverse;
+    }
+    .ent-msg.user .ent-bubble {
+      background: var(--jtf-dark, #0C1e38);
+      color: #fff;
+      border-radius: 16px 16px 4px 16px;
+    }
+    .ent-bot-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--jtf-red, #DC3645);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 900;
+      font-size: 0.68rem;
+      flex-shrink: 0;
+    }
+    .ent-bubble {
+      padding: 10px 14px;
+      font-size: 0.88rem;
+      line-height: 1.55;
+      max-width: 248px;
+    }
+    .ent-choices {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      padding-left: 36px;
+    }
+    .ent-choice-btn {
+      background: #fff;
+      border: 1.5px solid var(--jtf-dark, #0C1e38);
+      color: var(--jtf-dark, #0C1e38);
+      border-radius: 20px;
+      padding: 6px 14px;
+      font-size: 0.83rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      font-family: 'Inter', sans-serif;
+    }
+    .ent-choice-btn:hover, .ent-choice-btn.selected {
+      background: var(--jtf-dark, #0C1e38);
+      color: #fff;
+    }
+
+    .ent-input-row {
+      display: flex;
+      gap: 8px;
+      padding: 0 16px 16px;
+      align-items: center;
+    }
+    .ent-text-input {
+      flex: 1;
+      border: 1.5px solid #e2e4e8;
+      border-radius: 10px;
+      padding: 9px 12px;
+      font-size: 0.88rem;
+      font-family: 'Inter', sans-serif;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+    .ent-text-input:focus { border-color: var(--jtf-dark, #0C1e38); }
+    .ent-send-btn {
+      background: var(--jtf-red, #DC3645);
+      color: #fff;
+      border: none;
+      border-radius: 10px;
+      padding: 9px 14px;
+      font-size: 0.83rem;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: 'Inter', sans-serif;
+      transition: opacity 0.15s;
+    }
+    .ent-send-btn:hover { opacity: 0.88; }
+
+    .ent-footer {
+      text-align: center;
+      font-size: 0.73rem;
+      color: #9ca3af;
+      padding: 0 16px 12px;
+    }
+    .ent-footer a { color: #9ca3af; }
+
+    .ent-typing {
+      display: flex;
+      gap: 4px;
+      align-items: center;
+      padding: 10px 14px;
+    }
+    .ent-typing span {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #9ca3af;
+      animation: entDot 1.2s infinite;
+    }
+    .ent-typing span:nth-child(2) { animation-delay: 0.2s; }
+    .ent-typing span:nth-child(3) { animation-delay: 0.4s; }
+    @keyframes entDot {
+      0%, 60%, 100% { transform: translateY(0); opacity: 0.5; }
+      30% { transform: translateY(-4px); opacity: 1; }
+    }
+</style>
+
+<div id="entChatOverlay" onclick="closeEnterpriseChat()"></div>
+
+<div id="entChatWindow" role="dialog" aria-modal="true" aria-label="Enterprise Enquiry">
+  <div class="ent-header">
+    <div class="ent-header-avatar">JTF</div>
+    <div class="ent-header-title">Enterprise Enquiry</div>
+    <button class="ent-header-close" onclick="closeEnterpriseChat()" aria-label="Close">&times;</button>
+  </div>
+  <div class="ent-body" id="entBody"></div>
+  <div class="ent-input-row" id="entInputRow" style="display:none;">
+    <input type="text" class="ent-text-input" id="entInput" placeholder="Type your answer…" />
+    <button class="ent-send-btn" id="entSendBtn" onclick="entSend()">Send</button>
+  </div>
+  <div class="ent-footer"><a href="https://www.jtfmarketing.co/privacy-policy/" target="_blank">Privacy Policy</a></div>
+</div>
+
+<script>
+(function() {
+  var steps = [
+    { key: null,       type: 'bot',    text: "Hi there! Let\u2019s get you a tailored Enterprise proposal. It\u2019ll only take a minute." },
+    { key: 'teamSize', type: 'input',  inputType: 'number', text: "How many people are in your team?", placeholder: 'e.g. 25',
+      validate: function(v) { return /^\d+$/.test(v.trim()) && parseInt(v) >= 1 ? null : 'Please enter a valid number.'; } },
+    { key: 'company',  type: 'input',  inputType: 'text',  text: "What\u2019s your company name?", placeholder: 'e.g. Acme Ltd' },
+    { key: 'pathway',  type: 'choice', text: "Which pathway are you most interested in?", choices: ['Professional', 'Practitioner', 'Both'] },
+    { key: 'email',    type: 'input',  inputType: 'email', text: "What\u2019s your business email address?", placeholder: 'you@company.com',
+      validate: function(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v.trim()) ? null : 'Please enter a valid email.'; } },
+    { key: 'phone',    type: 'input',  inputType: 'tel',   text: "And your phone number? (optional \u2014 press Send to skip)", placeholder: '+44 7700 000000' },
+    { key: null,       type: 'end',    text: "Perfect, thank you! We\u2019ll review your details and send a tailored proposal to your inbox within <strong>24 hours</strong>." }
+  ];
+
+  var currentStep = 0;
+  var answers = {};
+  var body, inputRow, inputEl, initialized = false;
+
+  function init() {
+    if (initialized) return;
+    body     = document.getElementById('entBody');
+    inputRow = document.getElementById('entInputRow');
+    inputEl  = document.getElementById('entInput');
+    if (!body || !inputRow || !inputEl) return;
+    inputEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') window.entSend();
+    });
+    initialized = true;
+  }
+
+  function scrollBottom() {
+    setTimeout(function() { if (body) body.scrollTop = body.scrollHeight; }, 50);
+  }
+
+  function addBotBubble(html, typing) {
+    return new Promise(function(resolve) {
+      if (typing) {
+        var typingEl = document.createElement('div');
+        typingEl.className = 'ent-msg bot';
+        typingEl.innerHTML = '<div class="ent-bot-avatar">JTF</div><div class="ent-bubble"><div class="ent-typing"><span></span><span></span><span></span></div></div>';
+        body.appendChild(typingEl);
+        scrollBottom();
+        setTimeout(function() {
+          typingEl.remove();
+          var msgEl = document.createElement('div');
+          msgEl.className = 'ent-msg bot';
+          msgEl.innerHTML = '<div class="ent-bot-avatar">JTF</div><div class="ent-bubble">' + html + '</div>';
+          body.appendChild(msgEl);
+          scrollBottom();
+          resolve();
+        }, 700);
+      } else {
+        var msgEl = document.createElement('div');
+        msgEl.className = 'ent-msg bot';
+        msgEl.innerHTML = '<div class="ent-bot-avatar">JTF</div><div class="ent-bubble">' + html + '</div>';
+        body.appendChild(msgEl);
+        scrollBottom();
+        resolve();
+      }
+    });
+  }
+
+  function addUserBubble(text) {
+    var el = document.createElement('div');
+    el.className = 'ent-msg user';
+    el.innerHTML = '<div class="ent-bubble">' + escHtml(text) + '</div>';
+    body.appendChild(el);
+    scrollBottom();
+  }
+
+  function escHtml(s) {
+    return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+
+  function showChoices(choices) {
+    var row = document.createElement('div');
+    row.className = 'ent-choices';
+    choices.forEach(function(c) {
+      var btn = document.createElement('button');
+      btn.className = 'ent-choice-btn';
+      btn.textContent = c;
+      btn.onclick = function() {
+        answers[steps[currentStep].key] = c;
+        row.querySelectorAll('.ent-choice-btn').forEach(function(b) { b.disabled = true; });
+        btn.classList.add('selected');
+        addUserBubble(c);
+        currentStep++;
+        setTimeout(runStep, 400);
+      };
+      row.appendChild(btn);
+    });
+    body.appendChild(row);
+    scrollBottom();
+  }
+
+  function showInput(step) {
+    inputEl.type = step.inputType || 'text';
+    inputEl.placeholder = step.placeholder || 'Type your answer\u2026';
+    inputEl.value = '';
+    inputEl.style.borderColor = '';
+    inputRow.style.display = 'flex';
+    setTimeout(function() { inputEl.focus(); }, 100);
+  }
+
+  function hideInput() {
+    inputRow.style.display = 'none';
+    inputEl.value = '';
+  }
+
+  function runStep() {
+    if (currentStep >= steps.length) return;
+    var step = steps[currentStep];
+    if (step.type === 'bot') {
+      addBotBubble(step.text, currentStep > 0).then(function() {
+        currentStep++;
+        setTimeout(runStep, 300);
+      });
+    } else if (step.type === 'input') {
+      addBotBubble(step.text, true).then(function() { showInput(step); });
+    } else if (step.type === 'choice') {
+      addBotBubble(step.text, true).then(function() { showChoices(step.choices); });
+    } else if (step.type === 'end') {
+      hideInput();
+      addBotBubble(step.text, true).then(function() {
+        console.log('Enterprise enquiry:', answers);
+      });
+    }
+  }
+
+  window.entSend = function() {
+    var step = steps[currentStep];
+    if (!step || step.type !== 'input') return;
+    var val = inputEl.value.trim();
+    if (!val && step.key === 'phone') val = '(not provided)';
+    if (!val) { inputEl.focus(); return; }
+    if (step.validate) {
+      var err = step.validate(val);
+      if (err) {
+        inputEl.style.borderColor = '#DC3645';
+        inputEl.placeholder = err;
+        inputEl.value = '';
+        inputEl.focus();
+        return;
+      }
+    }
+    inputEl.style.borderColor = '';
+    answers[step.key] = val;
+    addUserBubble(val);
+    hideInput();
+    currentStep++;
+    setTimeout(runStep, 300);
+  };
+
+  window.openEnterpriseChat = function(e) {
+    if (e) e.preventDefault();
+    var overlay = document.getElementById('entChatOverlay');
+    var win     = document.getElementById('entChatWindow');
+    if (!overlay || !win) { console.warn('Enterprise chat modal HTML not found in page.'); return; }
+    init();
+    overlay.classList.add('open');
+    win.classList.add('open');
+    if (body && body.children.length === 0) {
+      currentStep = 0;
+      answers = {};
+      runStep();
+    }
+  };
+
+  window.closeEnterpriseChat = function() {
+    var overlay = document.getElementById('entChatOverlay');
+    var win     = document.getElementById('entChatWindow');
+    if (overlay) overlay.classList.remove('open');
+    if (win)     win.classList.remove('open');
+  };
+
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') window.closeEnterpriseChat();
+  });
+})();
+</script>
+
+</div>
+
+    </body>
+</html>
+
+
+
+
+
+
+
+
+
+<style>
+  /* ── FAQ SECTION ── */
+  .faq-section {
+    padding: 80px 0;
+    background: var(--jtf-gray-50);
+    border-top: 1px solid var(--jtf-gray-200);
+  }
+  .faq-list {
+    max-width: 800px;
+    margin: 48px auto 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .faq-item {
+    background: var(--jtf-white);
+    border: 1.5px solid var(--jtf-gray-200);
+    border-radius: var(--radius);
+    overflow: hidden;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .faq-item.open {
+    border-color: var(--jtf-red);
+    box-shadow: var(--shadow-sm);
+  }
+  .faq-question {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'Inter', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--jtf-gray-900);
+    text-align: left;
+    line-height: 1.4;
+  }
+  .faq-question:hover { color: var(--jtf-dark); }
+  .faq-icon {
+    flex-shrink: 0;
+    color: var(--jtf-gray-400);
+    transition: transform 0.25s ease, color 0.2s ease;
+  }
+  .faq-item.open .faq-icon {
+    transform: rotate(180deg);
+    color: var(--jtf-red);
+  }
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.25s ease;
+    padding: 0 24px;
+  }
+  .faq-item.open .faq-answer {
+    max-height: 400px;
+    padding: 0 24px 20px;
+  }
+  .faq-answer p {
+    font-size: 0.95rem;
+    color: var(--jtf-gray-700);
+    line-height: 1.75;
+  }
+  @media (max-width: 768px) {
+    .faq-section { padding: 60px 20px; }
+    .faq-list { width: 100%; margin-top: 36px; }
+  }
+  @media (max-width: 600px) {
+    .faq-section { padding: 48px 16px; }
+    .faq-list { width: 100%; margin-top: 24px; }
+    .faq-question { font-size: 0.92rem; padding: 16px 18px; }
+    .faq-answer { padding: 0 18px; }
+    .faq-item.open .faq-answer { padding: 0 18px 16px; }
+  }
+</style>
