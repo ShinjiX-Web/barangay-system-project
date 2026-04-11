@@ -1,6 +1,6 @@
 // Firebase Authentication - Migrated from auth.js
 import { auth, db, COLLECTIONS } from './firebase-config.js';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
+import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, GoogleAuthProvider, signInWithPopup } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
 import { doc, getDoc, setDoc, updateDoc, addDoc, collection, getDocs, query, limit, serverTimestamp } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
 // Current user (cached)
@@ -81,6 +81,37 @@ export async function loginUser(email, password) {
     console.error('Login error:', error);
     throw error;
   }
+}
+
+// Login with Google
+export async function loginWithGoogle() {
+  const provider = new GoogleAuthProvider();
+  const cred = await signInWithPopup(auth, provider);
+  const user = cred.user;
+
+  const userRef  = doc(db, COLLECTIONS.users, user.uid);
+  const userSnap = await getDoc(userRef);
+
+  if (!userSnap.exists()) {
+    // First-time Google sign-in — create a pending resident account
+    await setDoc(userRef, {
+      firstName:    user.displayName?.split(' ')[0] || '',
+      lastName:     user.displayName?.split(' ').slice(1).join(' ') || '',
+      email:        user.email,
+      username:     user.email,
+      role:         'resident',
+      position:     '',
+      profilePhoto: user.photoURL || 'assets/img/avatars/user-avatar.png',
+      isActive:     false,
+      status:       'pending',
+      createdAt:    serverTimestamp(),
+      updatedAt:    serverTimestamp(),
+    });
+    return { user, status: 'pending', role: 'resident' };
+  }
+
+  const data = userSnap.data();
+  return { user, status: data.status, role: data.role };
 }
 
 // Logout

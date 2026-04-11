@@ -304,6 +304,30 @@ body {
 .btn-login:hover:not(:disabled) { background-color: var(--btn-hover); }
 .btn-login:disabled { opacity: 0.5; cursor: not-allowed; }
 
+/* ── Google button ──────────────────────────────────────────── */
+.btn-google {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.625rem;
+    background-color: var(--card-bg);
+    color: var(--text);
+    border: 1px solid var(--card-border);
+    border-radius: 0.375rem;
+    font-size: 0.875rem;
+    font-weight: 500;
+    font-family: 'Inter', sans-serif;
+    padding: 0.5625rem 1rem;
+    cursor: pointer;
+    transition: background-color 0.15s, border-color 0.15s, opacity 0.15s;
+}
+.btn-google:hover:not(:disabled) {
+    background-color: var(--toggle-hover-bg);
+    border-color: var(--input-focus);
+}
+.btn-google:disabled { opacity: 0.5; cursor: not-allowed; }
+
 /* ── Divider & footer ───────────────────────────────────────── */
 .divider {
     display: flex;
