@@ -3,6 +3,37 @@ import { auth, db, COLLECTIONS } from './firebase-config.js';
 import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-auth.js';
 import { doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 
+const RECAPTCHA_SITE_KEY = '6Le2bLIsAAAAAJ2XNNBRT6GwOvE1yrn40z9H2kc9';
+const RECAPTCHA_API_KEY  = 'AIzaSyAAMgLqMnsRgovpgV6dRcW459feF_AOd6w'; // Replace with your Google Cloud API key
+const RECAPTCHA_PROJECT  = 'barangay-system-701b9';
+
+function getRecaptchaToken() {
+    const token = grecaptcha.enterprise.getResponse();
+    if (!token) return null;
+    return token;
+}
+
+async function verifyRecaptchaToken(token) {
+    const res = await fetch(
+        `https://recaptchaenterprise.googleapis.com/v1/projects/${RECAPTCHA_PROJECT}/assessments?key=${RECAPTCHA_API_KEY}`,
+        {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                event: {
+                    token,
+                    expectedAction: 'LOGIN',
+                    siteKey: RECAPTCHA_SITE_KEY,
+                }
+            })
+        }
+    );
+    if (!res.ok) throw new Error('reCAPTCHA assessment request failed');
+    const data = await res.json();
+    // Score ranges 0.0 (bot) to 1.0 (human); reject below 0.5
+    return data?.riskAnalysis?.score ?? data?.score ?? 0;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     onAuthStateChanged(auth, async (user) => {
         if (user) {
@@ -31,6 +62,20 @@ document.addEventListener('DOMContentLoaded', () => {
             btn.innerHTML = '<span class="spinner"></span>Logging in…';
 
             try {
+                const token = getRecaptchaToken();
+                if (!token) {
+                    btn.disabled = false;
+                    btn.textContent = 'Login';
+                    Swal.fire('Verification Required', 'Please complete the reCAPTCHA before logging in.', 'warning');
+                    return;
+                }
+                const score = await verifyRecaptchaToken(token);
+                if (score < 0.5) {
+                    grecaptcha.enterprise.reset();
+                    Swal.fire('Blocked', 'Suspicious activity detected. Please try again.', 'warning');
+                    return;
+                }
+
                 const firebaseUser = await loginUser(email, password);
                 const userDoc = await getDoc(doc(db, COLLECTIONS.users, firebaseUser.uid));
 
@@ -73,6 +118,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (error.code === 'auth/user-not-found'    ) msg = 'No account found with this email.';
                 if (error.code === 'auth/wrong-password'    ) msg = 'Incorrect password.';
                 if (error.code === 'auth/invalid-credential') msg = 'Invalid email or password.';
+                grecaptcha.enterprise.reset();
                 Swal.fire('Login Failed', msg, 'error');
             } finally {
                 btn.disabled = false;

@@ -68,7 +68,9 @@
                     </div>
                 </div>
 
-                <div class="g-recaptcha" data-sitekey="6Le2bLIsAAAAJ2XNNBRT6GwOvE1yrn40z9H2kc9" data-action="LOGIN"></div>
+                <div class="g-recaptcha"
+                     data-sitekey="6Le2bLIsAAAAAJ2XNNBRT6GwOvE1yrn40z9H2kc9"
+                     data-action="LOGIN"></div>
                 <button class="btn-login" type="submit" id="loginBtn">Login</button>
             </form>
 
@@ -98,14 +100,6 @@
     <script src="assets/js/theme-toggle.js"></script>
     <script src="assets/js/icon-cloud.js"></script>
 
-    <script>
-        function onClick(e) {
-            e.preventDefault();
-            grecaptcha.enterprise.ready(async () => {
-            const token = await grecaptcha.enterprise.execute('6Le2bLIsAAAAJ2XNNBRT6GwOvE1yrn40z9H2kc9', {action: 'LOGIN'});
-            });
-        }
-    </script>
 </body>
 
 </html>
