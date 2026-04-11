@@ -10,6 +10,7 @@
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
     <link rel="stylesheet" href="assets/css/login.css">
+    <script src="https://www.google.com/recaptcha/enterprise.js" async defer></script>
 </head>
 
 <body>
@@ -67,6 +68,7 @@
                     </div>
                 </div>
 
+                <div class="g-recaptcha" data-sitekey="6Le2bLIsAAAAJ2XNNBRT6GwOvE1yrn40z9H2kc9" data-action="LOGIN"></div>
                 <button class="btn-login" type="submit" id="loginBtn">Login</button>
             </form>
 
@@ -100,7 +102,7 @@
         function onClick(e) {
             e.preventDefault();
             grecaptcha.enterprise.ready(async () => {
-            const token = await grecaptcha.enterprise.execute('6LeobLIsAAAAABKy85N-c9xbPffyC5V9gG-ngmxY', {action: 'LOGIN'});
+            const token = await grecaptcha.enterprise.execute('6Le2bLIsAAAAJ2XNNBRT6GwOvE1yrn40z9H2kc9', {action: 'LOGIN'});
             });
         }
     </script>
