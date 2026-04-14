@@ -785,6 +785,7 @@ footer p { color: var(--footer-text); font-size: 0.8125rem; }
 .footer-br { display: none; }
 footer a { color: var(--footer-link); text-decoration: none; font-size: 0.8125rem; transition: color 0.15s; }
 footer a:hover { color: #fafafa; }
+.footer-links { display: flex; align-items: center; gap: 1.25rem; flex-wrap: wrap; }
 
 /* ── SCROLL REVEAL ──────────────────────────────────────────────── */
 .reveal {
@@ -843,6 +844,8 @@ footer a:hover { color: #fafafa; }
         align-items: center;
         text-align: center;
     }
+
+    .footer-links { justify-content: center; }
 
     .footer-br { display: block; }
 
