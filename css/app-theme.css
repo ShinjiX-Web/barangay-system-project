@@ -170,9 +170,9 @@ nav.sidebar,
 .sidebar .nav-item .nav-link,
 .sidebar .navbar-nav .nav-item .nav-link {
     color: var(--app-sidebar-text) !important;
-    font-size: 0.8125rem !important;
+    font-size: 0.9rem !important;
     font-weight: 500 !important;
-    padding: 0.625rem 1.25rem !important;
+    padding: 0.8rem 1.25rem !important;
     border-radius: 0.375rem !important;
     margin: 0.125rem 0.5rem !important;
     transition: background 0.15s, color 0.15s !important;
