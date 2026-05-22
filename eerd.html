@@ -152,7 +152,6 @@ classDiagram
         +lastName : String
         +email : String
         +role : String
-        +profilePhoto : String
         +createdAt : DateTime
     }
 
@@ -192,36 +191,50 @@ classDiagram
         +firstName : String
         +lastName : String
         +middleName : String
-        +birthDate : Date
+        +suffix : String
+        +dateOfBirth : Date
+        +age : Int
         +gender : String
         +civilStatus : String
         +address : String
         +contactNumber : String
-        +status : String
+        +email : String
+        +photoURL : String
+        +updatedAt : DateTime
     }
 
     class CERTIFICATES {
         +id : String
         +residentId : String
-        +issuedBy : String
-        +type : String
+        +certificateType : String
         +purpose : String
+        +residentName : String
         +requestDate : Date
-        +issuedDate : Date
         +status : String
+        +updatedAt : DateTime
     }
 
     class ACTIVITY_LOGS {
         +id : String
         +userId : String
+        +userEmail : String
+        +userName : String
+        +module : String
         +action : String
-        +details : String
+        +description : String
         +timestamp : DateTime
+    }
+
+    class SETTINGS {
+        +id : String
+        +captainName : String
+        +termStart : String
+        +termEnd : String
+        +updatedAt : DateTime
     }
 
     RESIDENT_ACCOUNT "1" --> "1" RESIDENTS : linked to
     RESIDENTS "1" --> "0..*" CERTIFICATES : requests
-    USERS "1" --> "0..*" CERTIFICATES : issues
     USERS "1" --> "0..*" ACTIVITY_LOGS : generates
                             </div>
                         </div>

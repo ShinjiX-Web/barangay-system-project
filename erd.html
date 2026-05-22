@@ -121,60 +121,71 @@
                 <div class="card shadow mb-4">
                     <div class="card-header py-3 d-flex justify-content-between align-items-center">
                         <h6 class="text-primary m-0 fw-bold"><i class="fas fa-diagram-project me-2"></i>ERD Diagram</h6>
-                        <span class="badge bg-primary">4 Entities &nbsp;|&nbsp; 4 Relationships</span>
+                        <span class="badge bg-primary">5 Entities &nbsp;|&nbsp; 3 Relationships</span>
                     </div>
                     <div class="card-body">
                         <div class="mermaid-wrap">
                             <div class="mermaid">
 erDiagram
     RESIDENTS {
-        string id PK
-        string firstName
-        string lastName
-        string middleName
-        date   birthDate
-        string gender
-        string civilStatus
-        string address
-        string contactNumber
-        string email
-        string status
-        datetime createdAt
+        string   id PK
+        string   firstName
+        string   lastName
+        string   middleName
+        string   suffix
+        date     dateOfBirth
+        int      age
+        string   gender
+        string   civilStatus
+        string   address
+        string   contactNumber
+        string   email
+        string   photoURL
+        datetime updatedAt
     }
 
     CERTIFICATES {
-        string id PK
-        string residentId FK
-        string issuedBy   FK
-        string type
-        string purpose
-        date   requestDate
-        date   issuedDate
-        string status
-        datetime createdAt
+        string   id PK
+        string   residentId FK
+        string   certificateType
+        string   purpose
+        string   residentName
+        string   residentAddress
+        date     requestDate
+        string   status
+        datetime updatedAt
     }
 
     USERS {
-        string id PK
-        string linkedResidentId FK
-        string firstName
-        string lastName
-        string email
-        string role
-        string profilePhoto
+        string   id PK
+        string   linkedResidentId FK
+        string   firstName
+        string   lastName
+        string   email
+        string   role
         datetime createdAt
     }
 
     ACTIVITY_LOGS {
-        string id PK
-        string userId FK
-        string action
-        string details
+        string   id PK
+        string   userId FK
+        string   userEmail
+        string   userName
+        string   module
+        string   action
+        string   description
         datetime timestamp
     }
 
+    SETTINGS {
+        string   id PK
+        string   captainName
+        string   termStart
+        string   termEnd
+        datetime updatedAt
+    }
+
     RESIDENTS   ||--o{ CERTIFICATES  : "requests"
-    USERS       ||--o{ CERTIFICATES  : "issues"
     USERS       }o--o| RESIDENTS     : "linked to"
     USERS       ||--o{ ACTIVITY_LOGS : "generates"
                             </div>
@@ -201,22 +212,22 @@ erDiagram
                                     <tr>
                                         <td><strong>RESIDENTS</strong> &rarr; <strong>CERTIFICATES</strong></td>
                                         <td><span class="badge bg-primary">One-to-Many</span></td>
-                                        <td>One resident can request zero or many certificates. Each certificate belongs to exactly one resident.</td>
-                                    </tr>
-                                    <tr>
-                                        <td><strong>USERS</strong> &rarr; <strong>CERTIFICATES</strong></td>
-                                        <td><span class="badge bg-primary">One-to-Many</span></td>
-                                        <td>One staff user can issue zero or many certificates. Each issued certificate is processed by one staff member.</td>
+                                        <td>One resident can request zero or many certificates. Each certificate stores the <code>residentId</code> as a foreign key.</td>
                                     </tr>
                                     <tr>
                                         <td><strong>USERS</strong> &harr; <strong>RESIDENTS</strong></td>
                                         <td><span class="badge bg-warning text-dark">Optional One-to-One</span></td>
-                                        <td>A user account may optionally be linked to a resident record (for residents who have login access).</td>
+                                        <td>A user account may optionally be linked to a resident record via <code>linkedResidentId</code> (for residents who have login access).</td>
                                     </tr>
                                     <tr>
                                         <td><strong>USERS</strong> &rarr; <strong>ACTIVITY_LOGS</strong></td>
                                         <td><span class="badge bg-primary">One-to-Many</span></td>
-                                        <td>Every system action by a user generates an activity log entry. One user can have many log entries.</td>
+                                        <td>Every system action by a user generates an activity log entry referenced by <code>userId</code>. One user can have many log entries.</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>SETTINGS</strong></td>
+                                        <td><span class="badge bg-secondary">Standalone</span></td>
+                                        <td>Stores barangay-wide configuration (captain name, term dates). No foreign key relationships — it is a single configuration document.</td>
                                     </tr>
                                 </tbody>
                             </table>
