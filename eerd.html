@@ -147,12 +147,16 @@ classDiagram
 
     class USERS {
         &lt;&lt;Supertype&gt;&gt;
-        +id : String
+        +document_id : String
         +firstName : String
         +lastName : String
         +email : String
         +role : String
+        +position : String
+        +isActive : String
+        +status : String
         +createdAt : DateTime
+        +updatedAt : DateTime
     }
 
     class ADMIN {
@@ -187,7 +191,7 @@ classDiagram
     USERS <|-- RESIDENT_ACCOUNT : ISA
 
     class RESIDENTS {
-        +id : String
+        +document_id : String
         +firstName : String
         +lastName : String
         +middleName : String
@@ -204,7 +208,7 @@ classDiagram
     }
 
     class CERTIFICATES {
-        +id : String
+        +document_id : String
         +residentId : String
         +certificateType : String
         +purpose : String
@@ -214,8 +218,8 @@ classDiagram
         +updatedAt : DateTime
     }
 
-    class ACTIVITY_LOGS {
-        +id : String
+    class ACTIVITYLOGS {
+        +document_id : String
         +userId : String
         +userEmail : String
         +userName : String
@@ -226,7 +230,7 @@ classDiagram
     }
 
     class SETTINGS {
-        +id : String
+        +document_id : String
         +captainName : String
         +termStart : String
         +termEnd : String
@@ -235,7 +239,7 @@ classDiagram
 
     RESIDENT_ACCOUNT "1" --> "1" RESIDENTS : linked to
     RESIDENTS "1" --> "0..*" CERTIFICATES : requests
-    USERS "1" --> "0..*" ACTIVITY_LOGS : generates
+    USERS "1" --> "0..*" ACTIVITYLOGS : generates
                             </div>
                         </div>
                     </div>

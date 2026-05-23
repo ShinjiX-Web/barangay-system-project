@@ -128,7 +128,7 @@
                             <div class="mermaid">
 erDiagram
     RESIDENTS {
-        string   id PK
+        string   document_id PK
         string   firstName
         string   lastName
         string   middleName
@@ -145,7 +145,7 @@ erDiagram
     }
 
     CERTIFICATES {
-        string   id PK
+        string   document_id PK
         string   residentId FK
         string   certificateType
         string   purpose
@@ -157,17 +157,21 @@ erDiagram
     }
 
     USERS {
-        string   id PK
+        string   document_id PK
         string   linkedResidentId FK
         string   firstName
         string   lastName
         string   email
         string   role
+        string   position
+        string   isActive
+        string   status
         datetime createdAt
+        datetime updatedAt
     }
 
-    ACTIVITY_LOGS {
-        string   id PK
+    ACTIVITYLOGS {
+        string   document_id PK
         string   userId FK
         string   userEmail
         string   userName
@@ -178,7 +182,7 @@ erDiagram
     }
 
     SETTINGS {
-        string   id PK
+        string   document_id PK
         string   captainName
         string   termStart
         string   termEnd
@@ -187,7 +191,7 @@ erDiagram
 
     RESIDENTS   ||--o{ CERTIFICATES  : "requests"
     USERS       }o--o| RESIDENTS     : "linked to"
-    USERS       ||--o{ ACTIVITY_LOGS : "generates"
+    USERS       ||--o{ ACTIVITYLOGS : "generates"
                             </div>
                         </div>
                     </div>
@@ -220,7 +224,7 @@ erDiagram
                                         <td>A user account may optionally be linked to a resident record via <code>linkedResidentId</code> (for residents who have login access).</td>
                                     </tr>
                                     <tr>
-                                        <td><strong>USERS</strong> &rarr; <strong>ACTIVITY_LOGS</strong></td>
+                                        <td><strong>USERS</strong> &rarr; <strong>ACTIVITYLOGS</strong></td>
                                         <td><span class="badge bg-primary">One-to-Many</span></td>
                                         <td>Every system action by a user generates an activity log entry referenced by <code>userId</code>. One user can have many log entries.</td>
                                     </tr>
