@@ -108,72 +108,96 @@
                     </div>
                     <div class="card-body">
                         <div class="row g-3">
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <div class="border rounded p-3 h-100">
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge bg-primary me-2">residents</span>
                                     </div>
                                     <div class="d-flex flex-wrap gap-1">
-                                        <span class="badge bg-light text-dark table-pill border">id <small class="text-danger">PK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">document_id <small class="text-danger">PK</small></span>
                                         <span class="badge bg-light text-dark table-pill border">firstName</span>
                                         <span class="badge bg-light text-dark table-pill border">lastName</span>
                                         <span class="badge bg-light text-dark table-pill border">middleName</span>
-                                        <span class="badge bg-light text-dark table-pill border">birthDate</span>
+                                        <span class="badge bg-light text-dark table-pill border">suffix</span>
+                                        <span class="badge bg-light text-dark table-pill border">email</span>
                                         <span class="badge bg-light text-dark table-pill border">gender</span>
+                                        <span class="badge bg-light text-dark table-pill border">age</span>
+                                        <span class="badge bg-light text-dark table-pill border">dateOfBirth</span>
                                         <span class="badge bg-light text-dark table-pill border">civilStatus</span>
-                                        <span class="badge bg-light text-dark table-pill border">address</span>
                                         <span class="badge bg-light text-dark table-pill border">contactNumber</span>
-                                        <span class="badge bg-light text-dark table-pill border">status</span>
-                                        <span class="badge bg-light text-dark table-pill border">createdAt</span>
+                                        <span class="badge bg-light text-dark table-pill border">address</span>
+                                        <span class="badge bg-light text-dark table-pill border">photoURL</span>
+                                        <span class="badge bg-light text-dark table-pill border">updatedAt</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <div class="border rounded p-3 h-100">
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge bg-success me-2">certificates</span>
                                     </div>
                                     <div class="d-flex flex-wrap gap-1">
-                                        <span class="badge bg-light text-dark table-pill border">id <small class="text-danger">PK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">document_id <small class="text-danger">PK</small></span>
                                         <span class="badge bg-light text-dark table-pill border">residentId <small class="text-primary">FK</small></span>
-                                        <span class="badge bg-light text-dark table-pill border">type</span>
+                                        <span class="badge bg-light text-dark table-pill border">certificateType</span>
                                         <span class="badge bg-light text-dark table-pill border">purpose</span>
+                                        <span class="badge bg-light text-dark table-pill border">residentName</span>
+                                        <span class="badge bg-light text-dark table-pill border">residentAddress</span>
                                         <span class="badge bg-light text-dark table-pill border">requestDate</span>
-                                        <span class="badge bg-light text-dark table-pill border">issuedDate</span>
                                         <span class="badge bg-light text-dark table-pill border">status</span>
-                                        <span class="badge bg-light text-dark table-pill border">issuedBy <small class="text-primary">FK</small></span>
-
+                                        <span class="badge bg-light text-dark table-pill border">updatedAt</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-4">
                                 <div class="border rounded p-3 h-100">
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge bg-warning text-dark me-2">users</span>
                                     </div>
                                     <div class="d-flex flex-wrap gap-1">
-                                        <span class="badge bg-light text-dark table-pill border">id <small class="text-danger">PK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">document_id <small class="text-danger">PK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">linkedResidentId <small class="text-primary">FK</small></span>
                                         <span class="badge bg-light text-dark table-pill border">firstName</span>
                                         <span class="badge bg-light text-dark table-pill border">lastName</span>
                                         <span class="badge bg-light text-dark table-pill border">email</span>
                                         <span class="badge bg-light text-dark table-pill border">role</span>
-                                        <span class="badge bg-light text-dark table-pill border">linkedResidentId <small class="text-primary">FK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">position</span>
+                                        <span class="badge bg-light text-dark table-pill border">dateHired</span>
+                                        <span class="badge bg-light text-dark table-pill border">isActive</span>
+                                        <span class="badge bg-light text-dark table-pill border">status</span>
                                         <span class="badge bg-light text-dark table-pill border">createdAt</span>
+                                        <span class="badge bg-light text-dark table-pill border">updatedAt</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-6 col-lg-3">
+                            <div class="col-sm-6 col-lg-6">
                                 <div class="border rounded p-3 h-100">
                                     <div class="d-flex align-items-center mb-2">
                                         <span class="badge bg-danger me-2">activitylogs</span>
                                     </div>
                                     <div class="d-flex flex-wrap gap-1">
-                                        <span class="badge bg-light text-dark table-pill border">id <small class="text-danger">PK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">document_id <small class="text-danger">PK</small></span>
                                         <span class="badge bg-light text-dark table-pill border">userId <small class="text-primary">FK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">userName</span>
+                                        <span class="badge bg-light text-dark table-pill border">userEmail</span>
                                         <span class="badge bg-light text-dark table-pill border">module</span>
                                         <span class="badge bg-light text-dark table-pill border">action</span>
                                         <span class="badge bg-light text-dark table-pill border">description</span>
                                         <span class="badge bg-light text-dark table-pill border">timestamp</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="border rounded p-3 h-100">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-secondary me-2">settings</span>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-light text-dark table-pill border">document_id <small class="text-danger">PK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">captainName</span>
+                                        <span class="badge bg-light text-dark table-pill border">termStart</span>
+                                        <span class="badge bg-light text-dark table-pill border">termEnd</span>
+                                        <span class="badge bg-light text-dark table-pill border">updatedAt</span>
                                     </div>
                                 </div>
                             </div>
