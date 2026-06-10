@@ -6,7 +6,10 @@
       "Bash(ls c:/Users/npana/Downloads/site_testing/assets/js/*.js)",
       "PowerShell(Get-ChildItem \"c:\\\\BSITOUMN Sta. Mesa Manila\\\\2025 - 2026\\\\2nd_Sem\\\\Information_Management\\\\barangay-system-project\" -Force | Select-Object Name, @{Name=\"Type\";Expression={if\\($_.PSIsContainer\\){\"Dir\"}else{\"File\"}}} | Format-Table -AutoSize)",
       "PowerShell(Head -20)",
-      "Bash(node -e ' *)"
+      "Bash(node -e ' *)",
+      "Bash(node)",
+      "Bash(node /tmp/fix_eerd.js)",
+      "PowerShell(node \"C:\\\\Users\\\\npana\\\\fix_eerd.js\")"
     ]
   }
 }
