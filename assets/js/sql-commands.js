@@ -3,6 +3,25 @@ import { onAuthStateChanged, signOut } from 'https://www.gstatic.com/firebasejs/
 import { getDoc, getDocs, doc, collection } from 'https://www.gstatic.com/firebasejs/10.13.1/firebase-firestore.js';
 import { applyRoleRestrictions } from './role-guard.js';
 
+const COLUMN_ORDER = {
+    residents:     ['document_id','firstName','middleName','lastName','suffix','email','gender','age','dateOfBirth','civilStatus','contactNumber','address','photoURL','registrationDate','createdAt','updatedAt'],
+    certificates:  ['document_id','residentId','certificateType','purpose','residentName','residentAddress','requestDate','status','updatedAt'],
+    users:         ['document_id','linkedResidentId','firstName','middleName','lastName','suffix','email','gender','age','dateOfBirth','civilStatus','contactNumber','role','position','dateHired','isActive','status','profilePhoto','createdAt','updatedAt'],
+    activitylogs:  ['document_id','userId','userName','userEmail','module','action','description','timestamp'],
+    settings:      ['document_id','captainName','termStart','termEnd','updatedAt'],
+    all_residents: ['document_id','firstName','middleName','lastName','suffix','email','gender','age','dateOfBirth','civilStatus','contactNumber','address']
+};
+
+function orderFields(rows, preferredOrder) {
+    if (!preferredOrder || rows.length === 0) return rows;
+    return rows.map(row => {
+        const ordered = {};
+        preferredOrder.forEach(key => { if (key in row) ordered[key] = row[key]; });
+        Object.keys(row).forEach(key => { if (!(key in ordered)) ordered[key] = row[key]; });
+        return ordered;
+    });
+}
+
 async function fetchFirebaseData() {
     const convertValue = (val) => {
         if (val && typeof val.toDate === 'function') {
@@ -56,7 +75,14 @@ async function fetchFirebaseData() {
         });
     });
 
-    return { residents, certificates, users, activitylogs, settings, all_residents };
+    return {
+        residents:     orderFields(residents,     COLUMN_ORDER.residents),
+        certificates:  orderFields(certificates,  COLUMN_ORDER.certificates),
+        users:         orderFields(users,         COLUMN_ORDER.users),
+        activitylogs:  orderFields(activitylogs,  COLUMN_ORDER.activitylogs),
+        settings:      orderFields(settings,      COLUMN_ORDER.settings),
+        all_residents: orderFields(all_residents,  COLUMN_ORDER.all_residents)
+    };
 }
 
 window.fetchFirebaseData = fetchFirebaseData;
