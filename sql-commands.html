@@ -200,6 +200,27 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-sm-6 col-lg-6">
+                                <div class="border rounded p-3 h-100" style="border-left:3px solid #0dcaf0 !important;">
+                                    <div class="d-flex align-items-center mb-2">
+                                        <span class="badge bg-info me-2">all_residents</span>
+                                        <small class="text-muted">Merged: residents + users (role=resident)</small>
+                                    </div>
+                                    <div class="d-flex flex-wrap gap-1">
+                                        <span class="badge bg-light text-dark table-pill border">document_id <small class="text-danger">PK</small></span>
+                                        <span class="badge bg-light text-dark table-pill border">firstName</span>
+                                        <span class="badge bg-light text-dark table-pill border">lastName</span>
+                                        <span class="badge bg-light text-dark table-pill border">middleName</span>
+                                        <span class="badge bg-light text-dark table-pill border">gender</span>
+                                        <span class="badge bg-light text-dark table-pill border">age</span>
+                                        <span class="badge bg-light text-dark table-pill border">dateOfBirth</span>
+                                        <span class="badge bg-light text-dark table-pill border">civilStatus</span>
+                                        <span class="badge bg-light text-dark table-pill border">contactNumber</span>
+                                        <span class="badge bg-light text-dark table-pill border">address</span>
+                                        <span class="badge bg-light text-dark table-pill border">email</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -273,6 +294,7 @@
                                         <div class="col-6 col-md-3"><span class="badge bg-warning text-dark me-1">users</span><span id="countUsers">-</span></div>
                                         <div class="col-6 col-md-3"><span class="badge bg-danger me-1">activitylogs</span><span id="countActivitylogs">-</span></div>
                                         <div class="col-6 col-md-3"><span class="badge bg-secondary me-1">settings</span><span id="countSettings">-</span></div>
+                                        <div class="col-6 col-md-3"><span class="badge bg-info me-1">all_residents</span><span id="countAllResidents">-</span></div>
                                     </div>
                                     <p class="text-muted mb-0"><i class="fas fa-lightbulb me-1"></i>Quick Load buttons use <strong>AlaSQL-compatible SQL</strong>. MySQL-specific functions like <code>TIMESTAMPDIFF</code>, <code>DATE_FORMAT</code>, <code>FIELD()</code>, and window functions are simplified. Queries shown in the cards below use full MySQL syntax.</p>
                                 </div>
@@ -848,7 +870,7 @@ function initDb(source) {
     source = source || currentSource;
     currentSource = source;
 
-    ['residents','certificates','users','settings','activitylogs'].forEach(t => {
+    ['residents','certificates','users','settings','activitylogs','all_residents'].forEach(t => {
         try { alasql('DROP TABLE ' + t); } catch(e) {}
     });
 
@@ -861,17 +883,19 @@ function initDb(source) {
             certificates: DB_CERTIFICATES,
             users:        DB_USERS,
             settings:     DB_SETTINGS,
-            activitylogs: DB_ACTIVITYLOGS
+            activitylogs: DB_ACTIVITYLOGS,
+            all_residents: DB_RESIDENTS
         };
         if (source === 'firebase') source = 'sample';
         currentSource = source;
     }
 
-    alasql('CREATE TABLE residents');     alasql.tables.residents.data     = data.residents;
-    alasql('CREATE TABLE certificates'); alasql.tables.certificates.data  = data.certificates;
-    alasql('CREATE TABLE users');         alasql.tables.users.data         = data.users;
-    alasql('CREATE TABLE settings');      alasql.tables.settings.data      = data.settings;
-    alasql('CREATE TABLE activitylogs');  alasql.tables.activitylogs.data  = data.activitylogs;
+    alasql('CREATE TABLE residents');      alasql.tables.residents.data      = data.residents;
+    alasql('CREATE TABLE certificates');  alasql.tables.certificates.data   = data.certificates;
+    alasql('CREATE TABLE users');          alasql.tables.users.data          = data.users;
+    alasql('CREATE TABLE settings');       alasql.tables.settings.data       = data.settings;
+    alasql('CREATE TABLE activitylogs');   alasql.tables.activitylogs.data   = data.activitylogs;
+    alasql('CREATE TABLE all_residents');  alasql.tables.all_residents.data  = data.all_residents || data.residents;
 
     updateBadge(source, data);
     updateDataCounts(data);
@@ -896,7 +920,7 @@ function updateBadge(source, data) {
 }
 
 function updateDataCounts(data) {
-    const ids = {countResidents:'residents', countCertificates:'certificates', countUsers:'users', countActivitylogs:'activitylogs', countSettings:'settings'};
+    const ids = {countResidents:'residents', countCertificates:'certificates', countUsers:'users', countActivitylogs:'activitylogs', countSettings:'settings', countAllResidents:'all_residents'};
     for (const [elId, key] of Object.entries(ids)) {
         const el = document.getElementById(elId);
         if (el) el.textContent = (data[key] ? data[key].length : 0) + ' rows';

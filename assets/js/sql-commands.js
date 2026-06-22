@@ -35,7 +35,28 @@ async function fetchFirebaseData() {
         fetchColl('settings')
     ]);
 
-    return { residents, certificates, users, activitylogs, settings };
+    const residentIds = new Set(residents.map(r => r.document_id));
+    const all_residents = [...residents];
+    users.forEach(u => {
+        if (u.role !== 'resident' || u.status !== 'approved') return;
+        if (u.linkedResidentId && residentIds.has(u.linkedResidentId)) return;
+        all_residents.push({
+            document_id:   'user_' + u.document_id,
+            firstName:     u.firstName     || '',
+            middleName:    u.middleName    || '',
+            lastName:      u.lastName      || '',
+            suffix:        u.suffix        || '',
+            gender:        u.gender        || '',
+            age:           u.age           || '',
+            civilStatus:   u.civilStatus   || '',
+            address:       u.address       || '',
+            contactNumber: u.contactNumber || '',
+            email:         u.email         || '',
+            dateOfBirth:   u.dateOfBirth   || '',
+        });
+    });
+
+    return { residents, certificates, users, activitylogs, settings, all_residents };
 }
 
 window.fetchFirebaseData = fetchFirebaseData;
